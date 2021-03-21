@@ -1,0 +1,281 @@
+% USC Dissertation/Thesis LaTeX Template
+% Edited by Ruda Zhang, 2020-10-08.
+% -----------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATION
+%-----------------------------------------------------------------------------
+
+% Use `report` class with `USCthesis` package (style file) by Brian P. Gerkey
+% Font size should be 11 or 12 points for regular paragraph text.
+\documentclass[letterpaper,11pt]{report}
+% [options] can be any of these default/alternative flag:
+%   dissertation/thesis, final/proposal, copyright/nocopyright,
+%   fussy/sloppy, flushbottom/raggedbottom, clref/opref.
+\usepackage[dissertation, proposal, opref]{USCthesis}
+
+% Packages required by `USCthesis.sty`.
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{tabularx}
+
+% Line spacing and margins in compliance with USC graduate school guidelines.
+\usepackage[margin=1in,footskip=.5in]{geometry}
+\doublespacing
+
+% Optional packages: mathematical fonts and symbols
+% You may comment this section out if you don't need them.
+\usepackage{mathptmx} % set font to Times Roman
+\usepackage[OT1]{fontenc} % font encoding for xelatex
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amssymb}
+% Optional packages: graphics
+\usepackage{graphicx}
+% You can use the "demo" option while editing to avoid compiling figures.
+% \usepackage[demo]{graphicx}
+% You can add absolute paths as well.
+\graphicspath{{./}{../}{figures/}{../figures/}{main/rvagene/figures}}
+
+% Optional packages: bibliography with BibLaTeX.
+% Comment this section out if you prefer BibTeX.
+%\usepackage[
+%    style=nature,
+%    sorting=none,
+%    isbn=false,
+%    url=false,
+%    doi=true,
+%    eprint=false,
+%    date=year,
+%    maxnames=6,
+%    minnames=6
+%]{biblatex}
+%\AtEveryBibitem{\clearfield{eventtitle}} 
+%\AtEveryCitekey{\clearfield{eventtitle}}
+%\AtEveryBibitem{\clearfield{pagetotal}} 
+%\AtEveryCitekey{\clearfield{pagetotal}}
+%\addbibresource{references.bib}
+
+% Filler text for formatting. Comment these lines out for real writing.
+\usepackage[english]{babel}
+\usepackage{blindtext}
+%%%%%%%%%%%%%%% My Additions ############
+
+%\usepackage[top=0.85in,left=2.75in,footskip=0.75in,marginparwidth=2in]{geometry}
+\usepackage{pmi} %pmi piyush rai style
+
+% use Unicode characters - try changing the option if you run into troubles with special characters (e.g. umlauts)
+\usepackage[utf8]{inputenc}
+\usepackage[lining,semibold]{libertine} % a bit lighter than Times--no osf in math
+\usepackage[varqu,varl]{inconsolata}% a typewriter font must be defined
+% clean citations
+%\usepackage{cite}
+
+% hyperref makes references clicky. use \url{www.example.com} or \href{www.example.com}{description} to add a clicky url
+\usepackage{nameref,hyperref}
+\hypersetup{
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = blue, %Colour for external hyperlinks
+  linkcolor    = blue, %Colour of internal links
+  citecolor    = blue  %Colour of citations
+}
+% line numbers
+\usepackage[right]{lineno}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+% improves typesetting in LaTeX
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = *  }
+
+
+% text layout - change as needed
+%-------------------------------------------------
+% \raggedright
+% \setlength{\parindent}{0.5cm}
+% \textwidth 5.25in
+% \textheight 8.75in
+%--------------------------------------------------
+% Remove % for double line spacing
+%\usepackage{setspace}
+%\doublespacing
+
+% use adjustwidth environment to exceed text width (see examples in text)
+\usepackage{changepage}
+
+% adjust caption style
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,singlelinecheck=off]{caption}
+
+
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+\usepackage{natbib}
+\usepackage{pmi}
+
+\newcommand{\tcr} { \textcolor{red} }
+
+\newcommand{\scrna}{scRNA-seq }
+\begin{document}
+
+%-----------------------------------------------------------------------------
+%	TITLE PAGE
+%-----------------------------------------------------------------------------
+
+% Volume name could be added as option, e.g. `[Volume I]`.
+\title{\textbf{\Large{Data driven modeling in transcriptomics and structural biology}}}
+
+\author{Raktim Mitra}
+
+% Committee list is only shown in `proposal` layout.
+\committee{A.~Adams & (Chair)\\*
+           B.~Bell\\*
+           C.~Clausius\\*
+           D.~Dirichlet\\*
+           E.~Emory & (Outside Member)}
+
+% Submission information is only shown in `final` layout.
+\majorfield{Computational Biology and Bioinformatics}
+\submitdate{May 2020}  % Must be one of the three dates allowed in the guideline
+
+% Make sure everything, specially your title page, exactly follows the guideline:
+% https://graduateschool.usc.edu/wp-content/themes/fictional-university-theme/assets/doc/Manuscript_Formatting_and_Documentation_Styles.pdf
+
+%-----------------------------------------------------------------------------
+%	PREFACE
+%-----------------------------------------------------------------------------
+
+% The preface environment prints the title page.
+\begin{preface}
+
+  % Dedication Page, which is truly unnecessary.
+  \prefacesection[Dedication]{}
+  \input{main/dedication}
+
+  % Acknowledgement Page, which is also unnecessary for proposals.
+  \prefacesection{Acknowledgements}
+  \input{main/acknowledgements}
+
+  \tableofcontents
+  %\listoftables   % Comment this out if you don't have tables
+  \listoffigures
+
+  % Abstract Page
+  \prefacesection{Abstract}
+  \input{main/abstract}
+\end{preface}
+
+%-----------------------------------------------------------------------------
+%	CONTENT STRUCTURE
+%-----------------------------------------------------------------------------
+
+% Better to separate LaTeX structure and content
+\include{main/Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% RVAgene ############################################################
+% Research Topic 1
+\chapter{RVAgene: Generative modeling of gene expression time series data}
+\label{cha:research_topic_1}
+
+\vspace*{0.35in}
+
+\begin{flushleft}
+% authors go here:
+{\large Raktim Mitra\textsuperscript{1},
+Adam L. MacLean\textsuperscript{1}}\\
+
+\bigskip
+$^1$Quantitative and Computational Biology, University of Southern California
+\\
+
+\end{flushleft}
+
+\input{rvagene/abstract.tex}
+
+\input{rvagene/introduction}
+\input{rvagene/methods}
+
+\section{Results}
+\input{rvagene/simulation}
+\input{rvagene/EScells}
+\input{rvagene/comparison.tex}
+\input{rvagene/jci}
+\input{rvagene/comp_cost}
+\input{rvagene/discussion}
+
+
+\section*{Acknowledgements}
+We thank A.P. McMahon for valuable discussions and comments on the manuscript.
+R.M. gratefully acknowledges support from a USC Viterbi Fellowship.
+
+\section*{Data Availability}
+The synthetic data used for evaluation of RVAgene are available at:
+\url{https://github.com/maclean-lab/RVAgene}. Additional data used in the manuscript are available from the Gene Expression Omnibus: ESC differentiation (GEO accession GSE65525) and kidney injury (GEO accession GSE98622).
+
+\section*{Software Availability}
+RVAgene is available in Python released under an MIT license:  \url{https://github.com/maclean-lab/RVAgene}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CRF %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% More Research Topics
+% \include{ResearchTopic2}
+
+\chapter{A probabilistic model for smooth binding site label prediction on protein surfaces}
+\label{cha:research_topic_2}
+
+\vspace*{0.35in}
+
+\begin{flushleft}
+
+{\large Raktim Mitra\textsuperscript{1}, 
+Jared Sagendorf\textsuperscript{1}}\\
+
+\bigskip
+$^1$Quantitative and Computational Biology, University of Southern California
+\\
+
+
+\end{flushleft}
+
+\input{crf/abstract}
+\input{crf/introduction}
+\input{crf/methods}
+\input{crf/results}
+\input{crf/discussion}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conclusion and ongoing work
+\include{main/Conclusion}
+
+\include{supp}
+% Using single-space for reference list.
+\begin{singlespace}
+% Bibliography
+%\phantomsection
+%\addcontentsline{toc}{chapter}{References}%
+%\markboth{References}{References}%
+% If you use BibLaTeX
+%\printbibliography[title=References]
+% If you use BibTeX
+\bibliography{library}
+\bibliographystyle{agsm}
+\end{singlespace}
+
+% Appendices
+\phantomsection
+\addcontentsline{toc}{chapter}{Appendices}%
+\markboth{Appendices}{Appendices}%
+\chapter*{Appendices}
+\renewcommand\thesection{\Alph{section}}
+\renewcommand*{\thesubsection}{\Alph{section}.\arabic{subsection}}
+\begingroup
+\numberwithin{equation}{section}
+% Appendix source files
+\input{main/appendix_proof}
+\endgroup
+
+% In case your dissertation has multiple volumes.
+% \addvolumecontents{thesis_part2}
+% \addvolumecontents{thesis_part3}
+% \addvolumecontents[lof]{thesis_part2}
+
+\end{document}

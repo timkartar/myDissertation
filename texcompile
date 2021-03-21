@@ -1,0 +1,15 @@
+#!/bin/bash
+TEXFILENAME="$1"
+FILE="${TEXFILENAME%.*}"
+
+# a beautiful one-line to get the full directory name of the location of this script
+CURDIRUP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+#source ${CURDIRUP}/cleanup
+
+#cleanup_incl_bbl ${FILE}
+latexmk -pdf -bibtex ${FILE}.tex -f -jobname=./output/main
+
+# finally, keep the bbl
+# cleanup ${FILE}
+#cleanup_incl_bbl ${FILE}
+#rm *.aux *.bcf *.out *.lot *.blg *.bcf *.toc  *.fls *.fdb_latexmk
