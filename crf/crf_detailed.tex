@@ -1,0 +1,105 @@
+
+%SetFonts
+
+
+%\date{}							% Activate to display a given date or no date
+
+\section{Detailed calculation of the CCRF layer update}
+Starting from the mean field variational inference result of a CRF as given in \red{(Kr\"{a}henb\"{u}hl, 2012)} we have,
+
+\begin{equation}
+Q_i (H_i) \simeq \frac{1}{Z} \exp \left ( - \alpha || H_i - B_i ||^2  - \beta \sum_{j \in \mathcal{N}(i)} g_{ij} \int_{-\infty}^{\infty} Q(H_j) ||H_i - H_j ||^2 d H_j\right )
+\end{equation}
+
+where $H_i, B_i, H_j \in \mathbb{R}^N$. Evaluating this component-wise and using the definition of the $\ell_2$ norm, we can write the energy $E(H_i)$ as
+
+\begin{equation}
+E(H_i) = \alpha \sum_n^N (H_{in} - B_{in})^2 + \beta \sum_{j \in \mathcal{N}(i)} g_{ij} \sum_n^N \int_{-\infty}^{\infty} \cdots \int_{-\infty}^{\infty} Q(H_j) (H_{in} - H_{jn})^2 d H_{j1}\cdots dH_{jN}
+\end{equation}.
+
+Focusing on the inner most summation of second term, since each component of $H_i$ and $H_j$ is independent (by eq. 10 of \red{Gao et al.}), we can write $Q(H_j) = \Pi_{k=1}^N Q_{jk}(H_{jk})$ and assume that each $Q_{jk}$ is individually normalized. The summation then becomes
+
+\begin{multline}
+ \sum_n^N \int_{-\infty}^{\infty}  Q(H_j) (H_{in} - H_{jn})^2 d H_{j1}\cdots dH_{jN} \\
+= \sum_n^N \int_{-\infty}^{\infty} (H_{in} - H_{jn})^2  \Pi_{k=1}^N Q_{jk}(H_{jk}) d H_{jk} \\
+= \sum_n^N \int_{-\infty}^{\infty} (H_{in} - H_{jn})^2  Q_{jn}(H_{jn}) d H_{jn}\int_{-\infty}^{\infty}  \Pi_{k\neq n}^N Q_{jk}(H_{jk}) d H_{jk} \\
+\end{multline} 
+
+where the last step follows because all the $Q_{jk}$'s integrate to 1. Therefore, we have that the energy is given by
+
+\begin{equation}
+E(H_i) = \sum_n^N \left [ \alpha (H_{in} - B_{in})^2 + \beta \sum_{j \in \mathcal{N}(i)} g_{ij}  \int_{-\infty}^{\infty} (H_{in} - H_{jn})^2  Q_{jn}(H_{jn}) d H_{jn} \right ]
+\end{equation}
+
+Taking the derivative of $E(H_i)$ with respect to the $k$ component of $H_i$ we have
+
+\begin{multline}
+\frac{\partial E(H_i)} {\partial H_{ik}} = 2\alpha (H_{ik} - B_{ik}) + \beta \sum_{j \in \mathcal{N}(i)} g_{ij} \int_{-\infty}^{\infty} 2 (H_{ik} - H_{jk})  Q_{jn}(H_{jk}) d H_{jk} \\
+= 2\alpha (H_{ik} - B_{ik}) + 2\beta \sum_{j \in \mathcal{N}(i)} g_{ij}  (H_{ik} - \int_{-\infty}^{\infty} H_{jk} Q_{jk}(H_{jk})d H_{jk})
+\end{multline}
+
+setting this equal to zero and solving for $H_i$ we have
+
+\begin{equation}
+H_{ik}^* = \frac{\alpha B_{ik} + \beta  \sum\limits_{j \in \mathcal{N}(i)} g_{ij} \mathbb{E}_{ H_{jk} \sim Q_{jk} } [H_{jk}]} {\alpha +  \beta  \sum \limits_{j \in \mathcal{N}(i)} g_{ij} }
+\end{equation}
+%%%%%%% Raktim's section %%%%%%%%%%%%%%%%
+\section*{Proposed Algorithm}
+Given initial states $B_i$ of the nodes, $H_i^0 = B_i$ maximizes $Q_i^0 = \frac{1}{Z_i^0}exp(-c||H_i^0 - B_i||^2)$. Now, we can use the above update equation and approximately     compute (at $t$ th iteration) $H_i^{t+1}$ (maximising $Q_i^{t+1})$ using $H_i^t$ and so forth until convergence (i.e. upto some iteration K, after which $Q_i^t$ and $Q_i^{t+1}$ are not very different and hence, so are $H_i^{T}$ and $H_i^{T+1}$).
+\\
+Update for iteration k:
+\begin{equation}
+ H_{i}^{t+1} = \frac{\alpha B_{i} + \beta  \sum\limits_{j \in \mathcal{N}(i)} (g_{ij} H_j^t)} {\alpha +  \beta  \sum \limits_{j \in \mathcal{N}(i)} g_{ij} }
+\end{equation}
+
+We can get the aggregated values $(\sum \limits_{j \in \mathcal{N}(i)} (g_{ij} H_j^t),\sum \limits_{j \in \mathcal{N}(i)} g_{ij})$ for $i$th node in a message passing step using $E, B_i$ and $H_i^t$ $\forall i$.
+\begin{pmialgorithm}[0.9\textwidth]{H}{ Mean Field CCRF Layer}\vskip-2ex
+	\label{algo:tk-means}
+	\begin{algorithmic}[1]
+		\REQUIRE  $B_i$  $\forall i$, $E$ (adjacency information)
+		\STATE Initialize $H_i^0 = B_i$ $\forall i$\COMMENT{$H_i^0$ maximizes $Q_i^0 = \frac{1}{Z_i^0}exp(-c||H_i^0 - B_i||^2)$}
+		\FOR[$T$ signifies convergence]{$t=0,1,2,...,T-1$} 
+        \STATE compute $(\sum \limits_{j \in \mathcal{N}(i)} (g_{ij} H_j^t),\sum \limits_{j \in \mathcal{N}(i)} g_{ij})$ \COMMENT{message passing}
+        \STATE $H_i^{t'} = \alpha B_{i} + \beta  \sum\limits_{j \in \mathcal{N}(i)} (g_{ij} H_j^t)$ 
+        \STATE $H_i^{t+1} = H_i^{t'} / (\alpha +  \beta  \sum \limits_{j \in \mathcal{N}(i)} g_{ij} )$ 
+		\ENDFOR 
+		\STATE $H_i^* = H_i^T$
+		\RETURN $H_i^*$
+	\end{algorithmic}
+\end{pmialgorithm}
+\newpage
+\section*{$Q_i^{(t)}$ and $H_i^{(t)}$ calculation for $t=1,2$}
+\begin{align*}
+\bE_{H_{jk}^{(0)}}[(H_{ik}^{(1)} - H_{jk}^{(0)})^2] &= \int_{x} exp[-\alpha(x - B_{jk})^2 ](H_{ik}^{(1)}-x)^2dx\\
+ &=\int_{t} exp[-\alpha(t - (B_{jk} - H_{ik}^{(1)}))^2)t^2dt\\
+ &=Var(T) + \bE[T]^2  \hspace{10pt}\text{($T = X - H_{ik}^{(1)}$)}\\
+ &= \bE[T]^2 + const.\\
+ &= (H_{ik}^{(1)} - B_{jk})^2\\
+ \implies Q_i^{(1)} &= \frac{1}{Z_{i}^{(1)}}exp(-E(H_i^{(1)}))\\
+ \implies E(H_i^{(1)}) &= \sum_{k=1}^{N}[\alpha(H_{ik}^{(1)} - B_{ik})^2 + \beta\sum_{j\in\cN(i)}g_{ij}(H_{ik}^{(1)} - B_{jk})^2]\\
+ \text{Taking partial derivative and setting to 0:}\\
+ H_{ik}^{(1)} &= \frac{\alpha B_{ik} +  \beta\sum_{j\in\cN(i)}g_{ij}B_{jk}}{\alpha + \beta\sum_{j\in\cN(i)}g_{ij}}\\
+ ----- & ------\\
+ \bE_{H_{jk}^{(1)}}[(H_{ik}^{(2)} - H_{jk}^{(1)})^2] &= \int_{x} exp[-\alpha(x - B_{jk})^2 - \beta\sum_{p\in\cN(j)}g_{jp}(x - B_{pk})^2](H_{ik}^{(2)}-x)^2dx\\
+        &=\int_{t} exp[-\alpha(t - (B_{jk} - H_{ik}^{(2)}))^2 - \beta\sum_{p\in\cN(j)}g_{ip}(t  - (B_{pk} -H_{ik}^{(2)}))^2]t^2dt\\
+ &=Var(T) + \bE[T]^2  \hspace{10pt}\text{($T = X - H_{ik}^{(2)}$)}\\
+ &= \bE[T]^2 + const.\\
+\bE[T] &= argmin_{t} (\alpha(t - (B_{jk} - H_{ik}^{(2)}))^2 + \beta\sum_{p\in\cN(j)}g_{jp}(t  - (B_{pk} -H_{ik}^{(2)}))^2)\\
+\implies \bE[T] &= \frac{\alpha(B_{jk} - H_{ik}^{(2)}) + \beta\sum_{p\in\cN(j)}g_{jp}(B_{pk} -H_{ik}^{(2)})}{\alpha + \beta\sum_{p\in\cN(j)}g_{jp}} \\
+\implies \bE[(H_{ik}^{(2)} - H_{jk}^{(1)})^2] &= \Big{[}\frac{\alpha(B_{jk} - H_{ik}^{(2)}) + \beta\sum_{p\in\cN(j)}g_{jp}(B_{pk} -H_{ik}^{(2)})}{\alpha + \beta\sum_{p\in\cN(j)}g_{jp}}\Big{]}^2\\
+&=\Big{[}\frac{\alpha(H_{ik}^{(2)} - B_{jk}) + \beta\sum_{p\in\cN(j)}g_{jp}(H_{ik}^{(2)} - B_{pk})}{\alpha + \beta\sum_{p\in\cN(j)}g_{jp}}\Big{]}^2\\
+&= \Big{[}\frac{H_{ik}^{(2)}(\alpha + \beta\sum_{p\in\cN(j)}g_{jp})}{\alpha + \beta\sum_{p\in\cN(j)}g_{jp}} - \frac{\alpha B_{jk} +  \beta\sum_{p\in\cN(j)}g_{jp}B_{pk}}{\alpha + \beta\sum_{p\in\cN(j)}g_{jp}}\Big{]}^2\\
+&= \Big{[}H_{ik}^{(2)} - \frac{\alpha B_{jk} +  \beta\sum_{p\in\cN(j)}g_{jp}B_{pk}}{\alpha + \beta\sum_{p   \in\cN(j)}g_{jp}}\Big{]}^2\\
+&=\Big{[}H_{ik}^{(2)} - H_{jk}^{(1)}\Big{]}^2\\
+\end{align*} 
+\begin{align*}
+ Q_i^{(2)} &= \frac{1}{Z_{i}^{(2)}}exp(-E(H_i^{(2)})) \\
+ \implies E(H_i^{(2)}) &= \sum_{k=1}^{N}[\alpha(H_{ik}^{(2)} - B_{ik})^2 + \beta\sum_{j\in\cN(i)}g_{ij}(H_{ik}^{(2)} - H_{jk}^{(1)})^2]\\
+ \text{Taking partial derivative and setting to 0:}\\
+ H_{ik}^{(2)} &= \frac{\alpha B_{ik} +  \beta\sum_{j\in\cN(i)}g_{ij}H_{jk}^{(1)}}{\alpha + \beta\sum_{j\in\cN(i)}g_{ij}}\\
+\end{align*}
+Similarly we can show the updates of eq.(7) holds true for t=3,4,...
+\begin{center}
+ ---------------------------------------
+\end{center}
+

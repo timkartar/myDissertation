@@ -4,6 +4,7 @@
 %	PACKAGES AND DOCUMENT CONFIGURATION
 %-----------------------------------------------------------------------------
 
+
 % Use `report` class with `USCthesis` package (style file) by Brian P. Gerkey
 % Font size should be 11 or 12 points for regular paragraph text.
 \documentclass[letterpaper,11pt]{report}
@@ -61,7 +62,7 @@
 
 %\usepackage[top=0.85in,left=2.75in,footskip=0.75in,marginparwidth=2in]{geometry}
 \usepackage{pmi} %pmi piyush rai style
-
+%\usepackage{ml}
 % use Unicode characters - try changing the option if you run into troubles with special characters (e.g. umlauts)
 \usepackage[utf8]{inputenc}
 \usepackage[lining,semibold]{libertine} % a bit lighter than Times--no osf in math
@@ -270,7 +271,8 @@ $^1$Quantitative and Computational Biology, University of Southern California
 \begingroup
 \numberwithin{equation}{section}
 % Appendix source files
-\input{main/appendix_proof}
+%\input{main/appendix_proof}
+\input{crf/crf_detailed.tex}
 \endgroup
 
 % In case your dissertation has multiple volumes.
