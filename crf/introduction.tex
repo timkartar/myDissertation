@@ -57,8 +57,8 @@ Such an operation is based on Continuous variant of a CRF or CCRF. \citet{ristov
 shows how to calculate the updates for such a model using mean field variational inference, although
 not in a neural network context. \citet{gao2019conditional} introduces this approach for graph
 convolution based networks, however, the network layer update equation presented in their work is
-faulty andresults into simply an Identity transaformation. So, we calculated and devised the correct
-form of the network layer which we then add to the second last layer of our Geobind model.
+faulty and results into simply an Identity transaformation. We calculated the correct
+form of the network layer which we use as the second last layer of our Geobind model.
 
 In this next sections we shall formally describe a metric  denoting "smoothness" of binding site
 prediction over protein meshes, the CCRF model and the CCRF layer's architecture, followed
