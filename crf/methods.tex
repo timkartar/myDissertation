@@ -2,8 +2,56 @@
 
 \subsection{A suitable smoothness metric for binding site prediction}
 
+There has been some work on smoothness of labels or features over graphs using some form of measure
+of local variations around each vertex as a smoothness metric
+\citep{zhou2004regularization,hou2019measuring,wang2019knowledge}. However, the smoothness metrics
+used by most of these works are not suitable for imbalanced classes. In our case, since binding site
+regions are generally only a small portion of the whole protein surface, the classes are extremely
+imbalanced. This means, metrics not addressing class imbalance all give extremely high values of
+smoothness even for meshes which we would consider as quite "unsmooth" due to lots of
+patchy/scattered predictions. 
 
 
+Given a graph $G=(V, E)$ and label assignments $l$ such that $l_v \in \{0, 1, ..., k-1\} \forall v\in V$,
+an example of a smoothness metric not considering class imbalance is as follows:
+\begin{align*}
+        M_1 &= \frac{1}{|E|} \sum_{(u,v) \in E}\bI[l_u = l_v]\numberthis \label{simple_smoothness}
+\end{align*}
+The metric $M_1$ presented above has a value of 1 if all the labels belong to one class and has a 
+value around 0.5 when the labels are totally randomly assigned. This already limits the
+range of this metric. Not only that in practice, we almost never see  our predicted labels over protein
+meshes go below the value of 0.9. Which makes the metric really skewed and any judgements of
+improvements in similarity is difficult to make. There are other weighted versions of this metric
+possible, for example, an inverse edge weighted version we attempted looks as follows:
+\begin{align*}
+        M_2 &= 1 - \frac{1}{\sum_{(u,v) \in E}\frac{1}{d(u,v)}} \sum_{(u,v) \in
+        E}\frac{1}{d(u,v)}\bI[l_u \neq l_v]\numberthis \label{inverse_edge_weghted_smoothness}\\
+        where, d(u,v) &= \text{ distance between vertices $u,v$ or edge length of $(u,v)$}
+\end{align*}
+However, this does not help much, because the variance of the edge length distribution
+is really low for our protein meshes. So, it behaves similarly as $M_1$.
+
+So finally, we designed a metric which takes care of the issue of label imbalanced (and the
+resulting skewed smoothness values). Assuming there are $k$ possible classes, we computing a measure
+of smoothness for labels corresponding to each of these classes separately and then do a weighted
+combination of them. So, let, $V_i \subset V$ be the set of vertices which has the label $i \in
+\{0,1,..,k-1\}$, and $V_i^{in} \subset V_i$ to be the set of vertices within $V_i$ all of whose
+neighbours have class label $i$. This makes $V_i^{out} = V - V_i^{in}$ the vertices which have at
+least one neihgbour having class label other than $i$. So, in essence, $V_i^{in}$ is analogous to
+area and $V_i^{out}$ is analogous to perimeter of regions with class label $i$. Hence, a measure for
+smoothness for class $i$ is simply:
+\begin{align*}
+        S_i = \frac{|V_i^{in}|}{|V_i|} = 1 - \frac{|V_i^{out}|}{|V_i|} \numberthis \\
+\end{align*}
+Now, we can take weighted combination of these class specific metrics to constitute a balanced
+smoothness smoothness metric:
+\begin{align*}
+        S = \frac{\sum_{i = 0}^{k-1}\frac{1}{|V_i|}S_i}{\sum_{i = 0}^{k-1}\frac{1}{|V_i|}} =
+        \frac{\sum_{i = 0}^{k-1}\frac{|V_i^{in}|}{|V_i|^2}}{\sum_{i = 0}^{k-1}\frac{1}{|V_i|}} \numberthis \label{final_smoothness_metric}
+\end{align*}
+
+This metric is nice in the sense it gives a broader range of values \red{small figure needed} and
+hence is more useful in our case.
 
 \subsection{Continuous Conditional Random Fields layer}
 
