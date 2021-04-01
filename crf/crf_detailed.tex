@@ -5,8 +5,8 @@
 %\date{}							% Activate to display a given date or no date
 
 \section{Detailed calculation of the CCRF layer update}
-Starting from the mean field variational inference result of a CRF as given in \red{(Kr\"{a}henb\"{u}hl, 2012)} we have,
-
+Starting from the mean field variational inference result in eq. \ref{mean_field_VI_result} we have, %\red{(Kr\"{a}henb\"{u}hl, 2012)} we have,
+\label{crf_detailed}
 \begin{equation}
 Q_i (H_i) \simeq \frac{1}{Z} \exp \left ( - \alpha || H_i - B_i ||^2  - \beta \sum_{j \in \mathcal{N}(i)} g_{ij} \int_{-\infty}^{\infty} Q(H_j) ||H_i - H_j ||^2 d H_j\right )
 \end{equation}

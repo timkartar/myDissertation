@@ -1,7 +1,5 @@
 \section{Methods}
-
 \subsection{A suitable smoothness metric for binding site prediction}
-
 There has been some work on smoothness of labels or features over graphs using some form of measure
 of local variations around each vertex as a smoothness metric
 \citep{zhou2004regularization,hou2019measuring,wang2019knowledge}. However, the smoothness metrics
@@ -10,8 +8,7 @@ regions are generally only a small portion of the whole protein surface, the cla
 imbalanced. This means, metrics not addressing class imbalance all give extremely high values of
 smoothness even for meshes which we would consider as quite "unsmooth" due to lots of
 patchy/scattered predictions. 
-
-
+\par
 Given a graph $G=(V, E)$ and label assignments $l$ such that $l_v \in \{0, 1, ..., k-1\} \forall v\in V$,
 an example of a smoothness metric not considering class imbalance is as follows:
 \begin{align*}
@@ -30,7 +27,7 @@ possible, for example, an inverse edge weighted version we attempted looks as fo
 \end{align*}
 However, this does not help much, because the variance of the edge length distribution
 is really low for our protein meshes. So, it behaves similarly as $M_1$.
-
+\par
 So finally, we designed a metric which takes care of the issue of label imbalanced (and the
 resulting skewed smoothness values). Assuming there are $k$ possible classes, we computing a measure
 of smoothness for labels corresponding to each of these classes separately and then do a weighted
@@ -49,14 +46,85 @@ smoothness smoothness metric:
         S = \frac{\sum_{i = 0}^{k-1}\frac{1}{|V_i|}S_i}{\sum_{i = 0}^{k-1}\frac{1}{|V_i|}} =
         \frac{\sum_{i = 0}^{k-1}\frac{|V_i^{in}|}{|V_i|^2}}{\sum_{i = 0}^{k-1}\frac{1}{|V_i|}} \numberthis \label{final_smoothness_metric}
 \end{align*}
-
 This metric is nice in the sense it gives a broader range of values \red{small figure needed} and
 hence is more useful in our case.
-
 \subsection{Continuous Conditional Random Fields layer}
-
-\begin{pmialgorithm}[0.9\textwidth]{H}{ Mean Field CCRF Layer}\vskip-2ex
-        \label{algo:tk-means}
+Given a graph $G = (V,E)$, features over graph vertices $x$ such that $x_v \in \bR^d \forall v \in V
+$ and labels over the vertices $y$ such that $y_v \in \{0,1,..,k\} \forall v
+\in V$, A CRF aims to maximize the following probability to reassign the labels $y$.
+\begin{align*}
+        P(y_i | x, y_{j\neq i} ) &= 
+        \frac{1}{Z(x_i)} exp [- (\psi_1(x_i,y_i) + \sum_{j \in
+        \cN(i)}\psi_2(y_i,y_j,x_i,x_j)) ] \numberthis \label{crf_general}
+\end{align*}
+The terms $\psi_1$ and $\psi_2$ in the above equation are known as unary and binary potentials
+respectively. $\psi_1$ models how much the label $y_i$ conforms to the features $x_i$ and $\psi_2$
+models how much the label $y_i$ conforms to the labels and features of the neighbours of vertex $i$.
+The exact form of these terms can be application dependent and designed accordingly. 
+However, optimizing eq. \ref{crf_general} in a general scenario is non-trivial and approximations
+either does not perform well or heavily resource consuming. Moreover, this kind of optimzation over
+discrete domain is not suitable for neural network application. 
+\par
+In our case, Geobind is a deep learning model. So , we would like to implement this conditional random field 
+model as a network layer which can just be plugged into the network and will be optimized by backpropagation 
+along with the whole network, without us requiring to do any extra optimization. So, following the
+approach described in \citet{gao2019conditional, ristovski2013continuous} we instead use a
+Continuous CRF model. 
+Since, we want to implement it as a network layer, we define our termonilogy thus: Let, $B_i \in
+\bR^d \;\forall i \in V$ be output of a neural network layer and is input the CCRF layer, $H_i \in
+\bR^d \; \forall i \in V$ be output of the CCRF layer. In this scenario, we can think $B$ as analogous
+to $x$ in eq. \ref{crf_general} and before any kind of optimization $H = H^0 = B$ is analogous to $y$ in
+eq. \ref{crf_general}. $H$ then gets reassigned some final output value after the layer performs its
+operation. Now, all variables are in continuous domain and the model looks as follows:
+\begin{align*}
+        P(H_i | B) &= 
+        \frac{1}{Z(B)} exp [- (\psi_1(H_i,B_i) + \sum_{j \in
+        \cN(i)}\psi_2(H_i,H_j,B_i,B_j)) ] \numberthis \label{ccrf}
+\end{align*}
+Now, it is time to design $\psi_1$ and $\psi_2$ which is straightforward in this case. We want
+output $H_i$ to preserve it's identity as much possible i.e. be as close to $B_i$ as possible, which
+makes squared error w.r.t. a reasonable choice for $\psi_1$. However, we want $H_i$ to be not too
+different from its neighbours also. We would like to different neighbours of $i$ differently
+according their initial similarity with vertext $i$. Finally, the two potential terms needs to be
+weighted by some optimzable constants determined by the network while training. This motivates the following choise of the functions:
+\begin{align*}
+        \psi_1(H_i, B_i) = \alpha ||H_i - B_i||_2^2 &\;\;\; \psi_2(H_i, H_j, B_i, B_j) = \beta
+        g_{ij} ||H_i - H_j||_2^2 \;\; \alpha, \beta > 0 \\
+        \text{A simple and effective choice: } & g_{ij} =
+        exp\bigg{[}\frac{B_i^TB_j}{\sigma^2 ||B_i||_2||B_j||_2}\bigg{]} \;\; \numberthis 
+\end{align*}
+$\sigma$ in the above equation can be left to the network to optimize. There can be other choices of
+$g_{ij}$ in the above equation too e.g. a it can be parametrized as a separate neural network
+itself.
+This makes the final form of our CCRF model as follows:
+\begin{align*}
+        P(H_i | B) &= \frac{1}{Z(B)} exp [-(||H_i - B_i||_2^2 + \sum_{j \in
+        \cN(i)} g_{ij} ||H_i - H_j||_2^2)] \numberthis \label{ccrf_final}
+\end{align*}
+Now, we need to optimize eq. \ref{ccrf_final} mathematically to get an update algorithm that the
+network layer can execute to get the final result $\hat{H}$. For this, we turn to Bayesian Variational
+Inference. In this framework, we propose to approximate the posterior distribution $P(H_i |
+B)$ which may not have a tractable form, using a candidate distribution $Q(H)$ which has a suitable
+form which we can work with. 
+We can do this in this case, by adopting the standard mean field variational inference (VI) assumption
+where we assume the full posterior distribution can be expressed as a product of independent
+marginal distributions over the vertices. i.e. $Q(H) = \prod_{i \in V}Q_i(H_i)$. The we can minimize
+the KL divergence between the candidate and target distribution is standard VI manner:
+\begin{align*}
+        Q* = argmin_{Q \in \cQ} KL(Q(H) || P(H | B)) \numberthis \label{kl_div_min}
+\end{align*}
+Following mean field VI calculation presented in \cite{murphy2012machine}, we can now
+calculate the posterior distribution of $H_i$:
+\begin{align*}
+Q^*_i(H_i) = \bE_{j\neq i}[ln P(H_i | B)] + const \numberthis \label{mean_field_VI_result}
+\end{align*}
+Now, the output of CCRF layer is simply the $\hat{H}_i$ that maximises $Q*(H_i) \forall i \in V$.
+Our calculations for the same is presented in \hyperref[crf_detailed]{Appendix A}. In essence, this constitutes a
+system of equations over the vertices which can be solved by iteratively updating the vertices until
+convergence is reached. For our purposes we stop the iterations at a set max iteration number T.
+Below we present the final fotm of the CCRF layer as used in geobind.
+\begin{pmialgorithm}[0.9\textwidth]{H}{CCRF Layer}\vskip-2ex
+        \label{algo:CCRF_LAYER}
         \begin{algorithmic}[1]
                 \REQUIRE  $B_i$  $\forall i$, $E$ (adjacency information)
                 \STATE Initialize $H_i^0 = B_i$ $\forall i$\COMMENT{$H_i^0$ maximises $Q_i^0 = \frac{1}{Z_i^0}exp(-c||H_i^0 - B_i||^2)$}
@@ -69,7 +137,12 @@ hence is more useful in our case.
                 \RETURN $H_i^*$
         \end{algorithmic}
 \end{pmialgorithm}
-
-
-
-
+The network optimizes the parameters $\alpha, \beta$ and $\sigma$. Intuitively, if the
+input vertex information is already smooth and no update is necessary then $beta$ goes towards 0 and 
+otherwise, we have some non zero vaue of $beta$ resulting in a balance between preserving the
+vertex's own features and conforming to features of its neighbours. In the following section, we
+show that using this layer as the second last of Geobind significantly improves the smoothness of
+predicted labels over protein meshes while improving upon or atleast preserving desired 
+metrics of classification reslts. Note: this is important, because, a naive way to increase
+smoothness of prediction is to predict the same class for all vertices, but, that would dramatically
+decrease performance metrics of the prediction. 
