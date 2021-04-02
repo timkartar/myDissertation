@@ -111,19 +111,28 @@ where we assume the full posterior distribution can be expressed as a product of
 marginal distributions over the vertices. i.e. $Q(H) = \prod_{i \in V}Q_i(H_i)$. The we can minimize
 the KL divergence between the candidate and target distribution is standard VI manner:
 \begin{align*}
-        Q* = argmin_{Q \in \cQ} KL(Q(H) || P(H | B)) \numberthis \label{kl_div_min}
+        Q^* = argmin_{Q \in \cQ} KL(Q(H) || P(H | B)) \numberthis \label{kl_div_min}
 \end{align*}
 Following mean field VI calculation presented in \cite{murphy2012machine}, we can now
 calculate the posterior distribution of $H_i$:
 \begin{align*}
 Q^*_i(H_i) = \bE_{j\neq i}[ln P(H_i | B)] + const \numberthis \label{mean_field_VI_result}
 \end{align*}
-Now, the output of CCRF layer is simply the $\hat{H}_i$ that maximises $Q*(H_i) \forall i \in V$.
-Our calculations for the same is presented in \hyperref[crf_detailed]{Appendix A}. In essence, this constitutes a
+Now, the output of CCRF layer is simply the $\hat{H}_i$ that maximises $Q^*(H_i) \forall i \in V$.
+Our detailed calculations for the same is presented in \hyperref[crf_detailed]{Appendices}. In essence, this constitutes a
 system of equations over the vertices which can be solved by iteratively updating the vertices until
 convergence is reached. For our purposes we stop the iterations at a set max iteration number T.
-Below we present the final fotm of the CCRF layer as used in geobind.
-\begin{pmialgorithm}[0.9\textwidth]{H}{CCRF Layer}\vskip-2ex
+\hyperref[algo:CCRF_LAYER]{Algorithm 1} presents the final form of the CCRF layer as used in geobind.
+The network optimizes the parameters $\alpha, \beta$ and $\sigma$. Intuitively, if the
+input vertex information is already smooth and no update is necessary then $\beta$ goes towards 0 and 
+otherwise, we have some non zero vaue of $\beta$ resulting in a balance between preserving the
+vertex's own features and conforming to features of its neighbours. In the following section, we
+show that using this layer as the second last of Geobind significantly improves the smoothness of
+predicted labels over protein meshes while improving upon or atleast preserving desired 
+metrics of classification reslts. Note: this is important, because, a naive way to increase
+smoothness of prediction is to predict the same class for all vertices, but, that would dramatically
+decrease performance metrics of the prediction. 
+\begin{pmialgorithm}[0.9\textwidth]{h!}{CCRF Layer}\vskip-2ex
         \label{algo:CCRF_LAYER}
         \begin{algorithmic}[1]
                 \REQUIRE  $B_i$  $\forall i$, $E$ (adjacency information)
@@ -137,12 +146,3 @@ Below we present the final fotm of the CCRF layer as used in geobind.
                 \RETURN $H_i^*$
         \end{algorithmic}
 \end{pmialgorithm}
-The network optimizes the parameters $\alpha, \beta$ and $\sigma$. Intuitively, if the
-input vertex information is already smooth and no update is necessary then $beta$ goes towards 0 and 
-otherwise, we have some non zero vaue of $beta$ resulting in a balance between preserving the
-vertex's own features and conforming to features of its neighbours. In the following section, we
-show that using this layer as the second last of Geobind significantly improves the smoothness of
-predicted labels over protein meshes while improving upon or atleast preserving desired 
-metrics of classification reslts. Note: this is important, because, a naive way to increase
-smoothness of prediction is to predict the same class for all vertices, but, that would dramatically
-decrease performance metrics of the prediction. 

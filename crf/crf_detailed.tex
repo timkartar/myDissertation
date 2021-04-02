@@ -4,7 +4,7 @@
 
 %\date{}							% Activate to display a given date or no date
 
-\section{Detailed calculation of the CCRF layer update}
+\section*{Detailed calculation of the CCRF layer update}
 Starting from the mean field variational inference result in eq. \ref{mean_field_VI_result} we have, %\red{(Kr\"{a}henb\"{u}hl, 2012)} we have,
 \label{crf_detailed}
 \begin{equation}
@@ -17,7 +17,8 @@ where $H_i, B_i, H_j \in \mathbb{R}^N$. Evaluating this component-wise and using
 E(H_i) = \alpha \sum_n^N (H_{in} - B_{in})^2 + \beta \sum_{j \in \mathcal{N}(i)} g_{ij} \sum_n^N \int_{-\infty}^{\infty} \cdots \int_{-\infty}^{\infty} Q(H_j) (H_{in} - H_{jn})^2 d H_{j1}\cdots dH_{jN}
 \end{equation}.
 
-Focusing on the inner most summation of second term, since each component of $H_i$ and $H_j$ is independent (by eq. 10 of \red{Gao et al.}), we can write $Q(H_j) = \Pi_{k=1}^N Q_{jk}(H_{jk})$ and assume that each $Q_{jk}$ is individually normalized. The summation then becomes
+Focusing on the inner most summation of second term, since each component of $H_i$ and $H_j$ is
+independent (by eq. 10 of \citet{gao2019conditional}), we can write $Q(H_j) = \Pi_{k=1}^N Q_{jk}(H_{jk})$ and assume that each $Q_{jk}$ is individually normalized. The summation then becomes
 
 \begin{multline}
  \sum_n^N \int_{-\infty}^{\infty}  Q(H_j) (H_{in} - H_{jn})^2 d H_{j1}\cdots dH_{jN} \\
@@ -53,22 +54,22 @@ Update for iteration k:
 \end{equation}
 
 We can get the aggregated values $(\sum \limits_{j \in \mathcal{N}(i)} (g_{ij} H_j^t),\sum \limits_{j \in \mathcal{N}(i)} g_{ij})$ for $i$th node in a message passing step using $E, B_i$ and $H_i^t$ $\forall i$.
-\begin{pmialgorithm}[0.9\textwidth]{H}{ Mean Field CCRF Layer}\vskip-2ex
-	\label{algo:tk-means}
-	\begin{algorithmic}[1]
-		\REQUIRE  $B_i$  $\forall i$, $E$ (adjacency information)
-		\STATE Initialize $H_i^0 = B_i$ $\forall i$\COMMENT{$H_i^0$ maximizes $Q_i^0 = \frac{1}{Z_i^0}exp(-c||H_i^0 - B_i||^2)$}
-		\FOR[$T$ signifies convergence]{$t=0,1,2,...,T-1$} 
-        \STATE compute $(\sum \limits_{j \in \mathcal{N}(i)} (g_{ij} H_j^t),\sum \limits_{j \in \mathcal{N}(i)} g_{ij})$ \COMMENT{message passing}
-        \STATE $H_i^{t'} = \alpha B_{i} + \beta  \sum\limits_{j \in \mathcal{N}(i)} (g_{ij} H_j^t)$ 
-        \STATE $H_i^{t+1} = H_i^{t'} / (\alpha +  \beta  \sum \limits_{j \in \mathcal{N}(i)} g_{ij} )$ 
-		\ENDFOR 
-		\STATE $H_i^* = H_i^T$
-		\RETURN $H_i^*$
-	\end{algorithmic}
-\end{pmialgorithm}
-Continued in next page ...
-\newpage
+%\begin{pmialgorithm}[0.9\textwidth]{H}{ Mean Field CCRF Layer}\vskip-2ex
+%	\label{algo:tk-means}
+%	\begin{algorithmic}[1]
+%		\REQUIRE  $B_i$  $\forall i$, $E$ (adjacency information)
+%		\STATE Initialize $H_i^0 = B_i$ $\forall i$\COMMENT{$H_i^0$ maximizes $Q_i^0 = \frac{1}{Z_i^0}exp(-c||H_i^0 - B_i||^2)$}
+%		\FOR[$T$ signifies convergence]{$t=0,1,2,...,T-1$} 
+%        \STATE compute $(\sum \limits_{j \in \mathcal{N}(i)} (g_{ij} H_j^t),\sum \limits_{j \in \mathcal{N}(i)} g_{ij})$ \COMMENT{message passing}
+%        \STATE $H_i^{t'} = \alpha B_{i} + \beta  \sum\limits_{j \in \mathcal{N}(i)} (g_{ij} H_j^t)$ 
+%        \STATE $H_i^{t+1} = H_i^{t'} / (\alpha +  \beta  \sum \limits_{j \in \mathcal{N}(i)} g_{ij} )$ 
+%		\ENDFOR 
+%		\STATE $H_i^* = H_i^T$
+%		\RETURN $H_i^*$
+%	\end{algorithmic}
+%\end{pmialgorithm}
+%Continued in next page ...
+%\newpage
 \section*{$Q_i^{(t)}$ and $H_i^{(t)}$ calculation for $t=1,2$}
 \begin{align*}
 \bE_{H_{jk}^{(0)}}[(H_{ik}^{(1)} - H_{jk}^{(0)})^2] &= \int_{x} exp[-\alpha(x - B_{jk})^2 ](H_{ik}^{(1)}-x)^2dx\\
