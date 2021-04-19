@@ -1,6 +1,25 @@
 \section{Results}
-livfwai;lwabv
-gabgawga
+We compare binding site prediction results between two Geobind networks, one without a CCRF layer
+and one with a CCRF layer as its second last layer. For both cases we trained and validated the
+networks on three different datsets. The datasets used are as follows:\\
+\\
+\textbf{PDNA-62 :} \citet{ahmad2004analysis} constructed a non-redundant dataset of 62 protein–DNA complexes which has been
+used in a variety of other studies \citep{kuznetsov2006transient, wang2006bindn} etc. The protein
+sequences used were filtered to ensure a maximum identity of no more than 25\% between any two sequences and the
+resolution of the chosen structures was 2.5 A or better. The structures in this dataset contain only helical B-form DNA.\\
+\textbf{PDNA-74 :} We constructed a dataset of 74 single-stranded DNA binding proteins bound to target ssDNA. We first
+used the structural database DNAproDB \citep{sagendorf2017dnaprodb,sagendorf2020dnaprodb} to identify 374 protein-ssDNA complexes based on structural critera
+which included ensuring the bound DNA in the structure presented the single-stranded secondary structure, a minimum
+length of 4 nucleotides per DNA strand and 40 residues per protein chain, and a minimum of 5 nucleotide-residue
+interactions (as defined by DNAproDB). Next, we verified that all proteins identified had known ssDNA binding
+function based on annotations from the Gene Ontology knowledgebase \citep{gene2019gene}.  Finally, all protein sequences were
+clustered with a 70\% sequence identity threshold using CD-HIT \citep{li2006cd}. These clusters were then randomly sampled,
+with up to three samples per cluster, to generate the final set of 74 protein structures. This sampling method allows us
+to construct a dataset with limited amount of sequence redundancy but more conformational sampling than would be
+possible with a stricter requirement on sequence redundancy. This is useful in the case of ssDNA where the polymer is
+very flexible, but structural data is limited.\\
+\textbf{PDNA-224:} a non-redundant dataset of 224 protein-DNA complexes originally constructed by
+\citet{li2013predna}\\
 
 \begin{center}
     \begin{figure}
