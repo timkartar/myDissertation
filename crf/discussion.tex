@@ -1,2 +1,23 @@
 \section{Discussion}
-Discuss drawbacks of geobind and future work.
+In Chapter 1, we used a technique for autoencoding Bayesian Variational inference to model gene
+expression time-series data. In this chapter we applied mean field Bayesian Variational inference to
+design a network layer for Geobind which results into smoother binding site predictions on protein
+surfaces. 
+
+Now, we want to bring light to one key aspect of Geobind. In this framework, the model input has no
+explicit information regarding the binding element (e.g. DNA/RNA/drug molecule etc.) and only based on
+protein surface and physicochemical features. I.e. we assume there are some commonalities between the proteins binding to
+say, ss-DNA (for PDNA-74) and this model implicitly learns those set of commonalities.
+
+However, as a next step we would probably like to bring in the binding elements in the
+picture. Normally in binding site prediction tasks this is problematic because including binding
+element information makes the
+datasets really sparse and unfit for a machine learning task. However, there is a way out of this,
+if we move to Generative setting instead of the Discriminative setting of binding cite prediction.
+
+In the next chapter, we propose a generalized generative model for  binding element design where we
+start from where Geobind's application ends. In this proposal, Given a binding site on a protein we
+would like to generate binding elements that could bind to the given site. The binding elements
+can be drug molecules or nucleic acid motifs. We shall discuss already performed research works
+using generative modeling for novel drug molecule, nucleic acid sequence generation and based upon
+insights from them present our proposed model for generalized binding element design.
