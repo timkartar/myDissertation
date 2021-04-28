@@ -45,7 +45,7 @@ are applicable to our case directly. One of the more interesting advances of app
 mesh object comes from \citet{kalogerakis2010learning} using alpha-expansion graph-cuts method proposed by
 \citet{boykov2001fast}. However, being pre-CNN revolution work, this method is not sutiable for deep
 learning and is not readily integrable to our Geobind model. 
-
+\par
 Overall, it turns out, optimizing a CRF model over the predicted labels of Geobind on the discrete
 domain to reassign them is not computationally easy. However, instead of trying to smooth the
 predicted labels we can directly try to make these predicted labels itself smoother. This means we
@@ -63,4 +63,12 @@ form of the network layer which we use as the second last layer of our Geobind m
 In this next sections we shall formally describe a metric  denoting "smoothness" of binding site
 prediction over protein meshes, the CCRF model and the CCRF layer's architecture, followed
 by results showing how it has significantly improved Geobind for the binding site classification task.
-
+\begin{center} 
+ \begin{figure}[!htp]
+                \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{crf_figs/crf_concept.png}}
+ % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
+        \caption[Geobind schematic, example and conceptual explanation of CRF application scenario]{\textbf{Geobind schematic, example and conceptual explanation of CRF application scenario}
+        ({\bf A}) Schematic diagram showing how Geobind predicts binding sites over a protein surface represented as a mesh. ({\bf B})\citet{krahenbuhl2012efficient} shows how applying a fully connected CRF model results in better image segmentation results compared to 
+        just unary classification. ({\bf C}) (above) An exmple independent class assignment in a 2-D grid of cells which is irregular, (below) A smoother classification, which we would 
+        expect to get as result of a conditional assignment process.}
+        \label{fig:crf_concept} \end{figure} \end{center}
