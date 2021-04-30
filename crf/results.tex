@@ -29,15 +29,15 @@ is very flexible, but structural data is limited.\\ \textbf{PDNA-224:} a non-red
         \label{fig:ccrf} \end{figure} \end{center}
 
 Both CRF and noCRF models were trained on the three datasets with a 4:1 training and validation set
-        split. \red{\hyperref[fig:ccrf]{Fig. 2.3}} shows smoothness( eq.
+        split. \red{\hyperref[fig:ccrf]{Fig. 2.2}} shows smoothness( eq.
         \ref{final_smoothness_metric}) and Balanced Accuracy  metrics achieved on the validation set
         in each case. We can clearly the smoothness of the predictions have increased significantly.
         It should also be noted that that, median Balanced Acuracy has also increased for all three
         cases. Therefore, we can conclude applying the CCRF layer improves the smoothness of the
         predicted labels over mesh vertices without compromizing in accuracy of prediction. For a
-        more visual understanding, \red{\hyperref[fig:ccrf]{Fig. 2.1C}} shows one particular example
+        more visual understanding, \red{\hyperref[fig:ccrf]{Fig. 2.2C}} shows one particular example
         of the effect of using CRF layer against the noCRF model for a protein in the validation set
-        for PDNA-74 dataset. The top left panel in \red{\hyperref[fig:ccrf]{Fig. 2.1C}} shows the
+        for PDNA-74 dataset. The top left panel in \red{\hyperref[fig:ccrf]{Fig. 2.2C}} shows the
         ground truth data. We can clearly see how the CRF model improves smoothness of the
         prediction along with various other classification metrics.
 
