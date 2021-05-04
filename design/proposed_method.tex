@@ -25,7 +25,7 @@ Now, we can model the posterior of $z$, $P(z | x_p)$ as a Gaussian $N(z_{\mu}, z
 can be modeled by outputing the parameters $z_{\mu}, z_{\Sigma}$ from an encoder network $E(x_p)$.
 A value of $z$ can be sampled from this distribution now using the reparamtrization trick described
 in \citet{Kingma2014}, similar to as described in Chapter 1 for RVAgene. This process along with a
-KL loss with a prior on $z$ $p(z) = N(0,\bI)$ ensures a regularized latent space which is important
+KL loss with a prior on $z$, $p(z) = N(0,\bI)$ ensures a regularized latent space which is important
 for generating meaningful data. Therefore,
 \begin{align*}
         z_{\mu}, z_{\Sigma} &= E(x_p) \numberthis \\
@@ -39,6 +39,27 @@ for generating meaningful data. Therefore,
 The functions $E(x_p)$ and $G(\hat{z})$ in \ref{final_prediction_architecture} represent the
 encoder and generator functions respectively both of which are parametrized by neural networks. 
 
+Now, we need to think about how to train this model, in case of RVAgene the input and output to the
+model was the same: gene expression time-series data, and we could employ a reconstruction loss to
+give the model an objective to optimize. Here, we can do something similar. We shall have the same
+KL divergence loss as we had for RVAgene, and we shall have a prediction loss comparing generated
+$\hat{x}_e$ to true $x_e$. However, this term won't be as straightforward as a reconstruction loss
+always. The following equation described the training objective of the model:
+\begin{align*}
+        \cL(\theta, x_e) = D_{KL}(\cN(z_{\mu},z_{\Sigma}) || \cN(0,I)) + f(x_e, \hat{x}_e)
+        \numberthis \label{loss}
+\end{align*}
+The definition of the prediction loss $f(x_e, \hat{x}_e)$ will change depending on the
+representation and type of binding element begin generated. For sequence PWMs it will be a
+straightforward L1($|x_e -  \hat{x}_e|$) or L2 loss ($|x_e -  \hat{x}_e|^2$). For SMILES strings, it
+can be L1/L2 loss on the one hot encodings of the SMILES strings or it can also be some kind of
+sequence alignment based scoring scheme. For molecular graph representations some for graph
+similarity/distance measurement can be used to implement $f$. It can be a straightforward L1/L2 loss
+between the vertex/edge features and adjacency matrices of $x_e$ and $\hat{x}_e$. Otherwise, we can
+use some more involved approaches detailed in \citet{koutra2011algorithms} or more recent approaches
+like \citet{lin2019novel}. Once we have decided  $f$, the whole model can be trained by the standard
+backpropagation \citep{kelley1960gradient} algorithm for neural network training using the loss
+function described in \ref{loss}.
 %Now, the encoder-generator framework described above is suitable for prediction, however it's
 %difficult to train it in a straight forward manner. For RVAgene \red{(cite)} we were able to use
 %reconstruction based method to train because the input of encoder and output of decoder was the same.

@@ -13,7 +13,12 @@ An alternative method to estimate hard-to-compute probability distributions is V
  q^*(\vz) &= \textrm{argmin}_{q(\vz)\in\cQ} \textrm{KL}(q(\vz)||p(\vz|\vx)). \numberthis \label{vi-formulation}
 \end{align*}
 
-Much recent effort has gone into solving VI problems in different settings \citep{Zhang2019, Ingraham2017, Bouchard-Cote2010}. VI can be framed as solving an optimization problem over function families: neural networks are popular candidates for representing and learning complex functions. VI was incorporated into autoencoders \citep{Kingma2014} to create the architecture of a variational autoencoder (VAE). A VAE consists of an encoder network to approximate $p(\vz|\vx)$ through a function $q_\vx(\vz)$, and a decoder network $p(\vx|\vz)$ (\hyperref[fig:fig2]{Fig. 1A}). Conceptually, the encoder solves an inference problem: approximating the posterior distribution $p(\vz|\vx)$ as some $q^*_\vx(\vz)$, while the decoder solves a reconstruction problem: defining a generative process for $p(\vx|\vz)$, given the latent variables.
+Much recent effort has gone into solving VI problems in different settings \citep{Zhang2019,
+Ingraham2017, Bouchard-Cote2010}. VI can be framed as solving an optimization problem over function
+families: neural networks are popular candidates for representing and learning complex functions. VI
+was incorporated into autoencoders \citep{Kingma2014} to create the architecture of a variational
+autoencoder (VAE). A VAE consists of an encoder network to approximate $p(\vz|\vx)$ through a
+function $q_\vx(\vz)$, and a decoder network $p(\vx|\vz)$ (\hyperref[fig:fig2]{Fig. 1.1A}). Conceptually, the encoder solves an inference problem: approximating the posterior distribution $p(\vz|\vx)$ as some $q^*_\vx(\vz)$, while the decoder solves a reconstruction problem: defining a generative process for $p(\vx|\vz)$, given the latent variables.
 The VAE posterior is modeled by a multivariate normal $\cN(\mathbf{\mu},\Sigma)$ of the same dimension as $\vz$. Training then comes down to minimizing two objective functions. For the encoder network, which should learn a ``well distributed'' latent space, minimize the KL divergence: KL$(\cN(\mathbf{\mu},\Sigma) || \cN(0,\vI)) $. For the decoder network, which should reconstruct the inputs $\vx$ from the latent space, minimizing either an $L1$ or $L2$ objective function with respect to $\hat{\vx}$ is appropriate. The use of KL-divergence and an $L2$ objective solves the VI formulation of Eq. \ref{vi-formulation} \citep{Kingma2014}, however, an $L1$ objective may be preferred in practice, e.g. in cases where we want to suppress the effects of outliers on the structure of $\vz$ \citep{botchkarev2018performance}.
 
 % Each input point $\vx_i$ is encoded as a distribution over the latent space $\vz$ given a prior, \tcr{and also project $\vx_i$ to a point $\vz_i$ using the reparametrization trick (\cite{Kingma2014}).} Typically, VAEs typically use a standard normal prior $\cN(0,\vI)$ as the prior distribution over the latent space. The decoder network then takes points from the latent space $\vz$ as input, and generates $\vx$. 
@@ -62,7 +67,9 @@ For the decoder network, the first state $h_1$ is calculated from $z$, and the r
 h_{t+1}^{dec} &= \textrm{LSTM}(W_{dec}^Th_t^{dec} + W_{out}^T{\hat{x}_t}+b_{dec}) \numberthis \label{decoder_lstm} \\
 \hat{x}_t &= \textrm{sigm}(W_{out}^Th_t^{dec} + b_{out}), \\
 \end{align*}
-where $\textrm{sigm}(u) = \frac{1}{1 + e^{-u}}$ is the sigmoid activation function, and ($W_i, b_i$) are the network weight parameters. A schematic diagram of the network is shown in \hyperref[fig:fig2]{Fig. 1A}, which can now be trained using backpropagation, to minimize the objective function: 
+where $\textrm{sigm}(u) = \frac{1}{1 + e^{-u}}$ is the sigmoid activation function, and ($W_i, b_i$)
+are the network weight parameters. A schematic diagram of the network is shown in
+\hyperref[fig:fig2]{Fig. 1.1A}, which can now be trained using backpropagation, to minimize the objective function: 
 \begin{align*}
     \cL(\theta, x) = D_{KL}(\cN(\mathbf{\mu}_z,\Sigma_z)||\cN(\mathbf{0},\vI)) + |x - \hat{x}|, \numberthis \label{lossfunction}
 \end{align*}

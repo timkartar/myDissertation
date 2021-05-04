@@ -1,11 +1,14 @@
 \section{Introduction} 
 
-Designing binding elements for target regions in protein residues or complexes is a hard
+Designing binding elements for target regions of protein residues or complexes is a hard
 computational problem  which has huge impact in biotechnology and pharmaceutical ventures.
 This constitutes of drug design and nucleic acid sequence/position weight matrix (PWM)
 design. The processes generally employed in solving these kind of problems are traditionally virtual and
 experimental screening of large amount of candidate binding elements. These processes are extremely
-computationally/experimentally intensive and costly. 
+computationally/experimentally intensive and costly. Moreover, 
+most computational methods modeling protein-nucleic acid binding pairs are protein specific models
+and lack generalization over protein structures. In this work we propose to provide a generalized
+model which can poetntially be used to model protein-nucleic acid binding modeling.
 \par
 Recently, generative machine learning models have
 been used to make significant advances in such tasks. The key generative models that are most
@@ -48,7 +51,7 @@ described above are discovery oriented. However, in this proposal we want to add
 binding element design. Input to our model would be a binding site region on protein surface. And
 given that input we want to predict a drug molecule or a sequence position weight matrix (PWM) that
 the given binding site could bind to. \hyperref[fig:design_problem]{Fig. 3.1} schematically
-described this problem statement. In the next section, we propose a GAN based method which can
+describes this problem statement. In the next section, we propose a GAN based method which can
 achieve this task.
 \begin{center}\begin{figure}
                 \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{design_figs/fig1.png}}
