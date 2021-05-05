@@ -14,5 +14,13 @@ for PWMs i.e PWMs are soft sequences only. Therefore, it is possible to train th
 sequence data directly provided the data is rich enough and PWM information is not needed in the
 training set. 
 
+Another point that should be discussed is concerning the architecture of Encoder and Generator
+networks. The encoder network, although performing the same task for both the drug molecule
+generation setting and PWM generation setting, may need to have different architectures. This may be necessary because binding sites for drug molecules are much smaller tha
+nucleic acid binding sites (which therefore, can also be discontinuous). This would lead to a point
+cloud representation being more favourable compared to mesh representation for PWM generation task.
+The generator network will have different architectures based upon the way the binding element
+generated is represented as discussed earlier in this chapter.
+
 We hope this project becomes a success and we can present it as a powerful computational tool to the
 Computational Biology and Bioinformatics community.

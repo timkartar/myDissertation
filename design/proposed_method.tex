@@ -38,7 +38,10 @@ for generating meaningful data. Therefore,
 %\implies \hat{z} = E(x_p); & \;\;\;\; \hat{x}_e = G(\hat{z}) \numberthis
 The functions $E(x_p)$ and $G(\hat{z})$ in \ref{final_prediction_architecture} represent the
 encoder and generator functions respectively both of which are parametrized by neural networks. 
-
+\hyperref[fig:design]{Fig. 3.2} schematically describes the model details described in this section.
+The exact architecture of Encoder $E$ and Generator $G$ shown in \hyperref[fig:design]{Fig. 3.2}
+is not decided and will vary for the drug molecule generation setting from the nucleic acid PWM
+generation setting.
 Now, we need to think about how to train this model, in case of RVAgene the input and output to the
 model was the same: gene expression time-series data, and we could employ a reconstruction loss to
 give the model an objective to optimize. Here, we can do something similar. We shall have the same
@@ -60,6 +63,11 @@ use some more involved approaches detailed in \citet{koutra2011algorithms} or mo
 like \citet{lin2019novel}. Once we have decided  $f$, the whole model can be trained by the standard
 backpropagation \citep{kelley1960gradient} algorithm for neural network training using the loss
 function described in \ref{loss}.
+\begin{center}\begin{figure}
+                \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{design_figs/design.png}}
+ % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
+        \caption[Proposed model for binding element design]{\textbf{Proposed model for binding element design}}
+        \label{fig:design} \end{figure} \end{center}
 %Now, the encoder-generator framework described above is suitable for prediction, however it's
 %difficult to train it in a straight forward manner. For RVAgene \red{(cite)} we were able to use
 %reconstruction based method to train because the input of encoder and output of decoder was the same.
