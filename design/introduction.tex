@@ -16,7 +16,7 @@ used are mainly of two kind: Variational Autoencoders (VAE) \citep{Kingma2014} a
 variations \citep{higgins2016beta, sohn2015learning,dilokthanakul2016deep}; Generative Adversarial
 Networks \citep{goodfellow2014generative} and variations \citep{wang2018high,zhu2017unpaired}.
 For the molecule generation case, \citet{gomez2018automatic} first proposed a variational autoencoder model for drug molecule design.
-Similar to RVAgene \red{(cite)} this method encodes training drug molecules represented as SMILES
+Similar to RVAgene \citep{mitra2020rvagene} this method encodes training drug molecules represented as SMILES
 \citep{weininger1988smiles} string in a regularized latent space which then can be sampled and
 decoded to generate new candidate molecules. They also train an additional network to optimize the
 generative process based on given chemical properties. This initial model sparked a flurry of folow up 
@@ -29,7 +29,7 @@ regularized VAE) etc. . \citet{kadurin2017drugan} proposed a GAN based generativ
 for molecule generation. Other GAN based models
 targeting the problem are \citep{de2018molgan} (implicit GAN), \citep{maziarka2020mol} (cycle-GAN), \citet{prykhodko2019novo} (latent vector based GAN), 
 \citet{mendez2020novo} (generating hit-like molecules), \citet{guimaraes2017objective} (objective
-reinforced GAN) etc. Although most of these methods use the SMILES format representations of a
+reinforced GAN) etc. Although most of these methods use the SMILES format representation of a
 molecule many deviate from it and propose other forms of representations which helps in increased
 validity among the generated molecules. \citet{mitton2021graph} proposes a graph VAE and graph
 Transformer \citep{vaswani2017attention} approach for generating molecule graph representations.

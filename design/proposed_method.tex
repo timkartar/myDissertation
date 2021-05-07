@@ -21,7 +21,7 @@ generated independent of $x_p$ i.e. $P(x_e|z,x_p) = P(x_e|z)$. Now we can write 
 \begin{align*}
 P(x_e,z|x_p) &= P(x_e|z)P(z|x_p) \numberthis \\
 \end{align*}
-Now, we can model the posterior of $z$, $P(z | x_p)$ as a Gaussian $N(z_{\mu}, z_{\Sigma})$. This
+Now, we can model the posterior of $z$, $P(z | x_p)$ as a Gaussian $N(z_{\mu}, z_{\Sigma})$ where $z_{\Sigma}$ is diagonal. This
 can be modeled by outputing the parameters $z_{\mu}, z_{\Sigma}$ from an encoder network $E(x_p)$.
 A value of $z$ can be sampled from this distribution now using the reparamtrization trick described
 in \citet{Kingma2014}, similar to as described in Chapter 1 for RVAgene. This process along with a

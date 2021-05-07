@@ -47,7 +47,7 @@ smoothness smoothness metric:
         \frac{\sum_{i = 0}^{k-1}\frac{|V_i^{in}|}{|V_i|^2}}{\sum_{i = 0}^{k-1}\frac{1}{|V_i|}} \numberthis \label{final_smoothness_metric}
 \end{align*}
 This metric is nice in the sense it gives a broader range of values and
-hence is more useful in our case.
+hence is more useful in our case. In \hyperref[fig:smooth]{Fig. 2.2} we show how the metrics $M1$,  $M2$, $S$ behaves by applying it on a set of 15 different proteins with predicted labels by Geobind. This demonstrates the advantage of $S$ clearly over the other two metrics.
 \subsection{Continuous Conditional Random Fields layer}
 Given a graph $G = (V,E)$, features over graph vertices $x$ such that $x_v \in \bR^d \forall v \in V
 $ and labels over the vertices $y$ such that $y_v \in \{0,1,..,k\} \forall v
@@ -70,6 +70,11 @@ model as a network layer which can just be plugged into the network and will be 
 along with the whole network, without us requiring to do any extra optimization. So, following the
 approach described in \citet{gao2019conditional, ristovski2013continuous} we instead use a
 Continuous CRF model. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{crf_figs/smooth.png}
+    \caption{\label{fig:smooth} The three smoothness metrics $M1$, $M2$, $S$ evaluated on 15 validation predictions on PDNA-74 dataset (see section \blue{2.3}). $S$ clearly behaves much nicer showing a large range of values compared to the rest.}
+\end{figure}
 Since, we want to implement it as a network layer, we define our termonilogy thus: Let, $B_i \in
 \bR^d \;\forall i \in V$ be output of a neural network layer and is input the CCRF layer, $H_i \in
 \bR^d \; \forall i \in V$ be output of the CCRF layer. In this scenario, we can think $B$ as analogous

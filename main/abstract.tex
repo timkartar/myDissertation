@@ -1,4 +1,4 @@
-Applying probabilistic machine learning models to solve biological questions have been my primary focus as a researcher. 
+Applying probabilistic machine learning models to solve biological questions has been my primary focus as a researcher. 
 With current advances in the computational fields, these data-driven models show huge promise. 
 In chapter 1, we design and shocase RVAgene: a recurrent variational
 autoencoder model applicable on gene expression time-series data, to learn a regularized latent
@@ -12,13 +12,13 @@ chapter 2, we deal with a different biological problem, using the same probabili
 technique of Bayesian Variational Inference (VI). Here, we start from a model of nucleic acid binding site
 prediction (Geobind) developed by Jared Sagendorf and improve upon it by designing a neural network layer using mean field
 VI over a continuous Conditional Random Field model, which makes the predicted binding sites
-smoother while improving upon prediction metrics. We also design a smoothness metric suitable for
-the task addressing the label imbalance problem. In chapter 3, we focus on the fact that the Geobind
+smoother while improving upon prediction metrics. We also design a smoothness metric
+addressing the label imbalance problem associated with the task. In chapter 3, we focus on the fact that the Geobind
 model for binding site prediction does not take into account information regarding the binding
 elements (drug molecules or nucleic acid sequences). The reason is, for a discriminative model like
 Geobind, the datasets become very sparse if we aim to train on datasets specific to nucleic acid
 sequences. However, a generative model inspired by and similar to RVAgene can be useful in this
-scenario. We propose a generalized binding element design model, where we take as input binding site
-information or some region of interest on a protein surface, and generate binding elements which
+scenario. So, we start where Geobind ends. We propose a generalized binding element design model, where we take binding site
+information or some region of interest on a protein surface as input, and generate binding elements which
 could bind to the given region of interest on a protein surface. Finally, in chapter 4, we conclude
-this dissertational proposal while discussing some long term project ideas for future work.
+this dissertation proposal while discussing some long term project ideas for future work.
