@@ -29,7 +29,7 @@ KL loss with a prior on $z$, $p(z) = N(0,\bI)$ ensures a regularized latent spac
 for generating meaningful data. Therefore,
 \begin{align*}
         z_{\mu}, z_{\Sigma} &= E(x_p) \numberthis \\
-        \hat{z} &= z_{\mu} + \epsilon \cdot z_{\Sigma} \;\; where \;\; \epsilon \sim N(0,\bI) \numberthis \\
+        \hat{z} &= z_{\mu} + \epsilon \cdot z_{\Sigma} \;\; where \;\; \epsilon \sim \cN(0,\bI) \numberthis \\
         \hat{x}_e &= argmax_{x_e}p(x_e | \hat{z}) = G(\hat{z}) \;\; \numberthis \label{final_prediction_architecture} 
 \end{align*}
 %\implies \text{prediction } \hat{x}_e, \hat{z} &= argmax_{x_e,z} P(x_e,z|x_p) \numberthis \\
@@ -49,7 +49,7 @@ KL divergence loss as we had for RVAgene, and we shall have a prediction loss co
 $\hat{x}_e$ to true $x_e$. However, this term won't be as straightforward as a reconstruction loss
 always. The following equation described the training objective of the model:
 \begin{align*}
-        \cL(\theta, x_e) = D_{KL}(\cN(z_{\mu},z_{\Sigma}) || \cN(0,I)) + f(x_e, \hat{x}_e)
+        \cL(\theta, x_e) = D_{KL}(\cN(z_{\mu},z_{\Sigma}) || \cN(0,\bI)) + f(x_e, \hat{x}_e)
         \numberthis \label{loss}
 \end{align*}
 The definition of the prediction loss $f(x_e, \hat{x}_e)$ will change depending on the
