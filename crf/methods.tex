@@ -34,8 +34,8 @@ of smoothness for labels corresponding to each of these classes separately and t
 combination of them. So, let, $V_i \subset V$ be the set of vertices which has the label $i \in
 \{0,1,..,k-1\}$, and $V_i^{in} \subset V_i$ to be the set of vertices within $V_i$ all of whose
 neighbours have class label $i$. This makes $V_i^{out} = V - V_i^{in}$ the vertices which have at
-least one neihgbour having class label other than $i$. So, in essence, $V_i^{in}$ is analogous to
-area and $V_i^{out}$ is analogous to perimeter of regions with class label $i$. Hence, a measure for
+least one neighbour having a class label other than $i$. So, in essence, $V_i^{in}$ is analogous to
+area and $V_i^{out}$ is analogous to the perimeter of regions with class label $i$. Hence, a measure for
 smoothness for class $i$ is simply:
 \begin{align*}
         S_i = \frac{|V_i^{in}|}{|V_i|} = 1 - \frac{|V_i^{out}|}{|V_i|} \numberthis \\
@@ -47,7 +47,7 @@ smoothness smoothness metric:
         \frac{\sum_{i = 0}^{k-1}\frac{|V_i^{in}|}{|V_i|^2}}{\sum_{i = 0}^{k-1}\frac{1}{|V_i|}} \numberthis \label{final_smoothness_metric}
 \end{align*}
 This metric is nice in the sense it gives a broader range of values and
-hence is more useful in our case. In \hyperref[fig:smooth]{Fig. 2.2} we show how the metrics $M1$,  $M2$, $S$ behaves by applying it on a set of 15 different proteins with predicted labels by Geobind. This demonstrates the advantage of $S$ clearly over the other two metrics.
+hence is more useful in our case. In \hyperref[fig:smooth]{Fig. 2.2} we show how the metrics $M1$,  $M2$, $S$ behave by applying it on a set of 15 different proteins with predicted labels by Geobind. This demonstrates the advantage of $S$ clearly over the other two metrics.
 \subsection{Continuous Conditional Random Fields layer}
 Given a graph $G = (V,E)$, features over graph vertices $x$ such that $x_v \in \bR^d \forall v \in V
 $ and labels over the vertices $y$ such that $y_v \in \{0,1,..,k\} \forall v
@@ -62,12 +62,12 @@ respectively. $\psi_1$ models how much the label $y_i$ conforms to the features 
 models how much the label $y_i$ conforms to the labels and features of the neighbours of vertex $i$.
 The exact form of these terms can be application dependent and designed accordingly. 
 However, optimizing eq. \ref{crf_general} in a general scenario is non-trivial and approximations
-either does not perform well or heavily resource consuming. Moreover, this kind of optimzation over
+either do not perform well or are heavily resource consuming. Moreover, this kind of optimization over
 discrete domain is not suitable for neural network application. 
 \par
 In our case, Geobind is a deep learning model. So , we would like to implement this conditional random field 
 model as a network layer which can just be plugged into the network and will be optimized by backpropagation 
-along with the whole network, without us requiring to do any extra optimization. So, following the
+along with the whole network, without us requiring any extra optimization. So, following the
 approach described in \citet{gao2019conditional, ristovski2013continuous} we instead use a
 Continuous CRF model. 
 \begin{figure}[H]
@@ -75,7 +75,7 @@ Continuous CRF model.
 \includegraphics[width=0.7\textwidth]{crf_figs/smooth.png}
     \caption{\label{fig:smooth} The three smoothness metrics $M1$, $M2$, $S$ evaluated on 15 validation predictions on PDNA-74 dataset (see section \blue{2.3}). $S$ clearly behaves much nicer showing a large range of values compared to the rest.}
 \end{figure}
-Since, we want to implement it as a network layer, we define our termonilogy thus: Let, $B_i \in
+Since, we want to implement it as a network layer, we define our terminology thus: Let, $B_i \in
 \bR^d \;\forall i \in V$ be output of a neural network layer and is input the CCRF layer, $H_i \in
 \bR^d \; \forall i \in V$ be output of the CCRF layer. In this scenario, we can think $B$ as analogous
 to $x$ in eq. \ref{crf_general} and before any kind of optimization $H = H^0 = B$ is analogous to $y$ in
@@ -87,11 +87,11 @@ operation. Now, all variables are in continuous domain and the model looks as fo
         \cN(i)}\psi_2(H_i,H_j,B_i,B_j)) ] \numberthis \label{ccrf}
 \end{align*}
 Now, it is time to design $\psi_1$ and $\psi_2$ which is straightforward in this case. We want
-output $H_i$ to preserve it's identity as much possible i.e. be as close to $B_i$ as possible, which
+output $H_i$ to preserve its identity as much possible i.e. be as close to $B_i$ as possible, which
 makes squared error w.r.t. a reasonable choice for $\psi_1$. However, we want $H_i$ to be not too
 different from its neighbours also. We would like to different neighbours of $i$ differently
-according their initial similarity with vertext $i$. Finally, the two potential terms needs to be
-weighted by some optimzable constants determined by the network while training. This motivates the following choise of the functions:
+according to their initial similarity with vertex $i$. Finally, the two potential terms need to be
+weighted by some optimizable constants determined by the network while training. This motivates the following choices of the functions:
 \begin{align*}
         \psi_1(H_i, B_i) = \alpha ||H_i - B_i||_2^2 &\;\;\; \psi_2(H_i, H_j, B_i, B_j) = \beta
         g_{ij} ||H_i - H_j||_2^2 \;\; \alpha, \beta > 0 \\
@@ -99,7 +99,7 @@ weighted by some optimzable constants determined by the network while training. 
         exp\bigg{[}\frac{B_i^TB_j}{\sigma^2 ||B_i||_2||B_j||_2}\bigg{]} \;\; \numberthis 
 \end{align*}
 $\sigma$ in the above equation can be left to the network to optimize. There can be other choices of
-$g_{ij}$ in the above equation too e.g. a it can be parametrized as a separate neural network
+$g_{ij}$ in the above equation too e.g. it can be parametrized as a separate neural network
 itself.
 This makes the final form of our CCRF model as follows:
 \begin{align*}
@@ -130,11 +130,11 @@ convergence is reached. For our purposes we stop the iterations at a set max ite
 \hyperref[algo:CCRF_LAYER]{Algorithm 1} presents the final form of the CCRF layer as used in geobind.
 The network optimizes the parameters $\alpha, \beta$ and $\sigma$. Intuitively, if the
 input vertex information is already smooth and no update is necessary then $\beta$ goes towards 0 and 
-otherwise, we have some non zero vaue of $\beta$ resulting in a balance between preserving the
+otherwise, we have some non zero value of $\beta$ resulting in a balance between preserving the
 vertex's own features and conforming to features of its neighbours. In the following section, we
 show that using this layer as the second last of Geobind significantly improves the smoothness of
-predicted labels over protein meshes while improving upon or atleast preserving desired 
-metrics of classification reslts. Note: this is important, because, a naive way to increase
+predicted labels over protein meshes while improving upon or at least preserving desired 
+metrics of classification results. Note: this is important, because a naive way to increase
 smoothness of prediction is to predict the same class for all vertices, but, that would dramatically
 decrease performance metrics of the prediction. \hyperref[fig:ccrf]{Fig. 2.3AB} schematically
 describes the usage context and layer details of the CCRF layer as described in this section.

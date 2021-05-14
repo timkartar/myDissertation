@@ -1,15 +1,15 @@
 \section{Discussion}
 In this chapter we described our proposal for designing a generative model for design binding
 elements given binding site information on protein surface. The proposed model is a variation over the VAE
-framework \citep{Kingma2014} for unsupervised representation learning. However, it should be noted,
-that the architecture described here is not final can change after further experimentation.
+framework \citep{Kingma2014} for unsupervised representation learning. However, it should be noted
+that the architecture described here is not final and can change after further experimentation.
 
 Next, we need to shade a little bit of light on the datasets that can be used to train such a model.
 Primary source for all our data will be the protein data bank \citep{berman2000protein}. For PWM
 generation, the databases JASPAR \citep{fornes2020jaspar} and TRANSFAC \citep{wingender2008transfac}
 are good candidates for sources of protein-motif data. However, it should
 be noted that, for nucleic acid PWM generation, although the prediction task is PWM generation, the
-training data does not need PWM information. Computationally sequences and PWMs are equevalent. the model
+training data does not need PWM information. Computationally sequences and PWMs are equivalent. the model
 sees both sequences and PWMs as a vector of dimension $L \times 4$ ($L$ is length of the
 sequence/PWM). Only difference, the vectors are one-hot for sequence and can have fractional values
 for PWMs i.e PWMs are soft sequences only. Therefore, it is possible to train the model with

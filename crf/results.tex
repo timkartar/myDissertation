@@ -13,16 +13,16 @@
 
 \section{Results} We compare binding site prediction results between two Geobind networks, one
 without a CCRF layer (noCRF) and one with a CCRF layer as its second last layer (CRF). For both
-cases we trained and validated the networks on three different datsets. The datasets used are as
+cases we trained and validated the networks on three different datasets. The datasets used are as
 follows:\\ \\ \textbf{PDNA-62 :} \citet{ahmad2004analysis} constructed a non-redundant dataset of 62
 protein–DNA complexes which has been used in a variety of other studies
 \citep{kuznetsov2006transient, wang2006bindn} etc. The protein sequences used were filtered to
 ensure a maximum identity of no more than 25\% between any two sequences and the resolution of the
-chosen structures was 2.5 A or better. The structures in this dataset contain only helical B-form
+chosen structures were 2.5 A or better. The structures in this dataset contain only helical B-form
 DNA.\\ \textbf{PDNA-74 :} We constructed a dataset of 74 single-stranded DNA binding proteins bound
 to target ssDNA. We first used the structural database DNAproDB
 \citep{sagendorf2017dnaprodb,sagendorf2020dnaprodb} to identify 374 protein-ssDNA complexes based on
-structural critera which included ensuring the bound DNA in the structure presented the
+structural criteria which included ensuring the bound DNA in the structure presented the
 single-stranded secondary structure, a minimum length of 4 nucleotides per DNA strand and 40
 residues per protein chain, and a minimum of 5 nucleotide-residue interactions (as defined by
 DNAproDB). Next, we verified that all proteins identified had known ssDNA binding function based on
@@ -45,10 +45,10 @@ Both CRF and noCRF models were trained on PDNA-62, PDNA-74 and PDNA-224, with a 
         prediction along with various other classification metrics. \hyperref[fig:ccrf]{Fig. 2.3D}
         shows smoothness (eq.
         \ref{final_smoothness_metric}) and Balanced Accuracy  metrics achieved on the validation set
-        in each case. We can clearly the smoothness of the predictions have increased significantly.
-        It should also be noted that that, median Balanced Acuracy has also increased for all three
+        in each case. We can clearly see that the smoothness of the predictions have increased significantly.
+        It should also be noted that that, median Balanced Accuracy has also increased for all three
         cases. Therefore, we can conclude applying the CCRF layer improves the smoothness of the
-        predicted labels over mesh vertices without compromizing in accuracy of prediction. 
+        predicted labels over mesh vertices without compromising in accuracy of prediction. 
 
         We also performed 5-fold cross validation on PDNA-224, PDNA-74 and RB198 datasets. While
         analyzing these results we discovered another interesting effect of the CCRF layer.

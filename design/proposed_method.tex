@@ -11,7 +11,7 @@ distribution $P(x_e|z)$. And we can employ an encoder network modeling $P(z|x_p)
 latent information $z$ from the input $x_e$.
 
 Now, to formally achieve the prediction task, we start with writing out the conditional distribution,
-$P(x_e, z|x_p)$ which we would like to maximize and predicts the argument $x_e$ and $z$ that maximizes it.
+$P(x_e, z|x_p)$ which we would like to maximize and predict the argument $x_e$ and $z$ that maximizes it.
 
 \begin{align*}
         P(x_e,z|x_p) = P(x_e|z,x_p)P(z|x_p) \;\;\; \text{using Bayes' rule}\numberthis
@@ -22,8 +22,8 @@ generated independent of $x_p$ i.e. $P(x_e|z,x_p) = P(x_e|z)$. Now we can write 
 P(x_e,z|x_p) &= P(x_e|z)P(z|x_p) \numberthis \\
 \end{align*}
 Now, we can model the posterior of $z$, $P(z | x_p)$ as a Gaussian $N(z_{\mu}, z_{\Sigma})$ where $z_{\Sigma}$ is diagonal. This
-can be modeled by outputing the parameters $z_{\mu}, z_{\Sigma}$ from an encoder network $E(x_p)$.
-A value of $z$ can be sampled from this distribution now using the reparamtrization trick described
+can be modeled by outputting the parameters $z_{\mu}, z_{\Sigma}$ from an encoder network $E(x_p)$.
+A value of $z$ can be sampled from this distribution now using the reparametrization trick described
 in \citet{Kingma2014}, similar to as described in Chapter 1 for RVAgene. This process along with a
 KL loss with a prior on $z$, $p(z) = N(0,\bI)$ ensures a regularized latent space which is important
 for generating meaningful data. Therefore,
