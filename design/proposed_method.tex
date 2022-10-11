@@ -14,7 +14,7 @@ Now, to formally achieve the prediction task, we start with writing out the cond
 $P(x_e, z|x_p)$ which we would like to maximize and predict the argument $x_e$ and $z$ that maximizes it.
 
 \begin{align*}
-        P(x_e,z|x_p) = P(x_e|z,x_p)P(z|x_p) \;\;\; \text{using Bayes' rule}\numberthis
+        P(x_e,z|x_p) = P(x_e|z,x_p)P(z|x_p) \;\;\; \text{using conditional probability  rule}\numberthis
 \end{align*}
 Here, we assume a hierarchical Bayesian setting where given the latent variable $z$, $x_e$ is
 generated independent of $x_p$ i.e. $P(x_e|z,x_p) = P(x_e|z)$. Now we can write the following,
