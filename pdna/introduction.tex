@@ -1,0 +1,28 @@
+\section{Introduction} 
+
+The scope of this work revolves around building a computational model which can analyze a given
+protein-DNA structure and make a prediction about the experimental DNA binding specificity. Ideally we
+would like to predict the free energey change of the binding process itself. However to train a
+machine learning model to do that task would require a huge amount of protein-DNA
+structure data annotated with corresponding energy. Also for the same protein it would be necessary
+to have multiple DNA sequences bound to it. However, not only do we not have such energy information
+but also we rarely have a protein structure bound to more than a couple different DNA sequences on
+the PDB \citep{berman2000protein}. However, we do have a reasonable amount of experimental
+specificity data in terms of Position Weight Matrices (PWM) on databases like
+JASPAR \citep{fornes2020jaspar}, HOCOMOCO \citep{kulakovskiy2018hocomoco} etc. This makes the problem of predicting PWM from
+a given protein-DNA co-crystal from PDB a tractable one, which is the question we attempt to solve
+in this work using a combination of Convolutional and Graph neural networks.
+
+However, we must first discuss the breadth of existing work which attempt to predict DNA binding
+specificty of proteins in various forms and in varied scopes. Predicting DNA binding specificity
+of a given protein is one of the toughest challenges of structural biology research. Existing works 
+try to tackle this problem in a family specific manner, generally targeting families with abundant data 
+and simple binding mechanism. For example, Zinc Finger proteins have been a popular target for such attempts
+\citep{persikov2009predicting,molparia2010zif, persikov2014novo,
+meseguer2020prediction,aizenshtein2022deepzf}. \red{expand mechanism and details on individual works}
+Homeodomains are another family that has received some attention in this regard
+\citep{noyes2008analysis,christensen2012recognition,wetzel2022learning}. \red{expand mechanism and
+details on individual work}.
+\par
+\par
+\par
