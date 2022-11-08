@@ -2,10 +2,10 @@
 
 The scope of this work revolves around building a computational model which can analyze a given
 protein-DNA structure and make a prediction about the experimental DNA binding specificity. Ideally we
-would like to predict the free energey change of the binding process itself. However to train a
+would like to predict the free energey change of the binding process itself. But to train a
 machine learning model to do that task would require a huge amount of protein-DNA
 structure data annotated with corresponding energy. Also for the same protein it would be necessary
-to have multiple DNA sequences bound to it. However, not only do we not have such energy information
+to have multiple DNA sequences bound to it. Unfortunately, not only do we not have such energy information
 but also we rarely have a protein structure bound to more than a couple different DNA sequences on
 the PDB \citep{berman2000protein}. However, we do have a reasonable amount of experimental
 specificity data in terms of Position Weight Matrices (PWM) on databases like
@@ -14,15 +14,50 @@ a given protein-DNA co-crystal from PDB a tractable one, which is the question w
 in this work using a combination of Convolutional and Graph neural networks.
 
 However, we must first discuss the breadth of existing work which attempt to predict DNA binding
-specificty of proteins in various forms and in varied scopes. Predicting DNA binding specificity
+specificity of proteins in various forms and in varied scopes. Predicting DNA binding specificity
 of a given protein is one of the toughest challenges of structural biology research. Existing works 
 try to tackle this problem in a family specific manner, generally targeting families with abundant data 
 and simple binding mechanism. For example, Zinc Finger proteins have been a popular target for such attempts
 \citep{persikov2009predicting,molparia2010zif, persikov2014novo,
 meseguer2020prediction,aizenshtein2022deepzf}. \red{expand mechanism and details on individual works}
 Homeodomains are another family that has received some attention in this regard
-\citep{noyes2008analysis,christensen2012recognition,wetzel2022learning}. \red{expand mechanism and
+\citep{noyes2008analysis, alleyne2009predicting, christensen2012recognition,wetzel2022learning}. \red{expand mechanism and
 details on individual work}.
 \par
+Despite all these attempts, a computational model for predicting PWM for a given protein across
+families remains largely unsolved, and looking into the problem a little bit gives some pointers on
+why so. Protein-DNA binding is often mediated by conformational changes of the protein structure in presence of suitable
+DNA. Binding of TBX5 to DNA is one such example. \citet{stirnimann2010structural} shows in
+presence of DNA, the binding domain of TBX5 undergoes a change from $\alpha$-helix to $3_{10}$-helix
+which is energetically unfavorable. However this allows two phenylalanine residues (F232, F236) on
+the protein to form strong stacking interactions with two pairs of Deoxyribose sugars on the DNA
+backbone. Predicting such kind of an event from the protein sequence features only or even the
+protein structure can be extremely hard. Moreover, complementarily, the shape of the bound DNA
+also influences energetics of protein DNA binding \citep{rohs2009role, dror2014covariation}. For example, the global shape of TATA-box binding
+proteins make it necessary for DNA helix axis to bend upto $56^{\circ}$ \citep{kim1993crystal}. In fact most contacts
+($~75\%$) on protein surface are DNA backbone contacts in various forms and suitable DNA shape
+reflected on protein
+surface geomentry plays important role in determining many of them. In theory, this should be
+something that a computational model might be able to capture. But characterizing global shape of
+proteins to a degree of nuance that allows such prediction is not yet achievable. On the other hand,
+it should be noted that characterizing DNA shape is a well established process
+(\citet{zhou2013dnashape} (shape from sequence), \citet{blanchet2011curves+,lu20033dna} (shape from
+structure) ). These observations
+portray a picture that protein-DNA binding is a very intimate process of the two actors involved and
+fully characterizing the outcomes with the information of protein only, might even be near
+unsolvable with the current state of technology. We should note that, one can perform
+of homology based K-nearest neighobour search and predict a PWM based on known 
+PWMs of proteins with similar sequences (using naive averaging or some form learning, e.g. \citet{schroder2010predicting}). 
+But this process is uninteresting to us because this involves no attempt at biophysical modeling of the system in question and thus has low promise of
+generating any meaningful knowledge on top of the usual drawback of search based methods being
+generally quite slow.
 \par
+Although the above discussion portrays quite a bleak picture to any enthusiast who is interested in
+the problem, it simultaneously hints towards the fact that protein-DNA structure data can be a more
+interesting starting point for predicting a PWM. Although, the structure is missing dynamics but it
+has other crucial informations necessary for determining specificity including but not limited to
+shape of protein and DNA in the bound context, one bound sequence and corresponding chemical
+interactions. In this work we build a deep learning model to predict experimentally determined PWMs
+from such data and we hope this work serves as a stepping stone towards solving the full problem of
+determining DNA  binding specificity of a given protein as discussed above.
 \par
