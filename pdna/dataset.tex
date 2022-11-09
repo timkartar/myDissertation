@@ -1,1 +1,33 @@
 \section{Dataset}
+Lack of exisiting standardized dataset made it nexessary for us to create our own dataset. We relied
+on the PDB as our source of structure data and on JASPAR and HOCOMOCO as source
+of specificity data. These two databases were chosen based on their presentation, ease of access and
+comprehensiveness. JASPAR \citep{fornes2020jaspar} catalogues a comprehensive set of experimental
+binding specifity data for proteins from various species obtained through various kinds experiments,
+while HOCOMOCO \citep{kulakovskiy2018hocomoco} consists of mainly ChIP-seq experiment data for Human
+and Mouse proteins. For a detailed distribution of species and experimental diversity of these two
+databases refer to \red{supplementary figure on data distribution}. 
+\par
+Next we looked for protein-DNA cocrystal data available on the PDB for each PWM available to us
+using corresponding Uniprot IDs. For Heterodimer PWMs, only co-crystals which has both heteromers
+present were kept. We employ DSSR \citep{lu2015dssr} to check for existence of DNA
+double helix and annotate in these structures. For our application we stick to double stranded DNA
+only, structures not conforming to this requirement were discarded. Moreover base-pair modifications
+were replaced by their parent base identity. This results into 1155 filtered PDB chain IDs.
+\par
+Next we cluster these PDB chains using CD-HIT \citep{fu2012cd} with a 40\% sequence similarity
+threshold for clustering. These results into 189 clusters. This step is necessary to ensure our
+training dataset is not overrepresenting any particular kind of protein sequence. Next we sample
+upto 5 members form each cluster and this results into 595 PDB chain IDs. We split this set
+of structures  into 5 cross validation based on the clusters, i.e. the same cluster can either be in
+training or validation set for each fold, but not both. This
+ensures the trained model doesn't get opportunities for easy transfer of predictions from training
+set to validation set and it has to actually the underlying data distribution to predict correctly
+for the validation set.
+\par
+For each structure entry in the final dataset the corresponding PWM was paired with it, if a PWM
+existed in both JASPAR and HOCOMOCO, one was randomly chosen. The two ends of each PWM were trimmed to
+remove uninformative regions with a 0.5 Information Content (IC) threshold. For each structure, the
+corresponding PWM was aligned to the DNA helix using an ungapped local alignment based on IC
+weighted PCC scoring function (\red{refer to supp}). This annotates the region on the DNA helix
+where predictions should be made and during training, loss computed on.
