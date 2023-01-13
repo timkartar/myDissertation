@@ -12,15 +12,15 @@ current state of structural biology. In particular, analyzing protein-DNA co-cry
         bound to different DNA sequences with corresponding binding energy values.
         However, structure data is generally sparse. Instead we have
         experimental binding specificity data (often in terms of Position Weight Matrices(PWMs))
-        which, although very noisy, still general enough to act as a proxy for energetics of the diverse 
-        protein-DNA mechanisms that we see in co-crystal structures can serve as target to train our model. 
-        Hence, our model (DeepPBS) takes as input a given co-crystal and
-        learns to predict binding specificity of the co-crystal.
+        which are, although very noisy, still general enough to act as a proxy for energetics of the diverse 
+        protein-DNA mechanisms that we see in co-crystal structures and therefore, can serve as a target to train our model. 
+        Hence, our model DeepPBS takes as input a given co-crystal and
+        is trained to predict binding specificity of the co-crystal.
 
         Result: The prediction of DeepPBS in cross-validation setting conforms very well with experimental
         speficities. However, it should be noted that DeepPBS really learns to predict a specifity based
         on the current state of interactions in the co-crystal which is useful in analyziing
         MD-trajectories and forming mechanistic hypothesis, serving as a guide to DNA-binder protein design
-        pipelines and/or serving as guide for mechanistic hypoethization in general and there in
+        pipelines and/or serving as guide for mechanistic hypothesization in general and therein
         lies the real strength of this model.
 \end{abstract}
