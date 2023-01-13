@@ -18,9 +18,10 @@ were replaced by their parent base identity. This results into 1155 filtered PDB
 Next we cluster these PDB chains using CD-HIT \citep{fu2012cd} with a 40\% sequence similarity
 threshold for clustering. These results into 189 clusters. This step is necessary to ensure our
 training dataset is not overrepresenting any particular kind of protein sequence. Next we sample
-upto 5 members form each cluster and this results into 595 PDB chain IDs. We split this set
-of structures  into 5 cross validation based on the clusters, i.e. the same cluster can either be in
-training or validation set for each fold, but not both. This
+upto 5 members form each cluster, this sampling priortised
+biological assemblies where the chain of interest has more contacts with the region of DNA where the
+PWM got aligned. We split this set of structures  into 5 cross validation folds based on the clusters,  
+i.e. the same cluster can either be in training or validation set for each fold, but not both. This
 ensures the trained model doesn't get opportunities for easy transfer of predictions from training
 set to validation set and it has to actually the underlying data distribution to predict correctly
 for the validation set.
