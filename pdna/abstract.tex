@@ -1,17 +1,26 @@
 \begin{abstract}
-Structure based study and mechanistic prediction of protein-DNA binding specificity is a key interest in the
+Structure based study and mechanistic understanding of protein-DNA binding specificity is a key interest in the
 current state of structural biology. In particular, analyzing protein-DNA co-crystals from PDB has
-        become a staple in everyday structural biology. However, we still do not have co-crystals
-        for a particular protein bound to a varied set of DNA structures. On the other hand, these variations in
-        DNA-binding are available from experimental data. These experiments do not easily give
-        insight into binding mechanism and are expensive to perform. Hence, a valuable question worth
-        asking is given one protein-DNA co-crystal can one predict the full range of DNA binding
-        specificity for the protein in the co-crystal in question.
+        become a staple in everyday structural biology. Often this involves experts
+        looking at various protein-DNA contacts manually and hypothesizing about
+        what role they play in determining binding specificty of the protein being discussed. 
+        Although, there is no better alternative to human expertise, in this work, we are interested 
+        in building a data-driven computational model that can analyze a protein-DNA complex and come 
+        up with predictions which can aid this process for proteins across different families.
 
-        In fact, the space of dna-binding proteins and corresponding binding mechanism is extremely
-        varied. Local chemical interactions as well as energetics of the global shape of
-        protein and DNA in context of binding determine these specificities. Current availability of structural
-        data, although not abundant but suffices to model this complicated problem via deep
-        learning. In this work we build a modular deep learning model which can generalize and learn from
-        various aspects of a given co-crystal and produces binding specificity prediction.
+        The ideal dataset for this task would have structures for the same protein
+        bound to different DNA sequences with corresponding binding energy values.
+        However, structure data is generally sparse. Instead we have
+        experimental binding specificity data (often in terms of Position Weight Matrices(PWMs))
+        which, although very noisy, still general enough to act as a proxy for energetics of the diverse 
+        protein-DNA mechanisms that we see in co-crystal structures can serve as target to train our model. 
+        Hence, our model (DeepPBS) takes as input a given co-crystal and
+        learns to predict binding specificity of the co-crystal.
+
+        Result: The prediction of DeepPBS in cross-validation setting conforms very well with experimental
+        speficities. However, it should be noted that DeepPBS really learns to predict a specifity based
+        on the current state of interactions in the co-crystal which is useful in analyziing
+        MD-trajectories and forming mechanistic hypothesis, serving as a guide to DNA-binder protein design
+        pipelines and/or serving as guide for mechanistic hypoethization in general and there in
+        lies the real strength of this model.
 \end{abstract}
