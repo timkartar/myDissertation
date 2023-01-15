@@ -1,25 +1,22 @@
 \begin{abstract}
-Structure based study and mechanistic understanding of protein-DNA binding specificity is a key interest in the
-current state of structural biology. In particular, analyzing protein-DNA co-crystals from PDB has
-        become a staple in everyday structural biology. Often this involves experts
+Structure based study and mechanistic understanding of protein-DNA binding often involves experts
         looking at various protein-DNA contacts manually and hypothesizing about
-        what role they play in determining binding specificty of the protein being discussed. 
-        Although, there is no better alternative to human expertise, in this work, we are interested 
+        their role in determining binding specificty of the protein being discussed. 
+        Although there is no better alternative to human expertise, in this work, we are interested 
         in building a data-driven computational model that can analyze a protein-DNA complex and come 
         up with predictions which can aid this process for proteins across different families.
-
-        The ideal dataset for this task would have structures for the same protein
+        Ideally this task would benefit from structures for the same protein
         bound to different DNA sequences with corresponding binding energy values.
         However, structure data is generally sparse. Instead we have
         experimental binding specificity data (often in terms of Position Weight Matrices(PWMs))
-        which are, although very noisy, still general enough to act as a proxy for energetics of the diverse 
-        protein-DNA mechanisms that we see in co-crystal structures and therefore, can serve as a target to train our model. 
+        which are, although very noisy, still general enough to act as a proxy for energetics and 
+        therefore can serve as a target to train our model. 
         Hence, our model DeepPBS takes as input a given co-crystal and
         is trained to predict binding specificity of the co-crystal.
 
         Result: The prediction of DeepPBS in cross-validation setting conforms very well with experimental
         speficities. However, it should be noted that DeepPBS really learns to predict a specifity based
-        on the current state of interactions in the co-crystal which is useful in analyziing
+        on the current state of interactions in the co-crystal which is useful in analyzing
         MD-trajectories and forming mechanistic hypothesis, serving as a guide to DNA-binder protein design
         pipelines and/or serving as guide for mechanistic hypothesization in general and therein
         lies the real strength of this model.
