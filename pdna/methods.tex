@@ -7,8 +7,34 @@
   \label{fig:pdna1}
 \end{figure}
 \end{center}
-
-
+\subsection{Representing Protein}
+In our framework protein is viewed as a spatial graph $G^p = (V^p, X^p, E^p, N^p)$  where the
+coordinates of the heavy atoms constitute the vertices $V^p$. For each vertex $v \in V^p$  we define
+a set of features $X^p_v$ which include one hot encoded atom type, solvent accessible surface area
+of the atom, charge, radius, circular variance and Atchley factors. The edges $E^p$ of the protein
+graph  are determined by the covalent bonds i.e. if  vertices $u$ and $v$ have
+a covalent bond between them then $(u,v) \in E^p$. The edges are unordered. Lastly to encode
+directionality of protein side chains we encode a unit vector $N^p_v$ for each vertex $v$ computed by
+averaging the directions of convalent bonds associated with each heavy atom. 
+\subsection{Representing DNA}
+Unlike the protein, a few important considerations need to be taken into account for representing
+DNA in this framework. First, our model would see the structure of DNA in the input but shall predict a one
+dimensional representation (a PWM), therefore in a purely engineering sense, it will be helpful to
+have same number of features per basepair. Second, the input co-crystal DNA has a sequence, depending on
+use cases we may or may not want our model to see this sequence, also since structure data is sparse
+the  co-crystal sequence has a strong potential for overfitting if seen by the model in input.
+Therefore, in general we want to symmetrize each base pair such that all the sequence information is
+lost but global shape of the DNA structure is preserved.
+With these points in mind, we come up with a coarse grained represntation of DNA
+where we represent each basepair as 11 points, 2 points representing the Phosphate moeity on each
+strand, 2 points represneting the Sugar moeity, 4 points in the major groove and 3 points in the minor
+groove. The major and minor groove points are placed symmetrically in the basepair plane so that
+they are devoid of any particular base identity but roughly corresponds to the major and minor
+groove chemical positions known \red{cite chiu. et. al. PNAS, 2023} to be used for base readout. Further
+details about how these points are chosen are in the \red{supplementary, cite olson2001standard for
+basepairframe}. Hence, the DNA structure is represented by
+a graph $G^d = (V^d, X^d, N^d)$
+\subsection{DeepPBS}
 \begin{center}
     \begin{figure}
     \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./pdna_figs/fig2.png}}
@@ -18,8 +44,3 @@
 \end{figure}
 \end{center}
 
-\subsection{Representing Protein}
-
-\subsection{Representing DNA}
-
-\subsection{DeepPBS}
