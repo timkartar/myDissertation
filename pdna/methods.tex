@@ -29,12 +29,21 @@ With these points in mind, we come up with a coarse grained represntation of DNA
 where we represent each basepair as 11 points, 2 points representing the Phosphate moeity on each
 strand, 2 points represneting the Sugar moeity, 4 points in the major groove and 3 points in the minor
 groove. The major and minor groove points are placed symmetrically in the basepair plane so that
-they are devoid of any particular base identity but roughly corresponds to the major and minor
+they are devoid of any particular base identity but roughly correspond to the major and minor
 groove chemical positions known \red{cite chiu. et. al. PNAS, 2023} to be used for base readout. Further
 details about how these points are chosen are in the \red{supplementary, cite olson2001standard for
-basepairframe}. Hence, the DNA structure is represented by
-a graph $G^d = (V^d, X^d, N^d)$
+basepairframe}. Hence, the DNA structure is represented as $G^d = (V^d, X^d, N^d)$. $V^d$ represents
+coordinates of the coarse grained points, $X^d$ represents point level DNA features which simply
+include one hot encoded annotation about which of the 11 points it is in the coarse grained
+base-pair representation. It should be noted that, if we desire we can add back the DNA sequence by
+including base-pair specific chemical interaction features for each point to $X^d$ in the same manner as \red{cite
+chiu. et. al.}. For each point $v \in X^d$ we also define an interaction vector $N^d_v$. These
+vectors used are basically reference directions in base-pair frame and used to compute relative
+orientation based features coupled with the vectors $N^p$ on the protein graph discussed further
+ahead. In addition we also include 14 DNA shape features denoted as $X^s$ which are basepair level features, further
+details in \red{supplementary}.
 \subsection{DeepPBS}
+
 \begin{center}
     \begin{figure}
     \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./pdna_figs/fig2.png}}
@@ -43,4 +52,5 @@ a graph $G^d = (V^d, X^d, N^d)$
   \label{fig:pdna2}
 \end{figure}
 \end{center}
+\subsection{Evaluation Metrics}
 
