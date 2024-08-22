@@ -1,34 +1,12 @@
 \section{Dataset}
-Lack of exisiting standardized dataset made it nexessary for us to create our own dataset. We relied
-on the PDB as our source of structure data and on JASPAR and HOCOMOCO as source
-of specificity data. These two databases were chosen based on their presentation, ease of access and
-comprehensiveness. JASPAR \citep{fornes2020jaspar} catalogues a comprehensive set of experimental
-binding specifity data for proteins from various species obtained through various kinds experiments,
-while HOCOMOCO \citep{kulakovskiy2018hocomoco} consists of mainly ChIP-seq experiment data for Human
-and Mouse proteins. For a detailed distribution of species and experimental diversity of these two
-databases refer to \red{supplementary figure on data distribution}. 
+We collected structural data from the Protein Data Bank (PDB)1 and binding specificity data from JASPAR (version 2022)2  and HOCOMOCO (v11 core collection)3. JASPAR catalogues a comprehensive set of experimental binding specificity data for proteins from different species obtained through various types of experimental platforms. HOCOMOCO consists of mainly chromatin immunoprecipitation followed by sequencing (ChIP-seq)4 data for human and mouse proteins.
 \par
-Next we looked for protein-DNA cocrystal data available on the PDB for each PWM available to us
-using corresponding Uniprot IDs. For Heterodimer PWMs, only co-crystals which has both heteromers
-present were kept. We employ DSSR \citep{lu2015dssr} to check for existence of DNA
-double helix and annotate in these structures. For our application we stick to double stranded DNA
-only, structures not conforming to this requirement were discarded. Moreover base-pair modifications
-were replaced by their parent base identity. This results into 1155 filtered PDB chain IDs.
+Next, we searched for protein-DNA co-crystal structures available in the PDB (Dec 2022) for each position weight matrix (PWM) available to us using corresponding UniProt IDs. We employed DSSR5 to check for and annotate the existence of one contiguous double helical region in these structures. In our application, we focused on double-stranded DNA only and discarded structures that did not conform to this requirement. Base modifications were replaced by their parent base identity. A total of 1,155 PDB chain IDs were filtered into the dataset. For each structure (biological assembly containing a chain of interest) in the dataset, a corresponding PWM was paired with it. If a PWM existed in both JASPAR20222 and HOCOMOCOv113, one was randomly chosen. PWMs were trimmed to remove uninformative terminal regions with a 0.5 information content (IC) threshold. For each structure, we aligned the corresponding PWM to the DNA helix using an ungapped local alignment (Supplementary Section 2), annotating the region on the DNA helix where predictions should be made and the loss computed during training. For source code and further details of data cleaning and pre-processing, see the Data/Code Availability section.
 \par
-Next we cluster these PDB chains using CD-HIT \citep{fu2012cd} with a 40\% sequence similarity
-threshold for clustering. These results into 189 clusters. This step is necessary to ensure our
-training dataset is not overrepresenting any particular kind of protein sequence. Next we sample
-upto 5 members form each cluster, this sampling priortised
-biological assemblies where the chain of interest has more contacts with the region of DNA where the
-PWM got aligned. We split this set of structures  into 5 cross validation folds based on the clusters,  
-i.e. the same cluster can either be in training or validation set for each fold, but not both. This
-ensures the trained model doesn't get opportunities for easy transfer of predictions from training
-set to validation set and it has to actually the underlying data distribution to predict correctly
-for the validation set.
+We clustered the protein chains using CD-HITv4.8.16 with a 40\% sequence similarity threshold for clustering, resulting in 189 clusters. This step ensures that our dataset does not overrepresent any particular protein sequence. Next, we sampled up to five members from each cluster, prioritizing biological assemblies where the chain of interest has more contacts with the DNA region where the PWM was aligned into a fold. Full list of these memberships is available in Extended Data. We set the cutoff for alignment length to be at least five base pairs. We split this set of structures into five folds to create a cross-validation set. A schematic representation of this process is shown in Fig. S1a. Experimental and species diversity of the gathered cross-validation dataset are shown in Fig. S1b.
 \par
-For each structure entry in the final dataset the corresponding PWM was paired with it, if a PWM
-existed in both JASPAR and HOCOMOCO, one was randomly chosen. The two ends of each PWM were trimmed to
-remove uninformative regions with a 0.5 Information Content (IC) threshold. For each structure, the
-corresponding PWM was aligned to the DNA helix using an ungapped local alignment based on IC
-weighted PCC scoring function (\red{refer to supp}). This annotates the region on the DNA helix
-where predictions should be made and during training, loss computed on.
+Structures that were not included in the cross-validation dataset were resampled, selecting up to five per cluster following the same criterion. This resulted in 130 datapoints, which we used as a benchmark set. Predictions on this set were only calculated once, after finalizing all models. The family distribution of this set (Fig. 2c) differs from that of the cross-validation set (Fig. S5b).
+\par
+The PWM of the same protein differed slightly between JASPAR2 and HOCOMOCO3 (example shown in Fig. S1c for human estrogen receptor). This observation indicates that there is an inherent limit on what can be possibly learned, signifying noise in collected knowledge. To quantify the performance limit on the dataset based on this phenomenon, we computed the distribution of performance metrics across all unique PWMs appearing in both databases (111 cases). 
+\par
+Alanine scanning mutagenesis involves measuring changes in binding free energy () when performing the same binding experiment for a given protein, with a specific residue mutated to alanine. We used an already gathered dataset7 of alanine scanning mutagenesis experiments for protein-DNA structures. We filtered the dataset to make it suitable for our context. Specifically, we removed cases involving single-stranded DNA. Mutations to alanine residues with  values within 0–3 kcal/mol were retained. We removed cases in which no heavy atom of the mutated residue was within 5 Å of DNA, because our model only assigns importance scores within this range. The final dataset is summarized in Table S1.

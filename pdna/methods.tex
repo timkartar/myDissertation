@@ -1,56 +1,180 @@
 \section{Methods}
-\begin{center}
-    \begin{figure}
-    \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./pdna_figs/fig1.png}}
- % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-        \caption[Computational cost of training RVAgene]{\textbf{Training RVAgene is reasonably scalable on CPU and even more so using hardware acceleration through GPU.} ({\bf A}) Time cost of training RVAgene for 100 epochs for datasets with varying number of genes and time points on CPU and GPU. ({\bf B}) Maximum memory utilized during training of the model on CPU an GPU for the cases in (A), inset plot: comparison of max memory used compared to DPGP for varying number of genes.}
-  \label{fig:pdna1}
-\end{figure}
-\end{center}
-\subsection{Representing Protein}
+% \begin{center}
+%     \begin{figure}
+%     \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./pdna\_figs/fig1.png}}
+%  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
+%         \caption[Computational cost of training RVAgene]{\textbf{Training RVAgene is reasonably scalable on CPU and even more so using hardware acceleration through GPU.} ({\bf A}) Time cost of training RVAgene for 100 epochs for datasets with varying number of genes and time points on CPU and GPU. ({\bf B}) Maximum memory utilized during training of the model on CPU an GPU for the cases in (A), inset plot: comparison of max memory used compared to DPGP for varying number of genes.}
+%   \label{fig:pdna1}
+% \end{figure}
+% \end{center}
+\subsection{Ungapped Local Alignment}
+Alignment of experimental PWMs to the corresponding co-crystal structure derived DNA is an important step for correctly annotating experimental protein-DNA structural data for model training and evaluation. This alignment needs to be ungapped and should prioritize alignment of higher IC columns from the PWM. Hence, we used an IC-weighted Pearson correlation coefficient (PCC) scoring scheme for the alignment, given by:
+
+%%EQUATION
+
+where  refers to a standard PCC, and IC refers to the information content calculated for a probability simplex with a uniform background, in this context:
+
+%%EQUATION
+
+%%ADD COMMENTS
+
+\begin{pmialgorithm}[0.9\textwidth]{h!}{Ungapped Local Alignment}\vskip-2ex
+        \label{algo:UngappedAlign}
+        \begin{algorithmic}[1]
+                \REQUIRE  $seq, pwm$ \COMMENT{Length X 4 arrays}
+                \STATE  $max\_score \leftarrow -9999$
+                \STATE  $opt\_i \leftarrow 0$
+                \STATE  $opt\_j \leftarrow 0$
+                \STATE  $opt\_k \leftarrow 0$
+                \STATE  $l \leftarrow length(seq)$
+                \STATE  $s \leftarrow length(pwm)$
+                
+                \FOR[]{$i=0,1,2,...,s-1$}
+                \FOR[]{$k=0,1,2,...,s-i$}
+                \FOR[]{$j=0,1,2,...,l-k$}
+                \STATE  $score \leftarrow 0$
+                
+                \FOR[]{$col=0,1,2,...,k-1$}
+                \STATE $col\_score \leftarrow ICWeightedPCC(pwm[i:i+k,:][col,:],$ \\$seq[j:j+k,:][col,:])$
+                \STATE $score \leftarrow score + col\_score$
+                \ENDFOR
+
+                \IF[]{$score > max\_score$}
+                \STATE $max\_score \leftarrow score + col\_score$
+                \STATE $opt\_i \leftarrow i$
+                \STATE $opt\_j \leftarrow j$
+                \STATE $opt\_k \leftarrow k$
+                \ENDIF
+                
+                \ENDFOR
+                \ENDFOR
+                \ENDFOR
+                \RETURN $opt\_i, opt\_j, opt\_k, max\_score$
+        \end{algorithmic}
+\end{pmialgorithm}
+
+
+
+\subsection{Representing DNA}
+Our framework must consider several important factors for representing DNA. First, our model observes the structure of DNA in the input, but will predict a one-dimensional (1D) representation (a PWM). Thus, from an engineering perspective, it is beneficial to have the same number of features per base pair. Second, the input co-crystal structure derived DNA has a sequence; depending on the use case, we may or may not want our model to observe this sequence. Moreover, because experimental structural data are sparse, the co-crystal derived sequence has a strong potential for overfitting if observed by the model in the input. Therefore, in general, we want to symmetrize each base pair such that all sequence information is lost, but the global shape of the double helix is preserved. 
+
+With these points in mind, we developed a coarse-grain symmetrized representation of DNA, where each base pair is represented by 11 points: two points for the phosphate moiety on each strand, two points for the sugar moiety, four points for the major groove, and three points for the minor groove. Major and minor groove points are placed symmetrically in the base-pair plane, so that they do not possess any particular base identity but roughly correspond to the major and minor groove chemical positions known8 to be used for base readout. The phosphate moiety is represented by the coordinate of the phosphorus atom. The sugar moiety is represented by the average coordinate of all sugar heavy atoms. The three minor groove points divide the line segment connecting the two C1' atoms into four equal segments. The base-pair plane is determined by the triangle connecting the two C1' atoms and point O (average of atoms N1 and N9). Next, we move perpendicular (to the minor groove line segment) in this plane from either C1' for 3.75 Å and expand the line segment by another 1.54 Å in either direction. The line segment is divided into five equal segments to determine positions of the four major groove points. Additionally, the central two major groove points are shifted by an additional 1 Å. This geometric construction is based solely on domain knowledge; no learning is employed to estimate any parameter. Fig. S2a shows a schematic representation of this process for an A-T base-pair. The only base atoms used for this process are N1 and N9, making it agnostic of base identity. 
+
+Fig. S2b shows an example transformation of a DNA structure to a symmetrized helix (sym-helix) using the described process. Fig. S2c shows one C-G base pair overlayed with sym-helix points computed for the corresponding base pair. As a result, the DNA structure is represented as .  represents coordinates of the sym-helix points, and  represents point-level DNA features, which reflect a one-hot encoded annotation of the 11 positions in the symmetrized base-pair representation. If desired, we can reintroduce the DNA sequence (`DeepPBS with DNASeqInfo' model) by including base-pair-specific chemical group features for each point to , as in Chiu et. al. 20238. For each point , we also define an interaction vector . These vectors act as reference directions in the base-pair frame. They are used to compute relative orientation-based features coupled with vectors  on the protein graph (refer to Section 4). For the phosphate point, this vector is the average direction of the two double-bonded oxygens; for the sugar point, this vector is the direction of the C4'-C5' bond. For the seven major and minor groove points, these directions are determined by connecting each point to the centroid of the heptagon formed by these points. Fig. S2e shows the arrangement of these vectors on a sym-helix. These directions do not encode any base-specific information and only serve to inform the relative orientation of a sym-helix point in the context of binding. In addition, we include 14 DNA shape features9,10,35 denoted as , which are base-pair level features (Fig. S2d). These features are: buckle, shear, stretch, stagger, propeller twist, opening, shift, slide, rise, tilt, roll, helix-twist, major groove width, and minor groove width. 3DNAv2.310 and Curves5.39,35 were used to calculate these values. Mean-padding was used to offset inter-base-pair features (shift, slide, rise, tilt, roll, helix-twist).
+
+\subsection{Representing protein}
+
 In our framework protein is viewed as a spatial graph $G^p = (V^p, X^p, E^p, N^p)$  where the
 coordinates of the heavy atoms constitute the vertices $V^p$. For each vertex $v \in V^p$  we define
-a set of features $X^p_v$ which include one hot encoded atom type, solvent accessible surface area
+a set of features $X^p\_v$ which include one hot encoded atom type, solvent accessible surface area
 of the atom, charge, radius, circular variance and Atchley factors. The edges $E^p$ of the protein
 graph  are determined by the covalent bonds i.e. if  vertices $u$ and $v$ have
 a covalent bond between them then $(u,v) \in E^p$. The edges are unordered. Lastly to encode
-directionality of protein side chains we encode a unit vector $N^p_v$ for each vertex $v$ computed by
+directionality of protein side chains we encode a unit vector $N^p\_v$ for each vertex $v$ computed by
 averaging the directions of convalent bonds associated with each heavy atom. 
-\subsection{Representing DNA}
-Unlike the protein, a few important considerations need to be taken into account for representing
-DNA in this framework. First, our model would see the structure of DNA in the input but shall predict a one
-dimensional representation (a PWM), therefore in a purely engineering sense, it will be helpful to
-have same number of features per basepair. Second, the input co-crystal DNA has a sequence, depending on
-use cases we may or may not want our model to see this sequence, also since structure data is sparse
-the  co-crystal sequence has a strong potential for overfitting if seen by the model in input.
-Therefore, in general we want to symmetrize each base pair such that all the sequence information is
-lost but global shape of the DNA structure is preserved.
-With these points in mind, we come up with a coarse grained represntation of DNA
-where we represent each basepair as 11 points, 2 points representing the Phosphate moeity on each
-strand, 2 points represneting the Sugar moeity, 4 points in the major groove and 3 points in the minor
-groove. The major and minor groove points are placed symmetrically in the basepair plane so that
-they are devoid of any particular base identity but roughly correspond to the major and minor
-groove chemical positions known \red{cite chiu. et. al. PNAS, 2023} to be used for base readout. Further
-details about how these points are chosen are in the \red{supplementary, cite olson2001standard for
-basepairframe}. Hence, the DNA structure is represented as $G^d = (V^d, X^d, N^d)$. $V^d$ represents
-coordinates of the coarse grained points, $X^d$ represents point level DNA features which simply
-include one hot encoded annotation about which of the 11 points it is in the coarse grained
-base-pair representation. It should be noted that, if we desire we can add back the DNA sequence by
-including base-pair specific chemical interaction features for each point to $X^d$ in the same manner as \red{cite
-chiu. et. al.}. For each point $v \in X^d$ we also define an interaction vector $N^d_v$. These
-vectors used are basically reference directions in base-pair frame and used to compute relative
-orientation based features coupled with the vectors $N^p$ on the protein graph discussed further
-ahead. In addition we also include 14 DNA shape features denoted as $X^s$ which are basepair level features, further
-details in \red{supplementary}.
-\subsection{DeepPBS}
 
-\begin{center}
-    \begin{figure}
-    \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./pdna_figs/fig2.png}}
- % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-        \caption[Computational cost of training RVAgene]{\textbf{Training RVAgene is reasonably scalable on CPU and even more so using hardware acceleration through GPU.} ({\bf A}) Time cost of training RVAgene for 100 epochs for datasets with varying number of genes and time points on CPU and GPU. ({\bf B}) Maximum memory utilized during training of the model on CPU an GPU for the cases in (A), inset plot: comparison of max memory used compared to DPGP for varying number of genes.}
-  \label{fig:pdna2}
-\end{figure}
-\end{center}
-\subsection{Evaluation Metrics}
+\subsection{DeepPBS architecture}
+The architecture of DeepPBS is modular. First, the ProteinEncoder module applies spatial graph convolutions on the protein graph to aggregate neighborhood environment information for each protein heavy atom. Initially, a fully connected embedding layer is applied to , which expands the dimensionality of  to 10 dimensions. Four layers of crystal graph convolutions (CGConv)12 are applied. The first two layers use only covalent bond edges, and the next two layers use distance-based edges with a 4Å radius. The mathematical description of the message-passing scheme for CGConv is as follows:
+        
+%%EQUATION
+ 
+where  denotes the neighbors of , and  denotes the concatenation of target node features, source/neighboring node features, and edge features (here, the distance between  and ). In addition,  denotes the sigmoid function, and  denotes the softplus function. A Rectified Linear Unit13 (ReLU) activation function is applied after each round of graph convolutions. This marks the end of the ProteinEncoder module.
 
+The sym-helix point features  are embedded into a 10-dimensional (10D) space using fully connected neural network layers and are used in the next module, the Bipartite Geometric Network (BiNet). In this module, aggregated information on  are pulled onto the sym-helix by performing geometry-aware bipartite convolutions. We use a modified version of point pair feature convolutions (PPFConv)14, which we call a bipartite ResidualPPFConv. The message-passing update scheme associated with it is as follows: 
+
+%%EQUATION
+
+where  denotes the line segments connecting a sym-helix point  and a protein heavy atom point .  is a transformation parametrized by fully connected neural networks. We set  to be the identity transformation. Four separate ResidualPPFConvs are applied for the major groove, minor groove, phosphate, and sugar points, respectively (from neighbors within 5 Å), followed by ReLU activation. At this stage, we have aggregated all local chemical and geometric interaction contexts onto the sym-helix.
+
+The final module is the CNN-Predictor module. We flatten the helix into a 1D base pair-level representation and apply a Multi Layered Perceptron (MLP) to reduce the dimensionality for each base-pair to 32. We concatenate precomputed helix shape features to aggregated base pair-level features. This step allows the network to make connections/correlate patterns between the aggregated information from BiNet and the global shape of the helix. We apply two rounds of 1D convolutions of filter size 3 with a stride of 1. We also apply relevant padding and set output feature size of 8, followed by ReLU activation, making the effective field of view five base-pairs. Next, we apply an MLP for each base-pair to generate logits for predicted base probabilities  for corresponding base-pairs. We apply a SoftMax15 activation to generate the output DNA base probabilities . A global temperature parameter () is learned for SoftMax through the training process. Fig. S3 schematically describes the DeepPBS architecture.
+
+%%EQUATION
+% 
+% \begin{center}
+%     \begin{figure}
+%     \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./pdna\_figs/fig2.png}}
+%  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
+%         \caption[Computational cost of training RVAgene]{\textbf{Training RVAgene is reasonably scalable on CPU and even more so using hardware acceleration through GPU.} ({\bf A}) Time cost of training RVAgene for 100 epochs for datasets with varying number of genes and time points on CPU and GPU. ({\bf B}) Maximum memory utilized during training of the model on CPU an GPU for the cases in (A), inset plot: comparison of max memory used compared to DPGP for varying number of genes.}
+%   \label{fig:pdna2}
+% \end{figure}
+% \end{center}
+\subsection{Training, cross-validation, and benchmarking}
+
+Five models were trained for each of the four types: DeepPBS, DeepPBS GrooveReadout, DeepPBS ShapeReadout, and DeepPBS with DNA SeqInfo. Each model was trained on four folds of the constructed cross-validation set. Training was conducted for 50 epochs with early stopping on an NVIDIA RTX A4000 using an Adam16 optimizer, with a learning rate of 0.001 and weight decay of 0.0001. Hyperparameters were selected based on domain knowledge and training curves. For every datapoint, two forward passes were made to account for reverse compliment predictions for both strand directions (with relevant index transformations for input; refer to Data/Code Availability). Outputs were concatenated, and MAE loss was calculated with ground truth (corresponding PWM and its reverse compliment concatenated). Predictions were made on the corresponding fifth/validation fold with each model to gather predictions for all datapoints in the 5-fold dataset. These predictions were used to report metrics in Fig. S5a-c. 
+
+For benchmarking purposes, ensemble averaged (of the five trained cross-validation models) predictions are used Fig. 2a-d. The ensemble is also used for results presented in Fig. 3, 4, 5, and Fig. S5b,d, S6, S7, S8, and S9. All core DeepPBS code was written in python3.9+ with various pythonic dependencies (full list available at GitHub). Packages used for geometric deep learning are pytorch1.12+ and torch-geometric (pyg v2.0+).
+
+\subsection{Performance metrics}
+
+Performance metrics used in this chapter are MAE and RMSE, defined as 
+
+%%EQUATION
+
+$N$ refers to the number of columns in the PWMs being compared. Both metrics follow ‘the lower the better’ principle. They are not independent but have different properties. A further discussion of the metrics is presented in Supplementary Section 7 and Supplementary Fig. 10.
+
+\subsection{Additional discussion on behavior of metrics}
+
+To get a better perspective of the behavior of MAE metric, we demonstrated of how the MAE metric behaves for various different target PWM columns and possible predictions (Fig. S10a). The predictions are of three forms, based on interpolated values of a variable . They are as follows: %%EQUATION
+. These demonstrations, although they do not form an exhaustive set, but gives an idea of the behavior of the MAE metric. Based on these plots and taking into account the inherent performance limit computed for this metric, we can consider values less than 0.8 to be of reasonable agreement and below 0.6 to be in good agreement. Although, we do note that these values should not be set in stone as the problem in question is a regression problem as opposed to binary classification.
+
+Some further thoughts on this matter: In theory, the uniform prediction [0.25, 0.25, 0.25, 0.25] can be regarded as a bad prediction, because a naive model can always predict such a value. This prediction will perform well for highly non-specific binders (e.g., cases like Fig. S8) but will fail for highly specific binders. However, the one-hot prediction [1,0,0,0] can also be a naive (bad) prediction for this problem setting. It is the case when the sequence present in the co-crystal structure itself is the output, e.g., for the sequence ACG: [[1,0,0,0],[0,1,0,0],[0,0,1,0]]. For experimentally determined structures, this prediction will generally perform well, especially for highly specific binders, but will fail for nonspecific binders. Ultimately, we wanted to create a general model that can handle specific binders and non-specific binders. So, we need a target metric to strike a balance between both scenarios. Therefore, in our opinion, looking at the predictive performances in context of the alignment scores of the co-crystal structure derived sequence with the target PWM gives a clearer picture. This has now been added (for the benchmark set) to the manuscript as Fig. S10b.
+
+We choose a continuous distance metrics like MAE over statistical measures like PCC (Pearson R) or SCC (Spearman R) because they are not very robust with only four (linearly dependent) points (well-known result in the statistics community17,18). In our observation, SCC can only take a few discrete values in this scenario and can sharply change for a very small change of values that change the rank order. The PCC metric, although it takes continuous values, is affected by similar non-intuitive situations. This is easy to demonstrate by considering the following three slightly altered predictions:
+
+PCC([0.5,0.5,0,0], [0.25,0.25,0.25,0.25]) = Undefined
+PCC([0.5,0.5,0,0], [0.23,0.24,0.26,0.27]) = -0.9487
+PCC([0.5,0.5,0,0], [0.27,0.26,0.24,0.23]) = 0.9487
+(calculated using scipy.stats.pearsonr() function)
+
+Intuitively, all three predictions are of similar caliber. However, the PCC metric paints a dramatically different picture. MAE on the other hand produces values of 1, 1.06 and 0.94. This is much more nuanced and intuitive. We can also easily construct other non-intuitive situations for PCC. For example, if the target is [0.1,0.2,0.3,0.4], any monotonically increasing prediction will have a high PCC value.
+
+PCC([0.1,0.2,0.3,0.4], [0.001,0.002,0.003,0.994]) = 0.776
+
+This gives the impression that this prediction is quite good, while in reality, it is almost just a one-hot prediction. MAE on the other hand produces a value of 1.187 which depicts a bad prediction.
+
+\subsection{Additional details associated with application of DeepPBS on predicted structures}
+%% CHECK LINKS
+Running rCLAMPS: We ran the rCLAMPS model with default parameters provided by the model’s authors according to instructions provided through their GitHub.
+\\
+Running RoseTTAfoldNA (RFNA): We ran the RFNA model with default options and model weights (version: April 13, 2023 v0.2) as provided by the authors through their GitHub.
+\\
+Trimming unstructured regions from full-length homeodomain (HD) sequences: For the analysis in Fig. 3e-i, full-length HD sequences were first trimmed to remove unstructured regions, while retaining the main Homeobox domain of interest (rCLAMPS also applies the same process in its pre-processing). This step was achieved by HMMERv3.419 using the ‘homeobox.hmm’ file provided by the rCLAMPS repository. 
+\\
+MM-PBSA vacuum energy calculation: For each PDB file, we generated a topology file and a run-parameter file using Gromacs 2020.3 to define the force fields amber14sb for protein and parmbsc1 for DNA. These files were used as input for g$\_$mmpbsa to calculate the potential energy in a vacuum. The dielectric constant of the solute was set to 8. 
+\\
+Dataset: We obtained UniProt protein sequences for three different families, bZIP (homodimers), bHLH (homodimers), and homeodomain (HD) (heterodimers excluded), for cases with a corresponding unique JASPAR entry and no experimental structure for the complex. RFNA predictions that could be successfully processed by DeepPBS pre-processing steps were fed into DeepPBS for specificity prediction (n=49 for bHLH, n=50 for bZIP, n=236 for HD family members).
+\\
+Choice of initial guess (IG) DNA: The IG DNA for the bHLH family was chosen as ‘GCGCACCACGTGGTGCGC’, which has a center E-box motif (‘CACGTG’) that is known20 to be a bHLH family target. The IG DNA for the bZIP family was chosen as ‘GCGCTGATGTCAGCGC’ (based on human CREB1 motif MA0018.4). The IG DNA for the HD family was chosen as ‘GCGTGTAAATGAATTACATGT’, based on DNA from PDB ID 1APL. 
+\\
+Details on metric calculation for Fig. 3d: We calculated MAE (best full overlap) for predictions in Fig. 3d against corresponding JASPAR annotations. As a baseline (apart from random predictions drawn from uniform), we calculated the MAE (best full overlap) for the one-hot PWM determined by the IG DNA against the corresponding JASPAR annotation. For the bHLH and HD families, the IG DNA was closer to experimental data than to random baseline (Fig. 3d).
+\\
+pLDDT score: (RFNA-predicted LDDT (Local Distance Difference Test)21 score). The LDDT score measures the similarity between a predicted and reference structure. When predicting a complex structure, RFNA predicts an LDDT score (pLDDT). These pLDDT scores were shown22 to be well correlated with the true LDDT of RFNA predictions. Thus, the pLDDT can be taken as a measure of quality of a complex generated by RFNA.
+\\
+Comparison of DeepPBS and rCLAMPS: There are several qualitative advantages to the DeepPBS approach. First, rCLAMPS uses structural mapping for HD-DNA binding to predict specificity for a given HD sequence. This structural mapping leads to a specificity output of exactly six 6 base pairs (bp). DeepPBS is functionally not limited to only predicting a 6-base pair core and can predict preferences in the flanks (Fig. 3e). Second, rCLAMPS is restricted to predicting monomer preferences (although HD proteins can often bind as dimers; see, e.g., Fig. S6a). In contrast, DeepPBS is able to handle biological assemblies. Third, DeepPBS is not limited to a specific family. For quantitative comparison, we compare the aspects that are achievable by rCLAMPS, namely, 6mer specificity predictions for monomer HD proteins.
+\\
+Metric computation for comparison with rCLAMPS: We ran rCLAMPS (github commit version 32a94edb65e87c6d038823dc34c4bcf6e1071b7b) on the set of monomer HD proteins (with unavailable complex structure, i.e. not part of RFNA or DeepPBS training). We computed the MAE (best overlap) values for rCLAMPS predictions against the corresponding JASPAR entry of experimental data, and compared these values to the MAE values of the best 6-mer overlap for DeepPBS predictions. In this case, for each datapoint, one of round 4-7 prediction was chosen. This choice was based on maximizing corresponding protein-DNA contact count (5 \AA cutoff) of input RFNA predicted structure. 
+\\
+Folding benchmark set datapoints with RFNA: We refolded all the benchmark set datapoints with RFNA, for results presented in Fig. 3g. 108/130 RFNA predictions produced pre-processable results. Out of them a few of were not able to place the protein near the DNA helix properly. So, we filtered an atom-to-atom contact count (within 5 Å) of greater than 500 contacts between protein and DNA to filter this set producing a set of size 98. The high confidence set among these are taken as predictions for which the RFNA pLDDT was greater that 0.9.
+\subsection{Molecular Dynamics (MD) simulation of Exd-Scr–DNA system}
+We conducted MD simulations on the Drosophila Extradenticle (Exd)-Sex combs reduced (Scr) system, with the dimer bound to its target DNA, using the co-crystal structure (PDB ID: 2R5Z). AlphaFold2 predictions of the proteins were aligned to the PDB structure to create an initial structure of the simulation. This process aided in filling in the missing linker residues in the biological assembly. The simulation was executed using the Gromacs23 2020.3 software package. Protein interactions were modeled with the amber14sb24 force field, and DNA interactions were modeled with the parmbsc125 force field. The pdb2gmx program from Gromacs was used to generate topological information for the simulation. The -his flag was used to protonate both N$\delta$ and N$\epsilon$ atoms of the His-12 residue for the system with protonated His-12. All complexes were solvated using the explicit TIP3P water model. The negative net charge of the Exd-Hox-DNA complex was neutralized by adding positively charged Na+ counterions, along with negatively charged Cl- counterions, to reach a final NaCl concentration of 150 mM that approximates the physiological concentration. The GROMACS 2020.3 genion program was used to place these counterions throughout the box. 
+\par
+The protein-DNA complex was energy-minimized with steep descent energy minimization for 2,000 steps to relax the structure and remove any steric clashes. Next, we performed three rounds of gradual NVT (constant Number of particles, Volume, and Temperature) equilibration for 10 ps to slowly heat the prepared system to 300K and 1 round of NPT (constant Number of particles, Pressure, and Temperature) to equilibrate the pressure of the system to 1 bar for 700ps. These equilibration rounds were used to adjust the whole system to biological conditions before starting the production simulation. The production simulation for the system was run for 300 ns in the isobaric–isothermal ensemble, where the pressure was maintained at 1 bar and temperature at 300K. The integration time step of 2 fs was used for all calculations. The Verlet cutoff scheme was used for all calculations. Long-range electrostatic interactions were computed using the Particle Mesh Ewald method26 from the GRPMACSv2020.3 package, with a 12\AA cutoff. Nonbonded van der Waals interactions were calculated with a 12\AA cutoff. The LINCS27 algorithm from the GRPMACSv2020.3 package, was employed to constrain all bonds.The MD simulation trajectories were generated as part of a recent study exploring effects of minor groove linker histidine protonation28.
+\\
+\subsection{Measures ensuring prevention of overfitting to protein sequences}
+We took several steps to prevent the model to be overfit on protein sequences. The cross-validation fold creation script (see Code Availability) took care to keep members of the same cluster in the same fold (except a handful ($<4\%$) got split randomly to keep the fold sizes same). Full description of these splits is available (see Data Availability) and the code for this process is available (see Code Availability). In addition, no more than five samples were chosen per cluster into a fold. This ensures prevention of over representation. Furthermore, the input to DeepPBS is purely structural and physico-chemical, and does not contain the sequence representation. These structures may demonstrate different spatial conformations interacting with potentially different DNA sequence/shape and randomly picked target PWM from JASPAR or HOCOMOCO. These guardrails in architecture and all of these variations, even for similar protein sequences, makes the model less prone to overfit on protein sequences. 
+\\
+\subsection{Bipartite edge perturbation and protein heavy atom importance score calculation}
+Supplementary Fig. 4 schematically describes the bipartite edge perturbation process for calculating protein heavy atom (say, atom a) importance scores. Briefly, the prediction is calculated twice: once (say, Ya) while considering edges corresponding to the protein heavy atoms, and again (say, Y~a) while masking the same edges. This process results in differences in predictions, which can be calculated using the mean absolute difference measure. On their own, these values may not be meaningful, but they can be normalized to the 0–1 range by dividing by the maximum value within a structure. The normalized values, RI scores, signify how much the specificity prediction is influenced by interactions made by the corresponding heavy atom. Depending on the downstream use, RI scores can be aggregated at the residue level using either the average, max or sum aggregations. Mathematically,
+\par
+Computationally, this process is like measuring the effect of a deactivating mutation, which is why we hypothesized that, at a residue level, these scores could correlate with alanine scanning mutagenesis data. For comparison with alanine scanning mutagenesis experiments (Fig. 4h) at a residue level, the log sum aggregated importance score was calculated. For each atom a of a residue r in the protein–DNA interface, let the calculated RI be RIa. Then, this value is calculated as 
+
+%%EQUATION
+
+Structure visualizations presented were produced using PyMOL2.5.
+
+\subsection{Description of competitor assay for quantifying designed proteins’ binding specificity}
+
+Glasscock et al.34 used a yeast display assay to quantify binding of their designed proteins. The proteins were expressed by integrating the corresponding synthetic oligonucleotide to a yeast surface expression vector. Yeast cells expressing designed proteins on their surface were labeled with biotinylated dsDNA targets, streptavidin–phycoerythrin and anti-c-Myc fluorescein isothiocyanate in a 96-well plate format, after which a binding signal was quantified on an Attune NxT flow cytometer. Excess addition of a competitor nonfluorescent target DNA reduces this binding signal. Thus, scanning single mutations for each position was possible through the competitor producing the data shown in Fig. 5d,h,l,p.
+\\
+\subsection{DeepPBS webserver}
+DeepPBS is available as a webserver at https://deeppbs.usc.edu. The webserver provides the functionality of the DeepPBS method of predicting a PWM on the basis of the structure of a protein–DNA complex. The structure can be uploaded as a PDB or macromolecular crystallographic information file. The webserver provides a documentation for users.

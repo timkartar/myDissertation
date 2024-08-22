@@ -82,10 +82,15 @@ We can get the aggregated values $(\sum \limits_{j \in \mathcal{N}(i)} (g_{ij} H
  \text{Taking partial derivative and setting to 0:}\\
  H_{ik}^{(1)} &= \frac{\alpha B_{ik} +  \beta\sum_{j\in\cN(i)}g_{ij}B_{jk}}{\alpha + \beta\sum_{j\in\cN(i)}g_{ij}}\\
  ----- & ------\\
+ \end{align*}
+\begin{align*}
  \bE_{H_{jk}^{(1)}}[(H_{ik}^{(2)} - H_{jk}^{(1)})^2] &= \int_{x} exp[-\alpha(x - B_{jk})^2 - \beta\sum_{p\in\cN(j)}g_{jp}(x - B_{pk})^2](H_{ik}^{(2)}-x)^2dx\\
         &=\int_{t} exp[-\alpha(t - (B_{jk} - H_{ik}^{(2)}))^2 - \beta\sum_{p\in\cN(j)}g_{ip}(t  - (B_{pk} -H_{ik}^{(2)}))^2]t^2dt\\
  &=Var(T) + \bE[T]^2  \hspace{10pt}\text{($T = X - H_{ik}^{(2)}$)}\\
  &= \bE[T]^2 + const.\\
+\end{align*}
+\newpage
+\begin{align*}
 \bE[T] &= argmin_{t} (\alpha(t - (B_{jk} - H_{ik}^{(2)}))^2 + \beta\sum_{p\in\cN(j)}g_{jp}(t  - (B_{pk} -H_{ik}^{(2)}))^2)\\
 \implies \bE[T] &= \frac{\alpha(B_{jk} - H_{ik}^{(2)}) + \beta\sum_{p\in\cN(j)}g_{jp}(B_{pk} -H_{ik}^{(2)})}{\alpha + \beta\sum_{p\in\cN(j)}g_{jp}} \\
 \implies \bE[(H_{ik}^{(2)} - H_{jk}^{(1)})^2] &= \Big{[}\frac{\alpha(B_{jk} - H_{ik}^{(2)}) + \beta\sum_{p\in\cN(j)}g_{jp}(B_{pk} -H_{ik}^{(2)})}{\alpha + \beta\sum_{p\in\cN(j)}g_{jp}}\Big{]}^2\\
@@ -93,6 +98,7 @@ We can get the aggregated values $(\sum \limits_{j \in \mathcal{N}(i)} (g_{ij} H
 &= \Big{[}\frac{H_{ik}^{(2)}(\alpha + \beta\sum_{p\in\cN(j)}g_{jp})}{\alpha + \beta\sum_{p\in\cN(j)}g_{jp}} - \frac{\alpha B_{jk} +  \beta\sum_{p\in\cN(j)}g_{jp}B_{pk}}{\alpha + \beta\sum_{p\in\cN(j)}g_{jp}}\Big{]}^2\\
 &= \Big{[}H_{ik}^{(2)} - \frac{\alpha B_{jk} +  \beta\sum_{p\in\cN(j)}g_{jp}B_{pk}}{\alpha + \beta\sum_{p   \in\cN(j)}g_{jp}}\Big{]}^2\\
 &=\Big{[}H_{ik}^{(2)} - H_{jk}^{(1)}\Big{]}^2\\
+ &-----------\\
 \end{align*} 
 \begin{align*}
  Q_i^{(2)} &= \frac{1}{Z_{i}^{(2)}}exp(-E(H_i^{(2)})) \\

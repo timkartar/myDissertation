@@ -1,23 +1,3 @@
 \begin{abstract}
-Structure based study and mechanistic understanding of protein-DNA binding often involves experts
-        looking at various protein-DNA contacts manually and hypothesizing about
-        their role in determining binding specificty of the protein being discussed. 
-        Although there is no better alternative to human expertise, in this work, we are interested 
-        in building a data-driven computational model that can analyze a protein-DNA complex and come 
-        up with predictions which can aid this process for proteins across different families.
-        Ideally this task would benefit from structures for the same protein
-        bound to different DNA sequences with corresponding binding energy values.
-        However, structure data is generally sparse. Instead we have
-        experimental binding specificity data (often in terms of Position Weight Matrices(PWMs))
-        which are, although very noisy, still general enough to act as a proxy for energetics and 
-        therefore can serve as a target to train our model. 
-        Hence, our model DeepPBS takes as input a given co-crystal and
-        is trained to predict binding specificity of the co-crystal.
-
-        Result: The prediction of DeepPBS in cross-validation setting conforms very well with experimental
-        speficities. However, it should be noted that DeepPBS really learns to predict a specifity based
-        on the current state of interactions in the co-crystal which is useful in analyzing
-        MD-trajectories and forming mechanistic hypothesis, serving as a guide to DNA-binder protein design
-        pipelines and/or serving as guide for mechanistic hypothesization in general and therein
-        lies the real strength of this model.
+Predicting protein–DNA binding specificity is a challenging yet essential task for understanding gene regulation. Protein–DNA complexes usually exhibit binding to a selected DNA target site, whereas a protein binds, with varying degrees of binding specificity, to a wide range of DNA sequences. This information is not directly accessible in a single structure. Here, to access this information, we present Deep Predictor of Binding Specificity (DeepPBS), a geometric deep-learning model designed to predict binding specificity from protein–DNA structure. DeepPBS can be applied to experimental or predicted structures. Interpretable protein heavy atom importance scores for interface residues can be extracted. When aggregated at the protein residue level, these scores are validated through mutagenesis experiments. Applied to designed proteins targeting specific DNA sequences, DeepPBS was demonstrated to predict experimentally measured binding specificity. DeepPBS offers a foundation for machine-aided studies that advance our understanding of molecular interactions and guide experimental designs and synthetic biology.
 \end{abstract}
