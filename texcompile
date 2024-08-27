@@ -7,7 +7,7 @@ CURDIRUP="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 #source ${CURDIRUP}/cleanup
 
 #cleanup_incl_bbl ${FILE}
-latexmk -pdf -bibtex ${FILE}.tex -f -jobname=./output/main
+latexmk -pdf -bibtex ${FILE}.tex -f -jobname=./output/$1
 
 # finally, keep the bbl
 # cleanup ${FILE}
