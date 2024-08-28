@@ -53,6 +53,7 @@
 %\AtEveryCitekey{\clearfield{pagetotal}}
 %\addbibresource{references.bib}
 
+
 % Filler text for formatting. Comment these lines out for real writing.
 \usepackage[english]{babel}
 \usepackage{blindtext}
@@ -105,13 +106,11 @@
 \makeatletter
 \renewcommand{\@biblabel}[1]{\quad#1.}
 \makeatother
-%\usepackage[numbers]{natbib}
 \usepackage[backend=biber, style=numeric, sortcites, maxnames=10, natbib=true]{biblatex}
 \usepackage{csquotes}% Recommended
 \usepackage{pmi}
 %\bibliography{library}
-\addbibresource{library.bib}
-
+\addbibresource{/Users/raktimmi/manuscripts/diss/library.bib}
 \newcommand{\tcr} { \textcolor{red} }
 
 \newcommand{\scrna}{scRNA-seq }
@@ -210,11 +209,11 @@
 
 \end{flushleft}
 
-\input{crf/abstract}
-\input{crf/introduction}
-\input{crf/methods}
-\input{crf/results}
-\input{crf/discussion}
+%\input{crf/abstract}
+%\input{crf/introduction}
+%\input{crf/methods}
+%\input{crf/results}
+%\input{crf/discussion}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\chapter{Proposal:  A generalized generative model for binding element design.}
@@ -225,20 +224,20 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Geometric deep learning of protein–DNA binding specificity}
-\input{pdna/abstract.tex}
-\input{pdna/introduction.tex}
+%\input{pdna/abstract.tex}
+%\input{pdna/introduction.tex}
 \input{pdna/results.tex}
-\input{pdna/dataset.tex}
-\input{pdna/methods.tex}
-\input{pdna/discussion.tex}
+%\input{pdna/dataset.tex}
+%\input{pdna/methods.tex}
+%\input{pdna/discussion.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Geometric mapping and customizable visualization of RNA structure}
-\input{rnascape/abstract.tex}
-\input{rnascape/introduction.tex}
-\input{rnascape/methods.tex}
-\input{rnascape/results.tex}
+%\input{rnascape/abstract.tex}
+%\input{rnascape/introduction.tex}
+%\input{rnascape/methods.tex}
+%\input{rnascape/results.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% RVAgene ############################################################
@@ -261,18 +260,18 @@
 
 \end{flushleft}
 
-\input{rvagene/abstract.tex}
+%\input{rvagene/abstract.tex}
 
-\input{rvagene/introduction}
-\input{rvagene/methods}
+%\input{rvagene/introduction}
+%\input{rvagene/methods}
 
 \section{Results}
-\input{rvagene/simulation}
-\input{rvagene/EScells}
-\input{rvagene/comparison.tex}
-\input{rvagene/jci}
-\input{rvagene/comp_cost}
-\input{rvagene/discussion}
+%\input{rvagene/simulation}
+%\input{rvagene/EScells}
+%\input{rvagene/comparison.tex}
+%\input{rvagene/jci}
+%\input{rvagene/comp_cost}
+%\input{rvagene/discussion}
 
 
 \section*{Acknowledgements}
@@ -290,7 +289,7 @@ RVAgene is available in Python released under an MIT license:  \url{https://gith
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Conclusion and future work}
-\input{conc/conclusion.tex}
+%\input{conc/conclusion.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Conclusion and ongoing work
 %\include{main/Conclusion}
@@ -302,7 +301,7 @@ RVAgene is available in Python released under an MIT license:  \url{https://gith
 %\addcontentsline{toc}{chapter}{References}%
 %\markboth{References}{References}%
 % If you use BibLaTeX
-\printbibliography%[title=References]
+\printbibliography[title=References]
 % If you use BibTeX
 %\bibliography{library}
 %\bibliographystyle{agsm}
@@ -322,7 +321,7 @@ RVAgene is available in Python released under an MIT license:  \url{https://gith
 \numberwithin{equation}{section}
 % Appendix source files
 %\input{main/appendix_proof}
-\input{crf/crf_detailed.tex}
+%\input{crf/crf_detailed.tex}
 \endgroup
 \section*{Appendix B}
 \addcontentsline{toc}{section}{Appendix B}%
@@ -330,7 +329,7 @@ RVAgene is available in Python released under an MIT license:  \url{https://gith
 \numberwithin{equation}{section}
 % Appendix source files
 %\input{main/appendix_proof}
-\input{supp.tex}
+%\input{supp.tex}
 \endgroup
 % In case your dissertation has multiple volumes.
 % \addvolumecontents{thesis_part2}
