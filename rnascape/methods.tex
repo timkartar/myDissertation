@@ -1,43 +1,80 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\label{table:rnascape}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllllll}
+Method & Preserves 3D topology & Input & Webserver & Upload limit & Output & Framework needed \\
+RNAscape \citep{Mitra2024rnascape} & Yes & .pdb, .cif & Yes & 50 MB & .png, .svg, .npz & Python (dependencies installed via pip) \\
+RNAview \citep{Yang2003}  & Yes & .pdb, .cif & No & N/A & .ps & C, make based installation \\
+RNAglib \citep{Mallet2022} & Semi (2.5D graphs) & .cif, compiled dataset by authors & No & N/A & .png, .svg & Python (dependencies installed via pip) \\
+RNAcanvas \citep{Johnson2023} & No (secondary structure) & dot-bracket/ss formats & Yes & N/A & .svg, .pptx, interactive GUI & Unavailable \\
+Forna \citep{Kerpedjiev2015}  & No (secondary structure, force directed) & dot-bracket, .pdb, .cif, .json & Yes & 2 MB & .png, .svg, .json, interactive   GUI & JavaScript \\
+VARNA \citep{Darty2009} & No (secondary structure) & dot-bracket/ss formats & No & N/A & .eps, .svg, .xfig, .jpg, .png & Java \\
+jVizRNA \citep{Shabash2019} & No (spring based) & dot-bracket/ss formats & No & N/A & interactive GUI & Java \\
+PseudoViewer \citep{Byun2009} & No (but considers pseudoknots) & dot-bracket/ss formats & Yes & N/A & .eps, .svg, .gif, .png, bracket   view & Microsoft .NET Framework \\
+XRNA (link) & No (secondary structure) & special program specific format & No & N/A & .ps & Java \\
+RNAViz \citep{Peter2003} & No (secondary structure) & dot-bracket/ss formats, DCSE   alignment & No & N/A & image format (exact unknown) & C, make based installation \\
+RNAPuzzler \citep{Wiegreffe2019} & No (secondary structure) & dot-bracket/ss format (.txt) & No & N/A & image format (exact unknown) & C, make based installation \\
+R2R \citep{Weinberg2011} & No (secondary structure) & Stockholm format (alignment) & No & N/A & .pdf, .svg & command line program for UNIX   like systems \\
+R2DT \citep{Sweeney2021} & No (predicted secondary   structure) & RNA sequence & Yes & N/A & .txt, .svg & command line tool with   Docker/Singularity \\
+RNArtist (link) & No (secondary structure) & dot-bracket/ss formats, .pdb & No & N/A & .svg & Java (jdeploy) \\
+Ribosketch \citep{Lu2018} & No (secondary structure, force   directed) & dot-bracket/ss formats & Yes & N/A & .txt, .svg, interactive GUI & standalone installer \\
+RNAvista \citep{antczak2019rnavista} & No (prediction tool for secondary/tertiary   structure) & FASTA or dot-bracket/ss formats & Yes & N/A & .svg, predicted 3D model (.pdb) & unavailable
+\end{tabular}%
+}
+\caption[escription of various attributes of relevant tools which produce 2D
+visualizations of RNA.]{The first row corresponds to RNAscape. The next two rows correspond to two
+methods which incorporate tertiary interactions in their output mapping: RNAView \citep{Yang2003} being the most
+frequently used, and RNAglib \citep{Mallet2022} being the most recent. The remaining rows indicate secondary
+structure drawing tools: Forna \citep{Kerpedjiev2015} being the most used (supports structure upload) and RNAcanvas \citep{Johnson2023} being the most recent (does not support structure upload). Abbreviations used: ss (secondary
+structure); GUI: Graphical User Interface; Dot-bracket: RNA sequence and secondary structure in dot-
+bracket format.}
+\end{table}
+
 \section{Materials and methods} 
 
 \subsection{Programming languages and general tools}
 
-The RNAscape webserver is a single-page web application. The backend (Figure 2A, B) is implemented in Python 3.9.18, and Django \citep{Django2019} is used to communicate with the backend. The frontend is (Figure 2C) designed in React v18.2.0 framework and implemented in Hypertext Markup Language (HTML)/Cascading Style Sheets (CSS)/JavaScript.
+The RNAscape webserver is a single-page web application. The backend \hyperref[fig:rnascape2]{(Figure 2A, B)} is implemented in Python 3.9.18, and Django \citep{Django2019} is used to communicate with the backend. The frontend is \hyperref[fig:rnascape2]{(Figure 2C)} designed in React v18.2.0 framework and implemented in Hypertext Markup Language (HTML)/Cascading Style Sheets (CSS)/JavaScript.
 
 \subsection{The RNAscape algorithm}
 
-Upon upload, the structure file is sent via Hypertext Transfer Protocol Secure (HTTPS) to the RNAscape webserver where backend processing occurs. If a user selects a PDB ID \citep{berman2000protein}, its corresponding first biological assembly is downloaded by the backend (Figure 2A, B) for processing.
+Upon upload, the structure file is sent via Hypertext Transfer Protocol Secure (HTTPS) to the RNAscape webserver where backend processing occurs. If a user selects a PDB ID \citep{berman2000protein}, its corresponding first biological assembly is downloaded by the backend \hyperref[fig:rnascape2]{(Figure 2A, B)} for processing.
 
-Pre-processing (Figure 3A). The DSSR program (v1.7.8) \citep{lu2015dssr} is run on the structure file to detect helices and base pairs, and assign base-pairing annotations.
+\textit{Pre-processing} \hyperref[fig:rnascape3]{(Figure 3A)}. The DSSR program (v1.7.8) \citep{lu2015dssr} is run on the structure file to detect helices and base pairs, and assign base-pairing annotations.
 
-Helical regions (Figure 3B). The positioning of helices, as well as non-helical regions, involves multiple considerations. The 3D coordinates of each nucleotide are represented by the centroid of atoms belonging to it (i.e. for the nucleotide,
-). The set of all nucleotide centroids is a combination of two subsets (i.e. (helical regions) and (non-helical regions)). Helical regions receive the highest priority and are placed in a way that reflects their spatial orientation while remaining visually intuitive. To do so, first, we run principal component analysis (PCA) exclusively on the helical segments () and project the points onto the plane determined by the first two components. In this process, the  sized matrix is converted to a matrix (which we can denote as ), which preserves the maximum spatial variance possible in two dimensions \citep{Pearson1901}. Next, we convert into a more visually intuitive ‘ladder’ representation, which first involves estimating a ladder axis in the projection plane for each helix. An initial estimate is made by connecting the centroid of the first and last base pairs of a helical region using a line segment. consists of multiple helical regions (i.e. ). If the midpoint of a base-pair is
-, the ladder axis for is the vector
-rooted at the point
+\textit{Helical regions} \hyperref[fig:rnascape3]{(Figure 3B)}. The positioning of helices, as well as non-helical regions, involves multiple considerations. The 3D coordinates of each nucleotide are represented by the centroid of atoms belonging to it (i.e. for the $i^{th}$ nucleotide, $V_i  = \frac{1}{|atoms(i)|}\sum\limits_{a\in atoms(i)}[a_x,a_y,a_z]$
+). The set of all nucleotide centroids is a combination of two subsets (i.e. 
+$V = V_H \cup V_{NH}, V_H$ (helical regions) and $V_{NH}$ (non-helical regions)). Helical regions receive the highest priority and are placed in a way that reflects their spatial orientation while remaining visually intuitive. To do so, first, we run principal component analysis (PCA) exclusively on the helical segments ($V_H$) and project the points onto the plane determined by the first two components. In this process, the $|V_H|\times 3$ sized matrix $V_H$ is converted to a $|V_H|\times 2$ matrix (which we can denote as $T$), which preserves the maximum spatial variance possible in two dimensions \citep{Pearson1901}. Next, we convert $T$ into a more visually intuitive ‘ladder’ representation, which first involves estimating a ladder axis in the projection plane for each helix. An initial estimate is made by connecting the centroid of the first and last base pairs of a helical region using a line segment. $T$ consists of multiple helical regions (i.e. $T=T_{H1}\cup T_{H2}\cup ... \cup t_{Hn}$). If the midpoint of a base-pair $B \in T_{Hk}$ is $T_{Hk}^{B}$
+, the ladder axis for $T_{Hk}$ is the vector $L_{Hk} = T_{Hk}^{B_{last}} - T_{Hk}^{B_{first}}$, rooted at the point $T_{Hk}^{B_{first}}$.
 
-.
 
 However, for bent helices, this estimate may be imprecise. To account for this case, we measure the distance
- between the centroid of the helical projection and the midpoint of the estimated ladder axis (i.e.
-. If this distance is greater than 10 Å, we re-estimate the ladder axis as a combination of two line segments: one connecting the first and central base-pair centroids and another between the central and last base-pair centroids. In theory, this process can be recursively performed. In practice, however, we observe that doing so once suffices. Next, if two helical projections are within a certain distance threshold (i.e.
-Å) and have similar orientations (i.e.
-), we merge them and recompute the ladder axis as described above. Next, we uniformly distribute the base pairs in the ‘ladder’ formation along each ladder axis. Finally, for cases where the projection of a helix is skewed, resulting in an overly cramped ladder representation, we lengthen the ladder to reduce visual clutter. The final mapping for nucleotide points in helical regions can be denoted as Non-helical regions (Figure 3C). Loops are either preferentially bulged out in a radial curve or interpolated linearly based on a spatial density threshold (see implementation in Data Availability), depending on the chosen setting. We choose bulging by default to reduce graph overlap and crowding. For bulging out, the structure mapping algorithm computes potential layouts and performs greedy optimization to select an optimal layout. This optimization considers the total nearest-neighbor count (within 10 Å) of all members of a loop, and the orientation with the lowest number of neighbors is selected. Let us assume that the loop is connected to two nucleotides which are part of a helical region, mapped to positions
-. Two possible circular layouts are computed for the loop based on
-and
-: bulging out in perpendicular directions
-(layout ) and
-(layout ), where
-denotes the unit vector which is perpendicular relative to the mapping plane. In each case, the center of the layout remains at the point (
-. The radius of the circular arc is either 
-, if
- \AA or
- \AA, where
-
-is the number of points in the loop. Points are uniformly distributed on the circular arc. One of the two loop orientations is selected based on minimizing the neighbor count in helical segments as follows:
+ between the centroid of the helical projection and the midpoint of the estimated ladder axis (i.e. $d = |centroid(T_{Hk}) - (T_{Hk}^{B_{first}} + \frac{1}{2}L_{H_k})|$
+. If this distance is greater than 10 \AA, we re-estimate the ladder axis as a combination of two line segments: one connecting the first and central base-pair centroids and another between the central and last base-pair centroids. In theory, this process can be recursively performed. In practice, however, we observe that doing so once suffices. Next, if two helical projections are within a certain distance threshold (i.e. $T_{Hk}^{B_{first}} - T_{Hk+1}^{B_{last} < 20 \AA}$
+Å) and have similar orientations (i.e. 
+$cos^{-1}$ 
+($\frac{L_{Hk}}{|L_{Hk}|}$ 
+$.$ 
+$\frac{L_{H{k+1}}}{|L_{H{k+1}}|})$ 
+$<$ 
+$\frac{\pi}{6}$
+), we merge them and recompute the ladder axis as described above. Next, we uniformly distribute the base pairs in the ‘ladder’ formation along each ladder axis. Finally, for cases where the projection of a helix is skewed, resulting in an overly cramped ladder representation, we lengthen the ladder to reduce visual clutter. The final mapping for nucleotide points in helical regions can be denoted as $P_H$.
+\textit{Non-helical regions} \hyperref[fig:rnascape3]{(Figure 3C)}. Loops are either preferentially bulged out in a radial curve or interpolated linearly based on a spatial density threshold (see implementation in Data Availability), depending on the chosen setting. We choose bulging by default to reduce graph overlap and crowding. For bulging out, the structure mapping algorithm computes potential layouts and performs greedy optimization to select an optimal layout. This optimization considers the total nearest-neighbor count (within 10 \AA) of all members of a loop, and the orientation with the lowest number of neighbors is selected. Let us assume that the loop is connected to two nucleotides which are part of a helical region, mapped to positions $P_H^i, P_H^j \in P_H$ . Two possible circular layouts are computed for the loop based on $P_H^i, P_H^j$: bulging out in perpendicular directions $P_H^i - P_H^j\times \vec{Z}$
+(layout $L_{pos}$) and $-(P_H^i - P_H^j\times \vec{Z})$ 
+(layout $L_{neg}$), where $\vec{Z}$
+denotes the unit vector which is perpendicular relative to the mapping plane. In each case, the center of the layout remains at the point $(P_H^i + P_H^j)/2$
+. The radius of the circular arc is either $|(P_H^i - P_H^j)/2|$ or $|\sqrt{n}\times(P_H^i - P_H^j)/2|$
+, if $|(P_H^i - P_H^j)| < 3 \AA$ or $|(P_H^i - P_H^j)/n| < 1.5 \AA$
+where $n$ is the number of points in the loop. Points are uniformly distributed on the circular arc. One of the two loop orientations is selected based on minimizing the neighbor count in helical segments as follows:
+\begin{align}
+{argmin}_{L\in{L_{pos},L_{neg}}}\sum\limits_{p\in L}\sum\limits_{v\in P_H}\bI[|v-p| < 5 \AA]
+\end{align}
 
 Hanging single stranded regions are linearly interpolated based on its connecting mapped helix. Additional adjustments are made for certain edge cases, such as, when a linearly interpolated non-helix nucleotide exactly overlaps with another nucleotide (see implementation in Data Availability). Structures containing no helices (generally rare) are mapped solely using a PCA.
 
-Visualization (Figure 3C). The RNAscape backend utilizes the Matplotlib \citep{Hunter2007,} and NetworkX \citep{Hagberg2008} packages to plot visualizations. As input, the plotting algorithm requires the mapped points, base-pairing annotations, and user-selected visual settings for a structure. As output, it generates an image that is temporarily stored (up to 48 h) on the webserver and tied to a specific user session. Structure files are not stored. The image is served to the frontend via a Django \citep{Django2019} server, where it can be interacted with by the user. A user can also regenerate a plot with different visual settings. In this case, we reuse the mapping output and rerun the visualization script, resulting in a faster response time than the complete computation.
+Visualization  \hyperref[fig:rnascape3]{(Figure 3C)}. The RNAscape backend utilizes the Matplotlib \citep{Hunter2007,} and NetworkX \citep{Hagberg2008} packages to plot visualizations. As input, the plotting algorithm requires the mapped points, base-pairing annotations, and user-selected visual settings for a structure. As output, it generates an image that is temporarily stored (up to 48 h) on the webserver and tied to a specific user session. Structure files are not stored. The image is served to the frontend via a Django \citep{Django2019} server, where it can be interacted with by the user. A user can also regenerate a plot with different visual settings. In this case, we reuse the mapping output and rerun the visualization script, resulting in a faster response time than the complete computation.
 \begin{center}
     \begin{figure}
     \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./rnascapefigs/figure2.png}}
@@ -46,3 +83,4 @@ Visualization (Figure 3C). The RNAscape backend utilizes the Matplotlib \citep{H
   \label{fig:rnascape2}
 \end{figure}
 \end{center}
+
