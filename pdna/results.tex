@@ -76,6 +76,64 @@ A regression plot and Pearson’s correlation coefficient (PCC), as shown in Fig
   \label{fig:pdna4}
 \end{figure}
 \end{center}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\small
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{DeepPBS} & \textbf{$\Delta\Delta G$(kcal/mol)} & \textbf{PDB ID} & \textbf{Residue} \\
+\hline
+3.4246 & 2.62 & 1b3t & Y518 \\
+0.0973 & 0.17 & 1fos & K148 \\
+0.1073 & 0.17 & 1fos & K153 \\
+3.0678 & 1.04 & 1fos & R155 \\
+0.1036 & 0.34 & 1fos & R158 \\
+0.0782 & 0.04 & 1fos & R272 \\
+2.8199 & 0.84 & 1hcq & E25 \\
+0.7292 & 0.92 & 1hcq & H18 \\
+4.2104 & 1.21 & 1hcq & K28 \\
+2.8322 & 1.24 & 1hcq & K32 \\
+1.0187 & 1.22 & 1hcq & Y19 \\
+0.6486 & 0.7 & 1j5n & K22 \\
+0.6486 & 0.7 & 1j5n & K22 \\
+0.5429 & 0.5 & 1j5n & K53 \\
+1.0272 & 0.4 & 1j5n & K60 \\
+0.9116 & 0.4 & 1j5n & K78 \\
+1.0853 & 0.2 & 1j5n & K85 \\
+3.2762 & 0.5 & 1j5n & M29 \\
+0.2997 & 0.7 & 1j5n & N33 \\
+0.9606 & 0.8 & 1j5n & R36 \\
+0.7074 & 0.7 & 1j5n & R40 \\
+3.751 & 0.9 & 1j5n & Y28 \\
+0.7891 & 0.2 & 1j5n & Y81 \\
+1.7017 & 0.2 & 1mse & S187 \\
+1.1549 & 0.7 & 1tn9 & K21 \\
+3.2913 & 1.36 & 1tn9 & K28 \\
+0.2911 & 1.33 & 1tn9 & K54 \\
+2.8115 & 0.43 & 1tn9 & R20 \\
+0.996 & 1.22 & 1tn9 & R24 \\
+2.6845 & 1.17 & 1tn9 & R55 \\
+0.0579 & 0.75 & 1tn9 & R5 \\
+0.5691 & 0.04 & 1tn9 & T15 \\
+0.3096 & 0.44 & 1tn9 & W42 \\
+2.596 & 1.51 & 1tn9 & Y40 \\
+0.5089 & 0.2725 & 2mxf & K102 \\
+0.6247 & 0.6225 & 2mxf & K105 \\
+1.1177 & 0.7518 & 2mxf & K108 \\
+0.5467 & 0.283 & 2mxf & K81 \\
+2.0751 & 0.2967 & 2mxf & K97 \\
+4.1414 & 0.7725 & 2mxf & N100 \\
+4.454 & 1.3382 & 2mxf & R80 \\
+3.5985 & 2.0467 & 3ufd & R46 \\
+0.6796 & 0.971 & 3ufd & S52 \\
+2.6846 & 1.4177 & 3ufd & Y37 \\
+3.7829 & 2.2518 & 4bnc & R391\\
+\hline
+\end{tabular}%
+\caption[Data presented showing correpondance of LogSum aggregated DeepPBS RI scores with alanine scanning mutagenesis data.]{Data presented showing correpondance of LogSum aggregated DeepPBS RI scores with alanine scanning mutagenesis data.}
+\end{table}
 \subsection{Application to designed scaffolds targeting specific DNA}
 Recent work \citep{Glasscock2023} made significant progress in designing structural models of fully synthetic helix-turn-helix (HTH) protein scaffolds targeting specific DNA sequences. We applied DeepPBS to synthetically designed proteins targeting a specific DNA sequence (GCAGATCTGCACATC), named DBP5/6/9/35, respectively (Fig. 5a,e,i,m). The predicted PWMs are shown (Fig. 5b,f,j,n) and the heavy atom level RI scores are visualized for the interfaces (Fig. 5c,g,k,o). We explored qualitative agreement of these predictions with experimental results obtained from the study (Fig. 5d,h,l,p, relative binding signal of all possible single base-pair mutations obtained via flow cytometry analysis \citep{Glasscock2023} in yeast display competition assays). DeepPBS mostly correctly predicted the columns of high specificity (where the mutants show less binding that is darker red) except for a couple of cases. Some of the alternate base preference predictions by DeepPBS appear to agree with the experimental data. For example, for DBP35-position 11, DeepPBS predicts an alternate specific binding possibility to C along with the WT base A, and similarly for DBP35-position 9 and DBP5-position 7. Also, it is important to look at the flanking predictions for DeepPBS’ ability to produce sensible predictions for unbound DNA regions. For DBP9 and DBP6, the flanking predictions look remarkably uniform, which is consistent with the designed structure having mostly unbound canonical B-DNA structure. This baseline behavior is intuitive and nontrivial in this problem setting (given that there is a DNA sequence present in the design and the model has to circumvent overfitting of it). On the other hand, for DBP5 and DBP35, the flanks have a non-canonical shape with a narrow minor groove interaction with a loop region of the protein (obtained from PDB ID 1L3L). The DeepPBS prediction of a mostly A-tract preference (positions 3-8) is consistent with narrow minor groove preferred by such sequences \citep{Stefl2004}. DNA shape prediction \citep{Li2023} for the top base prediction of these columns (AAATTT) is consistent with the shape visualized in the design (Supplementary Fig. 12), showing a significant dip in minor groove width. These examples illustrate the potential for DeepPBS as a computational guide to performing expensive and laborious wet lab experiments.
 \subsection{Application of DeepPBS to MD simulation of Exd-Scr–DNA system}

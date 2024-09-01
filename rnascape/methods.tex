@@ -4,10 +4,10 @@
 \label{table:rnascape}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lllllll}
-Method & Preserves 3D topology & Input & Webserver & Upload limit & Output & Framework needed \\
-RNAscape \citep{Mitra2024rnascape} & Yes & .pdb, .cif & Yes & 50 MB & .png, .svg, .npz & Python (dependencies installed via pip) \\
+\textbf{Method} & \textbf{Preserves 3D topology} & \textbf{Input} & \textbf{Webserver} & \textbf{Upload limit} & \textbf{Output} & \textbf{Framework needed} \\
+RNAscape \citep{Mitra2024rnascape} & Yes & .pdb, .cif & Yes & 50 MB & .png, .svg, .npz & Python (pip) \\
 RNAview \citep{Yang2003}  & Yes & .pdb, .cif & No & N/A & .ps & C, make based installation \\
-RNAglib \citep{Mallet2022} & Semi (2.5D graphs) & .cif, compiled dataset by authors & No & N/A & .png, .svg & Python (dependencies installed via pip) \\
+RNAglib \citep{Mallet2022} & Semi (2.5D graphs) & .cif, compiled dataset by authors & No & N/A & .png, .svg & Python (pip) \\
 RNAcanvas \citep{Johnson2023} & No (secondary structure) & dot-bracket/ss formats & Yes & N/A & .svg, .pptx, interactive GUI & Unavailable \\
 Forna \citep{Kerpedjiev2015}  & No (secondary structure, force directed) & dot-bracket, .pdb, .cif, .json & Yes & 2 MB & .png, .svg, .json, interactive   GUI & JavaScript \\
 VARNA \citep{Darty2009} & No (secondary structure) & dot-bracket/ss formats & No & N/A & .eps, .svg, .xfig, .jpg, .png & Java \\
@@ -16,16 +16,15 @@ PseudoViewer \citep{Byun2009} & No (but considers pseudoknots) & dot-bracket/ss 
 XRNA (link) & No (secondary structure) & special program specific format & No & N/A & .ps & Java \\
 RNAViz \citep{Peter2003} & No (secondary structure) & dot-bracket/ss formats, DCSE   alignment & No & N/A & image format (exact unknown) & C, make based installation \\
 RNAPuzzler \citep{Wiegreffe2019} & No (secondary structure) & dot-bracket/ss format (.txt) & No & N/A & image format (exact unknown) & C, make based installation \\
-R2R \citep{Weinberg2011} & No (secondary structure) & Stockholm format (alignment) & No & N/A & .pdf, .svg & command line program for UNIX   like systems \\
-R2DT \citep{Sweeney2021} & No (predicted secondary   structure) & RNA sequence & Yes & N/A & .txt, .svg & command line tool with   Docker/Singularity \\
+R2R \citep{Weinberg2011} & No (secondary structure) & Stockholm format (alignment) & No & N/A & .pdf, .svg & UNIX command  \\
+R2DT \citep{Sweeney2021} & No (predicted secondary   structure) & RNA sequence & Yes & N/A & .txt, .svg & Docker tool \\
 RNArtist (link) & No (secondary structure) & dot-bracket/ss formats, .pdb & No & N/A & .svg & Java (jdeploy) \\
 Ribosketch \citep{Lu2018} & No (secondary structure, force   directed) & dot-bracket/ss formats & Yes & N/A & .txt, .svg, interactive GUI & standalone installer \\
 RNAvista \citep{antczak2019rnavista} & No (prediction tool for secondary/tertiary   structure) & FASTA or dot-bracket/ss formats & Yes & N/A & .svg, predicted 3D model (.pdb) & unavailable
 \end{tabular}%
 }
 \caption[escription of various attributes of relevant tools which produce 2D
-visualizations of RNA.]{The first row corresponds to RNAscape. The next two rows correspond to two
-methods which incorporate tertiary interactions in their output mapping: RNAView \citep{Yang2003} being the most
+visualizations of RNA.]{The first row corresponds to RNAscape. The next two rows correspond to two methods which incorporate tertiary interactions in their output mapping: RNAView \citep{Yang2003} being the most
 frequently used, and RNAglib \citep{Mallet2022} being the most recent. The remaining rows indicate secondary
 structure drawing tools: Forna \citep{Kerpedjiev2015} being the most used (supports structure upload) and RNAcanvas \citep{Johnson2023} being the most recent (does not support structure upload). Abbreviations used: ss (secondary
 structure); GUI: Graphical User Interface; Dot-bracket: RNA sequence and secondary structure in dot-
