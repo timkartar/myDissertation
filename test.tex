@@ -16,6 +16,10 @@
 \usepackage{hyperref}
 \usepackage{setspace}
 \usepackage{tabularx}
+\newenvironment{myepigraph}
+  {\par\hfill\itshape
+   \begin{tabular}{@{}r@{\hspace{2em}}}} % 2em from the right margin
+  {\end{tabular}\par\medskip}
 
 % Line spacing and margins in compliance with USC graduate school guidelines.
 \usepackage[margin=1in,footskip=.5in]{geometry}
@@ -163,6 +167,8 @@
 % The preface environment prints the title page.
 \begin{preface}
 
+  \prefacesection[Epigraph]{Epigraph}
+  \input{main/epigraph}
   % Dedication Page, which is truly unnecessary.
   \prefacesection[Dedication]{Dedication}
   \input{main/dedication}
