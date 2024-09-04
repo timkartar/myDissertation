@@ -16,6 +16,7 @@
 \usepackage{hyperref}
 \usepackage{setspace}
 \usepackage{tabularx}
+\usepackage{siunitx}
 \newenvironment{myepigraph}
   {\par\hfill\itshape
    \begin{tabular}{@{}r@{\hspace{2em}}}} % 2em from the right margin
@@ -30,6 +31,8 @@
 \usepackage[OT1]{fontenc} % font encoding for xelatex
 \usepackage{mathtools}
 \usepackage{amsmath}
+\let\oldAA\AA
+\renewcommand{\AA}{\text{$\mathring{A}$}}
 \usepackage{amssymb}
 % Optional packages: graphics
 \usepackage{graphicx}

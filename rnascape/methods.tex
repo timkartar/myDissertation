@@ -50,7 +50,7 @@ $V = V_H \cup V_{NH}, V_H$ (helical regions) and $V_{NH}$ (non-helical regions))
 
 However, for bent helices, this estimate may be imprecise. To account for this case, we measure the distance
  between the centroid of the helical projection and the midpoint of the estimated ladder axis (i.e. $d = |centroid(T_{Hk}) - (T_{Hk}^{B_{first}} + \frac{1}{2}L_{H_k})|$
-. If this distance is greater than 10 \AA, we re-estimate the ladder axis as a combination of two line segments: one connecting the first and central base-pair centroids and another between the central and last base-pair centroids. In theory, this process can be recursively performed. In practice, however, we observe that doing so once suffices. Next, if two helical projections are within a certain distance threshold (i.e. $T_{Hk}^{B_{first}} - T_{Hk+1}^{B_{last} < 20 \AA}$
+. If this distance is greater than 10 \AA, we re-estimate the ladder axis as a combination of two line segments: one connecting the first and central base-pair centroids and another between the central and last base-pair centroids. In theory, this process can be recursively performed. In practice, however, we observe that doing so once suffices. Next, if two helical projections are within a certain distance threshold (i.e. $T_{Hk}^{B_{first}} - T_{Hk+1}^{B_{last}} < 20 \AA$
 Å) and have similar orientations (i.e. 
 $cos^{-1}$ 
 ($\frac{L_{Hk}}{|L_{Hk}|}$ 
