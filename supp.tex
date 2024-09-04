@@ -128,7 +128,7 @@
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS1.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[Dataset details.]{\textbf{Dataset details.} ({\bf a}) Schematic representation of process for combining data sources. ({\bf b}) Distribution of source experiments and species in constructed cross-validation set. ({\bf c}) Example illustration demonstrating differences in binding specificity data for the same protein (human estrogen receptor 1) from different experiments and databases. Mean absolute error (MAE) over columns among three cases.}
   \label{fig:pdnaS1}
 \end{figure}
 \end{center}
@@ -137,7 +137,7 @@
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS2.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[Data Representation.]{\textbf{Data Representation.} ({\bf a}) Coarse-grain symmetrization schema at DNA base-pair level. ({\bf b}) Example illustration showing how the computed sym-helix compares with the original structure. Each sym-helix point is shown as a sphere (1.5 \AA radius) for visibility. ({\bf c})Symmetrized base-pair representation on one C-G base pair (four major groove points, three minor groove points, and two points each for sugar and phosphate moieties). ({\bf d}) Example computed shape features overlayed on sym-helix as base pair-level features. ({\bf e}) Standard vectors computed on sym-helix, used by the network to correlate orientation information with ({\bf f}) interaction vectors on protein atom-graph, based on average direction of covalent bonds for each heavy atom.}
   \label{fig:pdnaS2}
 \end{figure}
 \end{center}
@@ -146,7 +146,11 @@
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS3.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[DeepPBS architecture.]{\textbf{DeepPBS architecture.} The DeepPBS architecture can be compartmentalized into three modules: ProteinEncoder,
+which encodes the protein neighborhood through spatial graph convolutions; BiNet, which consists of a network of
+bipartite geometric convolutions from the protein graph ($G^p =
+(V^p, X^p, E^p, N^p))$ to sym-helix points (DNA) ($G^d = (v^d, X^d, N^d))$; and CNN-Predictor, which flattens the aggregated sym-helix features into a 1D representation, adds shape features ($X^s$),
+and applies 1D convolutional layers followed by fully connected prediction layers. The final logits are converted into probability using a SoftMax activation with a learned temperature parameter. $E_{r=x}$ represents edges determined by vertices/points within a specified radius of length $x$. Each sym-helix point is shown as a sphere (1.5 \AA radius) for visibility.}
   \label{fig:pdnaS3}
 \end{figure}
 \end{center}
@@ -155,7 +159,11 @@
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS4.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[Schematic representation of bipartite edge-perturbation process.]{\textbf{Schematic representation of bipartite edge-perturbation process.} Blue circles denote protein heavy atoms.
+Green circles represent sym-helix points. In one forward pass, the output is calculated with all edges present. In
+another pass, edges corresponding to one protein heavy atom are excluded from the message-passing scheme,
+resulting in an alternate output. The difference between the two outputs can be quantified using the mean absolute
+difference measure and normalized as needed for interpretation purposes.}
   \label{fig:pdnaS4}
 \end{figure}
 \end{center}
@@ -164,25 +172,32 @@
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS5.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[Cross-validation performance of DeepPBS for predicting binding specificity across protein families on
+experimentally determined structures.]{\textbf{Cross-validation performance of DeepPBS for predicting binding specificity across protein families on experimentally determined structures.} Caption on next page.}
   \label{fig:pdnaS5}
 \end{figure}
+\addtocounter{figure}{-1}
+\begin{figure} [H]
+  \caption[Cross-validation performance of DeepPBS for predicting binding specificity across protein families on experimentally determined structures.]{\textbf{Cross-validation performance of DeepPBS for predicting binding specificity across protein families on experimentally determined structures.}({\bf a}) Cross-validation performance of individual trained models for the DeepPBS model and its variations (biological assemblies corresponding to $n$= 523 protein chains (for each box plot)) ({\bf b}) Abundance of various protein families (PFAM annotations) in cross-validation dataset (counts$>$8). ({\bf c}) Cross-validation performance of DeepPBS, along with ‘groove readout’ and ‘shape readout’ variations, across protein families (counts $>$ 8). (Biological assemblies corresponding to $n$ protein chains (for each family), where $n$ is as described in ({\bf b}), total unique $n$= 523) ({\bf d}) Example DeepPBS ensemble prediction on NF-$\kappa$B biological assembly (sampled in benchmark set) containing non-optimal DNA sequence. DeepPBS ensemble prediction on NF-$\kappa$B biological assembly for human (NFKB2, UniProt ID Q00653) is shown in the benchmark dataset. The colored heatmaps (top and bottom) encode probabilities of base identity. The back and white heatmap (center) represents the co-crystal structure. Although the co-crystal structure derived DNA sequence is not of the highest affinity (judging by experimental data from HOCOMOCO), our prediction can circumvent this issue and predict binding specificity levels that are much closer to those observed experimentally. For box plots in ({\bf a}) and ({\bf c}), lower limit represents lower quartile, middle line represents median, and upper limit represents upper quartile. Whiskers do not include outliers.}
+\end{figure}
 \end{center}
-
 \begin{center}
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS6.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[Application of DeepPBS to MD simulation of AlphaFold2- and PDB (2R5Z)-based modeled complex of Exd-
+Scr system. ]{\textbf{Application of DeepPBS to MD simulation of AlphaFold2- and PDB (2R5Z)-based modeled complex of Exd-Scr system.} ({\bf a}) Initial structure of simulation. Locations of residues of interest are marked. ({\bf b}) Residue-level RI score over time (averaged per 5 ns window) for residues involved in Exd-DNA flank ineraction. ({\bf c}) Snapshot of interactions by Exd Arg2, Arg3, and Arg5 at 50 ns, 200 ns, and 280 ns, respectively. ({\bf d}) Residue-level RI score over time (averaged 5 ns window) for residues involved in Scr-DNA minor groove interaction. ({\bf e}) Snapshot of interactions by Scr Arg5 and His-12 at 70 ns and 250 ns, respectively. ({\bf f}) Residue-level RI score over time (averaged per 5 ns window) for residues involved in Scr-DNA major groove interaction. ({\bf g}) Snapshot of interactions by Exd Arg58, Lys6, and Ile57 at 70 ns and 250 ns.}
   \label{fig:pdnaS6}
 \end{figure}
 \end{center}
+
 
 \begin{center}
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS7.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[Example DeepPBS ensemble predictions on structures of specific DNA binders.]{\textbf{Example DeepPBS ensemble predictions on structures of specific DNA binders.} Specificity data were
+unavailable on JASPAR/HOCOMOCO.  ({\bf a}) Monomeric orphan nuclear receptor NGFI-B, ({\bf b}) replication termination protein in bacteria, ({\bf c}) proto-oncogene product c-Rel, ({\bf d}) Tc3 transposase bound to transposon DNA, ({\bf e}) Fitab protein from \textit{Neisseria gonorrhoeae}, ({\bf f}) Epstein-Barr virus ZEBRA protein, ({\bf g}) Smad5-MH1 protein/ palindromic SBE DNA complex, and ({\bf h}) DUF1778 domain-containing kacTA protein.}
   \label{fig:pdnaS7}
 \end{figure}
 \end{center}
@@ -191,7 +206,8 @@
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS8.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[Example DeepPBS ensemble predictions on structures of non-specific DNA binders.]{\textbf{Example DeepPBS ensemble predictions on structures of non-specific DNA binders.} ({\bf a}) Sso7D-DNA complex,
+({\bf b}) DNA polymerase I Klenow fragment,  ({\bf c}) HIV-1 reverse transcriptase with pre-translocation and post-translocation AZTMP-terminated DNA,  ({\bf d}) DNA polymerase IV,  ({\bf e}) Moloney murine leukemia virus reverse transcriptase,  ({\bf f}) DNA repair enzyme formamidopyrimidine-DNA glycosylase (Fpg),  ({\bf g}) DNA polymerases in complex with proliferative cell nuclear antigen (PCNA), and  ({\bf h}) DNA damage sensing enzyme \textit{Methanococcus jannaschii} Mre11 (MjMre11).}
   \label{fig:pdnaS8}
 \end{figure}
 \end{center}
@@ -200,7 +216,13 @@
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS9.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[Application of DeepPBS on modeled structures.]{\textbf{Application of DeepPBS on modeled structures.} ({\bf a}) Performance of DeepPBS (best 6-mer overlap) improves as
+the feedback loop progresses (corresponding to Fig. 3f) in conjunction with improvement in RFNA complex design. ($n$ = 236 predicted assemblies) ({\bf b}) Example application of DeepPBS on mouse CREB1 dimer bound to DNA modeled
+by MELD-DNA (as provided by their authors). ({\bf c}) Calculated MM-PBSA (Supplementary Section 7) vacuum energy
+distribution for stable RFNA predictions ($<$0 kJ/mol) and corresponding counts over rounds 1–7 (for $n$ predicted
+assemblies for each boxplot, where $n$ is same as stable structure count (corresponding bar plot)). For box plots in ({\bf a})
+and ({\bf c}), lower limit represents lower quartile, middle point/line represents median, and upper limit represents upper
+quartile.}
   \label{fig:pdnaS9}
 \end{figure}
 \end{center}
@@ -209,7 +231,11 @@
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS10.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[Behavior of metric for different target PWM and interpolated predictions.]{\textbf{Behavior of metric for different target PWM and interpolated predictions.} ({\bf a}) Demonstrations of how the MAE
+metric behaves for various different target PWM columns and possible predictions (Fig. S10a). The predictions are of three forms, based on interpolated values of a variable $x \in [0,1]$ . Although not an exhaustive set, we hope it helps the reader put into context the behavior of this metric. ({\bf b}) DeepPBS
+and DeepPBS with DNA SeqInfo performance on benchmark set in context of two naive models (uniform predictor
+and co-crystal structure derived sequence predictor). Lines indicates linear regression fit. Light shaded regions
+indicate corresponding 95$\%$ confidence interval computed via bootstrapping mean.}
   \label{fig:pdnaS10}
 \end{figure}
 \end{center}
@@ -218,7 +244,7 @@
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS11.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[MAE equivalent of benchmark performance vs alignment score plot.]{\textbf{MAE equivalent of benchmark performance vs alignment score plot}  showing the bias of the DeepPBS with DNA SeqInfo model compared to the DeepPBS model towards the alignment score of co-crystal DNA structure derived sequence and target PWM. Lines indicates linear regression fit. Light shaded regions indicate corresponding 95$\%$ confidence interval computed via bootstrapping mean.}
   \label{fig:pdnaS11}
 \end{figure}
 \end{center}
@@ -227,7 +253,9 @@
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{./pdnafigs/figS12.png}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-    \caption[Examples of continuous time prediction of ESC differentiation.]{\textbf{Examples of continuous time prediction of ESC differentiation.} Reconstruction (up to $t=6.8$) and future prediction (for $t>6.8$) for 4 example genes by a  latent ODE \citep{chen2018neural} trained on ESC data \citep{Klein2015} for 1000000 iterations, showing a good fit for the initial timepoints, but underfitting for the later timepoints.}
+    \caption[Deep DNAshape prediction of the minor groove width (MGW) profile]{\textbf{Deep DNAshape \citep{Li2023} prediction of the minor groove width (MGW) profile} for the sequence AAATTG (top DeepPBS
+prediction for the designed model DBP35 and DBP5, positions 3–8) compared to the actual MGW of the DNA in
+these designed complexes.}
   \label{fig:pdnaS12}
 \end{figure}
 \end{center}
