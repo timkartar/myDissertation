@@ -47,7 +47,7 @@ smoothness smoothness metric:
         \frac{\sum_{i = 0}^{k-1}\frac{|V_i^{in}|}{|V_i|^2}}{\sum_{i = 0}^{k-1}\frac{1}{|V_i|}} \numberthis \label{final_smoothness_metric}
 \end{align*}
 This metric is nice in the sense it gives a broader range of values and
-hence is more useful in our case. In \hyperref[fig:smooth]{Fig. 2.2} we show how the metrics $M1$,  $M2$, $S$ behave by applying it on a set of 15 different proteins with predicted labels by Geobind. This demonstrates the advantage of $S$ clearly over the other two metrics.
+hence is more useful in our case. In \hyperref[fig:smooth]{Fig. 1.2} we show how the metrics $M1$,  $M2$, $S$ behave by applying it on a set of 15 different proteins with predicted labels by Geobind. This demonstrates the advantage of $S$ clearly over the other two metrics.
 \subsection{Continuous Conditional Random Fields layer}
 Given a graph $G = (V,E)$, features over graph vertices $x$ such that $x_v \in \bR^d \forall v \in V
 $ and labels over the vertices $y$ such that $y_v \in \{0,1,..,k\} \forall v
@@ -136,7 +136,7 @@ show that using this layer as the second last of Geobind significantly improves 
 predicted labels over protein meshes while improving upon or at least preserving desired 
 metrics of classification results. Note: this is important, because a naive way to increase
 smoothness of prediction is to predict the same class for all vertices, but, that would dramatically
-decrease performance metrics of the prediction. \hyperref[fig:ccrf]{Fig. 2.3AB} schematically
+decrease performance metrics of the prediction. \hyperref[fig:ccrf]{Fig. 1.3AB} schematically
 describes the usage context and layer details of the CCRF layer as described in this section.
 \begin{pmialgorithm}[0.9\textwidth]{h!}{CCRF Layer}\vskip-2ex
         \label{algo:CCRF_LAYER}

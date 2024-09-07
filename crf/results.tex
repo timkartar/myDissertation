@@ -38,11 +38,11 @@ is very flexible, but structural data is limited.\\ \textbf{PDNA-224:} a non-red
         \citep{walia2012protein}.
 
 Both CRF and noCRF models were trained on PDNA-62, PDNA-74 and PDNA-224, with a 4:1 training and validation set
-        split. \hyperref[fig:ccrf]{Fig. 2.3C} shows one particular example 
+        split. \hyperref[fig:ccrf]{Fig. 1.3C} shows one particular example 
         of the effect of using CRF layer against the noCRF model for a protein (pdbid: \textit{1bj6}) in the validation set
-        for PDNA-74. The top left panel in \hyperref[fig:ccrf]{Fig. 2.3C} shows the
+        for PDNA-74. The top left panel in \hyperref[fig:ccrf]{Fig. 1.3C} shows the
         ground truth data. We can clearly see how the CRF model improves smoothness of the
-        prediction along with various other classification metrics. \hyperref[fig:ccrf]{Fig. 2.3D}
+        prediction along with various other classification metrics. \hyperref[fig:ccrf]{Fig. 1.3D}
         shows smoothness (eq.
         \ref{final_smoothness_metric}) and Balanced Accuracy  metrics achieved on the validation set
         in each case. We can clearly see that the smoothness of the predictions have increased significantly.
@@ -52,7 +52,7 @@ Both CRF and noCRF models were trained on PDNA-62, PDNA-74 and PDNA-224, with a 
 
         We also performed 5-fold cross validation on PDNA-224, PDNA-74 and RB198 datasets. While
         analyzing these results we discovered another interesting effect of the CCRF layer.
-        \hyperref[fig:ccrf]{Fig. 2.3E} shows average standard deviation of validation predictions
+        \hyperref[fig:ccrf]{Fig. 1.3E} shows average standard deviation of validation predictions
         across 5 folds for various classification metrics. We can see, the CRF models consistently
         results into lower standard deviations in the metrics. This result hints towards the
         conclusion that the CCRF layer is having a
