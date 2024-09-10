@@ -1,6 +1,24 @@
 \section{Introduction}
 Structural complexity of RNA molecules is vast and so are their modes of interaction with proteins \citep{jones2001protein}. Although there has been an ever-expanding repertoire of structural data on the PDB, there is a lack of data resources which systematically analyze these interactions. In addition, recent advances in artificial intelligence have made high throughput prediction of protein-RNA complex structures viable \citep{Abramson2024, watson2023novo}. RNAproDB is a webserver where a user can upload a protein-RNA complex and explore analyzed results covering a multitude of aspects (e.g., direct and water-mediated hydrogen bonds, base-pairing annotations, nucleotide modifications, secondary structural features). Compared to existing resources, which often focus on the RNA structure alone and provide a particular way of visualization \citep{Kerpedjiev2015, Yang2003}, or use a representation which is very coarse-grained \citep{chojnowski2014rna}, RNAproDB provides three different algorithms for visualizing the RNA topology along with the interacting protein residues: a new design based on partial projection of the structure (RNA and interacting protein residues), tertiary structure aware mapping \citep{Mitra2024rnascape}, secondary structure-based mapping \citep{Kerpedjiev2015}. This information is presented via a highly interactive interface explorer combined with sequence and 3D-structure viewers, and a secondary structure selector. Tabular data is also available. Another novel functionality, subgraph exploration, allows a user to explore parts of the structure (e.g., a particular junction region) via the interface explorer. Subgraph selections can be manually entered or automatically selected from the secondary structure selector. As of our knowledge, no existing tool offers such capability. In addition to the webserver, we offer pre-analyzed structures containing RNA, from the PDB, in the form of a searchable collection. With a cutoff of 10,000 monomers per biological assembly and molecular weight cut off of 800 kDa on the asymmetric unit, the initial collection of RNAproDB provides around 3,500 biological assemblies containing RNA molecules. RNAproDB will be automatically updated weekly with new PDB entries. We believe RNAproDB will be a valuable resource for the scientific community interested in RNA biology, protein-nucleic acid interaction and function, structure prediction, and drug design.
 
+\begin{center}
+    \begin{figure}
+    \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./rnaprodbfigs/fig1.png}}
+ % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
+        \caption[Key aspects of this update to DNAproDB.]{\textbf{Key aspects of this update to DNAproDB.} ({\bf A}) Automatic update and separated external annotation incorporation scheme.  ({\bf B})  Different nucleic acid layout options in with added tertiary structure aware RNAscape layout, shown for PDB ID: 3LDY. ({\bf C}) Water-mediated hydrogen bond annotation. ({\bf D}) Various improvements in other aspects of DNAproDB. }
+  \label{fig:rnaprodb1}
+\end{figure}
+\end{center}
+
 \section{Interface explorer}
 
 The 'Interface explorer' for RNAproDB is freshly designed to present an interaction graph of the RNA structure along with interacting protein residues. 
+
+\begin{center}
+    \begin{figure}
+    \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./rnaprodbfigs/fig2.png}}
+ % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
+        \caption[Key aspects of this update to DNAproDB.]{\textbf{Key aspects of this update to DNAproDB.} ({\bf A}) Automatic update and separated external annotation incorporation scheme.  ({\bf B})  Different nucleic acid layout options in with added tertiary structure aware RNAscape layout, shown for PDB ID: 3LDY. ({\bf C}) Water-mediated hydrogen bond annotation. ({\bf D}) Various improvements in other aspects of DNAproDB. }
+  \label{fig:rnaprodb2}
+\end{figure}
+\end{center}
