@@ -2,20 +2,20 @@
 
 In order to assess the performance of RVAgene for gene clustering and biological discovery, we compared it to five alternative methods: two neural network approaches and three hierarchical clustering methods. To assess the utility of the recurrent architecture of RVAgene, we trained non-recurrent (i.e. fully connected) variational autoencoders on the embryonic stem cell differentiation dataset \citep{Klein2015}. We compared two options: using the pseudotemporally ordered and smoothed data as input (same as for RVAgene), or using the raw (i.e. unordered and unsmoothed) gene expression data as input. We trained encoder and decoder networks of depth two (one hidden layer) and with a hidden layer size of 400 (we performed a hyperparameter search to optimize this). Theoretically, depth two networks are large enough to learn any non linear function \citep{cybenko1989approximation, hornik1989multilayer, funahashi1989approximate, barron1994approximation}, although the fully connected VAE has no recurrent inductive bias. Thus we test how important this recurrent inductive bias is in practice. 
 \par 
-The results of the comparison of neural networks are given in \hyperref[fig:fig4]{Fig. 1.3A-B}. In
+The results of the comparison of neural networks are given in \hyperref[fig:fig4]{fig. 6.3A-B}. In
 each case, models were trained for 200 epochs. Annotating the results in latent space using
-correlations against pseudotime (\hyperref[fig:fig4]{Fig. 1.3A}) shows that all three models
+correlations against pseudotime (\hyperref[fig:fig4]{fig. 6.3A}) shows that all three models
 separate the data reasonably well, with slightly better separation for the recurrent architecture
 (RVAgene). We also annotated the results using cluster labels from the largest four DPGP clusters
 for comparison. These are appropriate ``gold-standard'' cluster labels since robust dynamical
-signatures are learnt by DPGP in each case (\hyperref[supp]{Fig. S3}). RVAgene captures: 1) better
+signatures are learnt by DPGP in each case (\hyperref[fig:figS3]{Fig. S18}). RVAgene captures: 1) better
 seperation between clusters that either of the non-recurrent networks, and 2) a spectrum of
-behaviors from up- to down-regulated (\hyperref[fig:fig4]{Fig. 1.3B}).
+behaviors from up- to down-regulated (\hyperref[fig:fig4]{fig. 6.3B}).
 \par 
 We also performed hierarchical clustering on the pseudotemporally ordered and smoothed data using
 three standard hierarchical clustering methods: the Nearest Point Algorithm, the Farthest Point
 Algorithm, and UPGMA (the Unweighted Pair Group Method with Arithmetic mean). We annotated the
-results with the same clusters labels from DPGP (\hyperref[fig:fig4]{Fig. 1.3C}). UPGMA performs best out of these three clustering algorithms, yet still does not attain clear seperation between each of the four groups. Thus, the 2D latent space representation of RVAgene is better than both 1D representations via hierarchical clustering and the alternative neural network latent space representations at distinguishing between dynamic gene profiles in pseudotemporally-ordered data.
+results with the same clusters labels from DPGP (\hyperref[fig:fig4]{fig. 6.3C}). UPGMA performs best out of these three clustering algorithms, yet still does not attain clear seperation between each of the four groups. Thus, the 2D latent space representation of RVAgene is better than both 1D representations via hierarchical clustering and the alternative neural network latent space representations at distinguishing between dynamic gene profiles in pseudotemporally-ordered data.
 
 
 

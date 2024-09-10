@@ -69,7 +69,7 @@ h_{t+1}^{dec} &= \textrm{LSTM}(W_{dec}^Th_t^{dec} + W_{out}^T{\hat{x}_t}+b_{dec}
 \end{align*}
 where $\textrm{sigm}(u) = \frac{1}{1 + e^{-u}}$ is the sigmoid activation function, and ($W_i, b_i$)
 are the network weight parameters. A schematic diagram of the network is shown in
-\hyperref[fig:fig2]{Fig. 1.1A}, which can now be trained using backpropagation, to minimize the objective function: 
+\hyperref[fig:fig2]{fig. 6.1A}, which can now be trained using backpropagation, to minimize the objective function: 
 \begin{align*}
     \cL(\theta, x) = D_{KL}(\cN(\mathbf{\mu}_z,\Sigma_z)||\cN(\mathbf{0},\vI)) + |x - \hat{x}|, \numberthis \label{lossfunction}
 \end{align*}

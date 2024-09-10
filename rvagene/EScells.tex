@@ -7,25 +7,25 @@ gathered at four time points: 0, 2, 4, and 7 days after LIF withdrawal. (Table S
 \citet{Klein2015}). We ordered the data (2717 single cells) using diffusion pseudotime (DPT), which
 provides robust methods for the reconstruction of single-cell temporal processes
 \citep{haghverdi2016diffusion}. The root cell was randomly sampled from the initial time point
-(\hyperref[fig:fig3]{Fig. 1.2A}). The inferred pseudotime is highly correlated with the experimental
+(\hyperref[fig:fig3]{fig. 6.2A}). The inferred pseudotime is highly correlated with the experimental
 time points, giving confidence that true biological processes are represented over the DPT
 pseudotime. The gene expression dynamics over pseudotime show considerable variability among cells.
 To smooth the data, we apply a moving window average, over windows of length 40, to give 68 time
-points after smoothing (\hyperref[fig:fig3]{Fig. 1.2A}). 
+points after smoothing (\hyperref[fig:fig3]{fig. 6.2A}). 
 We fit linear regression models to the smoothed pseudotime profiles of each gene
-(\hyperref[supp]{Fig. S2}), and see that for the majority of genes the correlation coefficients are
-$> 0.5$ (\hyperref[fig:fig3]{Fig. 1.2B}), with a clear distinction between the up- and down-regulated genes over pseudotime.
+(\hyperref[fig:figS2]{Fig. S17}), and see that for the majority of genes the correlation coefficients are
+$> 0.5$ (\hyperref[fig:fig3]{fig. 6.2B}), with a clear distinction between the up- and down-regulated genes over pseudotime.
 \par 
 An RVAgene model was trained on the data with a two-dimensional latent space, on which genes are
-classified based on their correlation coefficients  (\hyperref[fig:fig3]{Fig. 1.2C}). Two distinctive characteristics emerge: a) the two groups (up- and down-regulated genes) are well-separated in the latent space, and b) the two groups merge and overlap at some point, illustrating the continuity of the latent space, as discussed above. 
+classified based on their correlation coefficients  (\hyperref[fig:fig3]{fig. 6.2C}). Two distinctive characteristics emerge: a) the two groups (up- and down-regulated genes) are well-separated in the latent space, and b) the two groups merge and overlap at some point, illustrating the continuity of the latent space, as discussed above. 
 We compared the results of RVAgene with DPGP, an unsupervised approach for gene expression time series clustering \citep{McDowell2018}. DPGP is a hierarchical Bayesian model that estimates the number of clusters along with the cluster membership.
 
-To assess the correspondence between methods, genes clustered by DPGP (\hyperref[supp]{Fig. S3})
-were projected onto the RVAgene latent space (\hyperref[fig:fig3]{Fig. 1.2D}). Of the 12 clusters
+To assess the correspondence between methods, genes clustered by DPGP (\hyperref[fig:figS3]{Fig. S18})
+were projected onto the RVAgene latent space (\hyperref[fig:fig3]{fig. 6.2D}). Of the 12 clusters
 detected by DPGP, the four largest can be characterized by their up- and down-regulation profiles
 over pseudotime. On the RVAgene latent space, we find that genes sampled from each of the DPGP
 clusters appear close together, and moreover, are represented on a spectrum from upregulation to
-downregulation (\hyperref[fig:fig3]{Fig. 1.2D}). The goals of RVAgene and DPGP are to some degree complementary: DPGP characterizes gene expression profiles discretely with no need for prior information, while RVAgene characterizes profiles with a continuous representation, that can explain smooth changes in patterns.
+downregulation (\hyperref[fig:fig3]{fig. 6.2D}). The goals of RVAgene and DPGP are to some degree complementary: DPGP characterizes gene expression profiles discretely with no need for prior information, while RVAgene characterizes profiles with a continuous representation, that can explain smooth changes in patterns.
 
 %DPGP is a hierarchical Bayesian model that estimates the number of clusters along with the cluster membership, and outputs a posterior mean function and covariance matrix for each gene cluster. In contrast to RVAgene, DPGP does not assume any structure in gene expression data, performing an agnostic search, resulting in higher resource consumption (see \hyperref[supp]{Fig. S1}). DPGP does perform unsupervised clustering, a key advantage, although it does not provide inter-cluster information or predictions, which are provided by RVAgene.
 
@@ -57,26 +57,26 @@ To assess the ability of the model to reconstruct genes not used during training
 We note that in this case (and in the case of single-cell datasets in general), the generative model of RVAgene produces pseudotime-smoothed gene expression trajectories, rather than being generative of raw pseudotemporal data, which tend to display overall high noise levels.
 }
 Reconstructed test gene expression profiles are shown for three reconstructed genes
-(\hyperref[fig:fig3]{Fig. 1.2E}), chosen to sample across the spectrum of reconstruction errors
-(\hyperref[fig:fig3]{Fig. 1.2F}). The reconstruction for {\em Ddt}, which has a reconstruction error
-near the mode (\hyperref[fig:fig3]{Fig. 1.2F}), shows very high accuracy. The reconstruction for
+(\hyperref[fig:fig3]{fig. 6.2E}), chosen to sample across the spectrum of reconstruction errors
+(\hyperref[fig:fig3]{fig. 6.2F}). The reconstruction for {\em Ddt}, which has a reconstruction error
+near the mode (\hyperref[fig:fig3]{fig. 6.2F}), shows very high accuracy. The reconstruction for
 {\em Hmgb2}, which has twice the reconstruction error, still broadly captures the temporal profile
 but with lesser accuracy. Finally we show the reconstruction for {\em Rhox4e}, a gene that was
 sampled from the long tail of the reconstruction error distribution, i.e. does not well match the
 data. Comparing these three examples with the full distribution of reconstruction errors
-(\hyperref[fig:fig3]{Fig. 1.2F}), we see that the large majority of genes lie to the left of {\em
+(\hyperref[fig:fig3]{fig. 6.2F}), we see that the large majority of genes lie to the left of {\em
 Hmgb2}, i.e. have better-than-moderate accuracy. The reconstruction error of {\em Hmgb2} is close to
 0.005, which we use as a cut off for ``well-reconstructed'' genes, based on analysis of individual
 gene reconstructions. The cumulative reconstruction error distribution reiterates this point: 230
-out of 300 genes (77\%) have a reconstruction error $\leq 0.005$ (\hyperref[fig:fig3]{Fig. 1.2G}); we can conclude that the majority of test genes were faithfully reconstructed by the model.
+out of 300 genes (77\%) have a reconstruction error $\leq 0.005$ (\hyperref[fig:fig3]{fig. 6.2G}); we can conclude that the majority of test genes were faithfully reconstructed by the model.
 \par
 RVAgene accurately reconstructed most gene profiles using only $\sim60 {\%}$ of the data for
-training (\hyperref[fig:fig3]{Fig. 1.2G}), likely due to co-regulation of gene expression programs.
+training (\hyperref[fig:fig3]{fig. 6.2G}), likely due to co-regulation of gene expression programs.
 This led to a question: what is the smallest training gene set that can be used to accurately
 reconstruct gene dynamics? We subset the data randomly into train/test sets and trained separate
 RVAgene models on each. We found that reconstruction errors slowly increase as the size of the
 training set decreases, but not until the training set was as low as $18\%$ of the data did the
-reconstruction errors significantly increase (\hyperref[fig:fig3]{Fig. 1.2G}, \hyperref[supp]{Fig. S4}). Analysis of the cumulative distribution of reconstruction errors across all groups found that RVAgene reconstructs the majority of gene temporal profiles well (defined as below a reconstruction error of 0.005) if $\geq 45\%$ of the data is used for training. The successful reconstruction of gene expression dynamics de novo while training on  small subsets of the data suggests widespread co-regulation of gene expression programs during embryonic stem cell differentiation, as found in previous work \citep{jang2017dynamics}.
+reconstruction errors significantly increase (\hyperref[fig:fig3]{fig. 6.2G}, \hyperref[fig:figS4]{Fig. S19}). Analysis of the cumulative distribution of reconstruction errors across all groups found that RVAgene reconstructs the majority of gene temporal profiles well (defined as below a reconstruction error of 0.005) if $\geq 45\%$ of the data is used for training. The successful reconstruction of gene expression dynamics de novo while training on  small subsets of the data suggests widespread co-regulation of gene expression programs during embryonic stem cell differentiation, as found in previous work \citep{jang2017dynamics}.
 % This information is a useful indicator to whether an algorithm estimating number of clusters is overfitting or underfitting (i.e. detecting too many or too few clusters), we talk about this in more detail later in \hyperref[discussion1]{Discussion} section. 
 
 %{\centering
