@@ -12,7 +12,9 @@ Structural complexity of RNA molecules is vast and so are their modes of interac
 
 \section{Interface explorer}
 
-The 'Interface explorer' for RNAproDB is freshly designed to present an interaction graph of the RNA structure along with interacting protein residues. The explorer present three different layout algorithm options, selectable by the user. two of these options are secondary structure based (computed using ViennaRNA \citep{Lorenz2011}) and tertiary structure aware mapping based (computed using RNAscape \citep{Mitra2024rnascape}). The third (default) option is a new mapping scheme produced by prjecting the RNA residues and only interacting protein residues into the 2D plane maximizing their spatial variance \citep{Pearson1901}. We call this method ``Partial projection" (instead of the whole structure, it only projects the RNA and interacting protein components). In our observation, this scheme is visually intuitive for exploring corresponding 3D structure. The user is free to choose between the three layouts. In each case, the protein residues are placed using a force directed layout scheme \citep{bostock2012fl}. We demonstrate the three layout schemes for a valyl-tRNA synthetase-tRNA complex (PDB ID: 1IVS) (\blue{Fig. \ref{fig:rnaprodb1}A}).
+The 'Interface explorer' for RNAproDB is freshly designed to present an interaction graph of the RNA structure along with interacting protein residues. The explorer present three different layout algorithm options, selectable by the user. two of these options are secondary structure based (computed using ViennaRNA \citep{Lorenz2011}) and tertiary structure aware mapping based (computed using RNAscape \citep{Mitra2024rnascape}). The third (default) option is a new mapping scheme produced by prjecting the RNA residues and only interacting protein residues into the 2D plane maximizing their spatial variance \citep{Pearson1901}. We call this method ``Partial projection" (instead of the whole structure, it only projects the RNA and interacting protein components). In our observation, this scheme is visually intuitive for exploring corresponding 3D structure. The user is free to choose between the three layouts. In each case, the protein residues are placed using a force directed layout scheme \citep{bostock2012fl}. We demonstrate the three layout schemes for a valyl-tRNA synthetase-tRNA complex (PDB ID: 1IVS) (\blue{Fig. \ref{fig:rnaprodb1}A}). The partial projection-based layout is shown in \blue{Fig. \ref{fig:rnaprodb1}B}. This layout reflects the helical turns clearly, making the best coreespondance with the 3D structure. The RNAscape \citep{Mitra2024rnascape} layout (\blue{Fig. \ref{fig:rnaprodb1}C}) is cleaner and more suitable for users used to ladder-like representation.  The secondary structure based layout, shown in \blue{Fig. \ref{fig:rnaprodb1}D}, although familiar, suffers from tertiary interactions within RNA and protein-RNA interactions criss-crossing the view. 
+
+\section{Secondary structure selector and subgraph exploration}
 
 \begin{center}
     \begin{figure}
@@ -22,6 +24,8 @@ The 'Interface explorer' for RNAproDB is freshly designed to present an interact
   \label{fig:rnaprodb2}
 \end{figure}
 \end{center}
+
+\section{RNA-RNA water mediated interactions}
 
 \begin{center}
     \begin{figure}
