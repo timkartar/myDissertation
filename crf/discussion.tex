@@ -1,23 +1,9 @@
 \section{Discussion}
-In Chapter 1, we used a technique for autoencoding Bayesian Variational inference to model gene
-expression time-series data. In this chapter we applied mean field Bayesian Variational inference to
-design a network layer for Geobind which results in smoother binding site predictions on protein
-surfaces. 
+In this chapter we applied mean field Bayesian Variational inference to
+design a network layer for PNAbind which results in smoother binding site predictions on protein surfaces. We also designed a smoothness metric appropriate for the task of protein surface segmentation.
 
-Now, we want to bring light to one key aspect of Geobind. In this framework, the model input has no
-explicit information regarding the binding element (e.g. DNA/RNA/drug molecule etc.) and is only based on
-protein surface and physicochemical features. I.e. we assume there are some commonalities between the proteins binding to,
-say, ss-DNA (for PDNA-74) and this model implicitly learns those sets of commonalities.
+In the PNAbind framework, the model predicts whether a protein would bind nucleic acids or not and segments the protein surface into binding and non-binding regions. However, it does not try to predict binding specificity (i.e. what nucleic acid squence is preffered) and is only based on protein surface and physicochemical features. I.e. we assume there are some commonalities between the proteins binding to, say, ss-DNA (for PDNA-74) and this model implicitly learns those sets of commonalities. 
 
-However, as a next step we would probably like to bring in the binding elements in the
-picture. Normally in binding site prediction tasks this is problematic because including binding
-element information makes the
-datasets really sparse and unfit for a machine learning task. However, there is a way out of this,
-if we move to the generative setting instead of the Discriminative setting of binding site prediction.
+The PNAbind package has been published as joint work led by Jared Sagendorf, who mentored me in this project, with contributions from Jiawei Hunag, Prof. Xiaojiang Chen and supervised by Prof. Remo Rohs\citep{Sagendorf2024}. In recent years multiple works have been published which compete with PNAbind \citep{gainza2020deciphering, gligorijevic2021structure, yuan2022alphafold2, xia2021graphbind, tubiana2022scannet, krapp2023pesto, li2023geobind, sverrisson2021fast}. But, no deep learning method to predict binding specificity across protein families has been achieved yet.
 
-In the next chapter, we propose a generalized generative model for  binding element design where we
-start from where Geobind's application ends. In this proposal, Given a binding site on a protein we
-would like to generate binding elements that could bind to the given site. The binding elements
-can be drug molecules or nucleic acid motifs. We shall discuss already performed research works
-using generative modeling for novel drug molecules, nucleic acid sequence generation and based upon
-insights from them present our proposed model for generalized binding element design.
+As a next step, we work towards predicting binding specificity. One of the key challenges in this problem seting is data sparsity. In the next chapter, we present DeepPBS, a model for protein-DNA  binding specificity prediction.  
