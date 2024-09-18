@@ -47,7 +47,7 @@ smoothness smoothness metric:
         \frac{\sum_{i = 0}^{k-1}\frac{|V_i^{in}|}{|V_i|^2}}{\sum_{i = 0}^{k-1}\frac{1}{|V_i|}} \numberthis \label{final_smoothness_metric}
 \end{align*}
 This metric is nice in the sense it gives a broader range of values and
-hence is more useful in our case. In \hyperref[fig:smooth]{Fig. 1.2} we show how the metrics $M1$,  $M2$, $S$ behave by applying it on a set of 15 different proteins with predicted labels by Geobind. This demonstrates the advantage of $S$ clearly over the other two metrics.
+hence is more useful in our case. In \hyperref[fig:smooth]{Fig. 1.2} we show how the metrics $M1$,  $M2$, $S$ behave by applying it on a set of 15 different proteins with predicted labels by PNAbind. This demonstrates the advantage of $S$ clearly over the other two metrics.
 \subsection{Continuous Conditional Random Fields layer}
 Given a graph $G = (V,E)$, features over graph vertices $x$ such that $x_v \in \bR^d \forall v \in V
 $ and labels over the vertices $y$ such that $y_v \in \{0,1,..,k\} \forall v
@@ -65,7 +65,7 @@ However, optimizing eq. \ref{crf_general} in a general scenario is non-trivial a
 either do not perform well or are heavily resource consuming. Moreover, this kind of optimization over
 discrete domain is not suitable for neural network application. 
 \par
-In our case, Geobind is a deep learning model. So , we would like to implement this conditional random field 
+In our case, PNAbind is a deep learning model. So , we would like to implement this conditional random field 
 model as a network layer which can just be plugged into the network and will be optimized by backpropagation 
 along with the whole network, without us requiring any extra optimization. So, following the
 approach described in \citet{gao2019conditional, ristovski2013continuous} we instead use a
@@ -127,12 +127,12 @@ Now, the output of CCRF layer is simply the $\hat{H}_i$ that maximises $Q^*(H_i)
 Our detailed calculations for the same is presented in \hyperref[crf_detailed]{Appendices}. In essence, this constitutes a
 system of equations over the vertices which can be solved by iteratively updating the vertices until
 convergence is reached. For our purposes we stop the iterations at a set max iteration number T.
-\hyperref[algo:CCRF_LAYER]{Algorithm 1} presents the final form of the CCRF layer as used in geobind.
+\hyperref[algo:CCRF_LAYER]{Algorithm 1} presents the final form of the CCRF layer as used in PNAbind.
 The network optimizes the parameters $\alpha, \beta$ and $\sigma$. Intuitively, if the
 input vertex information is already smooth and no update is necessary then $\beta$ goes towards 0 and 
 otherwise, we have some non zero value of $\beta$ resulting in a balance between preserving the
 vertex's own features and conforming to features of its neighbours. In the following section, we
-show that using this layer as the second last of Geobind significantly improves the smoothness of
+show that using this layer as the second last of PNAbind significantly improves the smoothness of
 predicted labels over protein meshes while improving upon or at least preserving desired 
 metrics of classification results. Note: this is important, because a naive way to increase
 smoothness of prediction is to predict the same class for all vertices, but, that would dramatically
