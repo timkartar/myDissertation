@@ -5,7 +5,7 @@ Structural complexity of RNA molecules is vast and so are their modes of interac
     \begin{figure}
     \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./rnaprodbfigs/fig1.png}}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-        \caption[Key aspects of this update to DNAproDB.]{\textbf{Key aspects of this update to DNAproDB.} ({\bf A}) Automatic update and separated external annotation incorporation scheme.  ({\bf B})  Different nucleic acid layout options in with added tertiary structure aware RNAscape layout, shown for PDB ID: 3LDY. ({\bf C}) Water-mediated hydrogen bond annotation. ({\bf D}) Various improvements in other aspects of DNAproDB. }
+        \caption[Multiple mapping algorithms available in RNAproDB for protein-RNA complex (PDB ID: 1IVS)]{\textbf{Multiple mapping algorithms available in RNAproDB for protein-RNA complex (PDB ID: 1IVS).} ({\bf A}) Crystal structure of the valyl-tRNA synthetase bound to tRNA (PDB ID: 1IVS).  ({\bf B})  Mapping produced based on partial projection. ({\bf C}) Mapping produced based on RNAscape algorithm. ({\bf D}) Mapping produced by applying ViennaRNA secondary structure layout algorithm. }
   \label{fig:rnaprodb1}
 \end{figure}
 \end{center}
@@ -26,7 +26,7 @@ Interface explorer (using single click, or multi-select using shift+click). Doin
     \begin{figure}
     \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./rnaprodbfigs/fig2.png}}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-        \caption[Key aspects of this update to DNAproDB.]{\textbf{Key aspects of this update to DNAproDB.} ({\bf A}) Automatic update and separated external annotation incorporation scheme.  ({\bf B})  Different nucleic acid layout options in with added tertiary structure aware RNAscape layout, shown for PDB ID: 3LDY. ({\bf C}) Water-mediated hydrogen bond annotation. ({\bf D}) Various improvements in other aspects of DNAproDB. }
+        \caption[Novel interactive capabilities of the RNAproDB user interface]{\textbf{Novel interactive capabilities of the RNAproDB user interface.} ({\bf A}) Secondary structure based layout of a protein-RNA complex (PDB ID: 1IVS) ({\bf B})  Updated layout with tertiary RNA interactions turned off. ({\bf C}) Updated layout with protein interactions turned off. ({\bf D}) 3D structure of a zinc finger protien-RNA complex (PDB ID: 1UN6). ({\bf E}) Corresponding secondary structure selector, a user can click on any node (example: stem3, circles) ({\bf F}) Partial projection based layout for PDB ID: 1UN6. ({\bf G}) Generated subgraph based on user selected secondary structure element.}
   \label{fig:rnaprodb2}
 \end{figure}
 \end{center}
@@ -40,7 +40,7 @@ Whenever a user clicks a particular node (e.g. `Stem 3' in \blue{Fig. \ref{fig:r
 
 The pre-analyzed collection of RNAproDB contains 3500+ protein-RNA structures. In addition, RNA structures without proteins, DNA and NA-hybrid containing structures are also included. A known PDB ID can be directly searched using the qucick search box available at the top-right location of the website. More refined searches can be performed from the "Search" page. The search page allows search queries to be entered which can be author names or keywords related to the structures of interest. Additional filters can be set, which include molecule type (polymer entity type: RNA/DNA/NA-hybrid), experimental modality, resolution range, publication year, number of NA polymers, number of protein polymers, molecular weight of the biological assembly. The search results will be presented in tabular view. Optionally a card view of the search results is also available. The resulting PDB IDs can be copied to clipboard or the data can be downloaded in comma-separated value (CSV) or JavaScript object notation (JSON) format. An example search output page for the keyword search ``tetrahymena" is shown in \hyperref[fig:rnaprodbS1]{Fig. S29}.
 
-Structure files in mmCIF format can be uploaded to the RNAproDB webserver through the upload page. Upon upload, the server will process the structure and create a custom page with the results. We hope this feature will be exceedingly valuable for people looking to analyze predicted complex structures (e.g. from AlphaFold3 \citep{Abramson2024}) of protein and nucleic acids. An example output page for AlphaFold3 predicted structure (model 0) for molecules in PDB ID: 8AW3 is shown in \hyperref[fig:rnaprodbS2]{Fig. S30}.
+Structure files in mmCIF format can be uploaded to the RNAproDB webserver through the upload page. Upon upload, the server will process the structure and create a custom page with the results. We hope this feature will be exceedingly valuable for people looking to analyze predicted complex structures (e.g. from AlphaFold3 \citep{Abramson2024}) of protein and nucleic acids. An example output page for AlphaFold3 predicted structure (model 0) for molecules in PDB ID: 8AW3 is shown in \hyperref[fig:rnaprodbS2]{Fig. S30}. An example of Interface explorer layouts for a CAS9-DNA-RNA complex  is also presented in \hyperref[fig:rnaprodbS3]{Fig. S31}.
 
 \section{RNA-RNA water mediated interactions}
 
@@ -52,7 +52,9 @@ RNAproDB computes RNA-RNA water mediated hydrogen bonds to reflect such informat
     \begin{figure}
     \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{./rnaprodbfigs/fig3.png}}
  % archetecture.png: 1149x508 px, 72dpi, 40.53x17.92 cm, bb=0 0 1149 508
-        \caption[Key aspects of this update to DNAproDB.]{\textbf{Key aspects of this update to DNAproDB.} ({\bf A}) Automatic update and separated external annotation incorporation scheme.  ({\bf B})  Different nucleic acid layout options in with added tertiary structure aware RNAscape layout, shown for PDB ID: 3LDY. ({\bf C}) Water-mediated hydrogen bond annotation. ({\bf D}) Various improvements in other aspects of DNAproDB. }
+        \caption[Example illustration of RNA-RNA water mediated hydrogen bond facilitating non-Watson-Crick interaction.]{\textbf{Example illustration of RNA-RNA water mediated hydrogen bond facilitating non-Watson-Crick interaction.} ({\bf A}) 3D structure of PDB ID: 7Y2B  ({\bf B}) RNAproDB interface explorer layout (RNA scape algorithm) for PDB ID: 7Y2B. The central U-U is considered un-paired by DSSR, but computing RNA-RNA water-mediated hydrogen bonds reveal interactions between them. ({\bf C}) Zoomed in view of central U-U interaction with two water-molecules facilitating water-mediated hydrogen bonds. ({\bf D}) Zoomed in view of an off centre U-U interaction with one water molecule facilitating water-mediated hydrogen bond in addition to a direct hydrogen bond.}
   \label{fig:rnaprodb3}
 \end{figure}
 \end{center}
+
+\section{Discussion}
