@@ -33,8 +33,8 @@ resulting skewed smoothness values). Assuming there are $k$ possible classes, we
 of smoothness for labels corresponding to each of these classes separately and then do a weighted
 combination of them. So, let, $V_i \subset V$ be the set of vertices which has the label $i \in
 \{0,1,..,k-1\}$, and $V_i^{in} \subset V_i$ to be the set of vertices within $V_i$ all of whose
-neighbours have class label $i$. This makes $V_i^{out} = V - V_i^{in}$ the vertices which have at
-least one neighbour having a class label other than $i$. So, in essence, $V_i^{in}$ is analogous to
+neighbors have class label $i$. This makes $V_i^{out} = V - V_i^{in}$ the vertices which have at
+least one neighbor having a class label other than $i$. So, in essence, $V_i^{in}$ is analogous to
 area and $V_i^{out}$ is analogous to the perimeter of regions with class label $i$. Hence, a measure for
 smoothness for class $i$ is simply:
 \begin{align*}
@@ -59,7 +59,7 @@ $ and labels over the vertices $y$ such that $y_v \in \{0,1,..,k\} \forall v
 \end{align*}
 The terms $\psi_1$ and $\psi_2$ in the above equation are known as unary and binary potentials
 respectively. $\psi_1$ models how much the label $y_i$ conforms to the features $x_i$ and $\psi_2$
-models how much the label $y_i$ conforms to the labels and features of the neighbours of vertex $i$.
+models how much the label $y_i$ conforms to the labels and features of the neighbors of vertex $i$.
 The exact form of these terms can be application dependent and designed accordingly. 
 However, optimizing eq. \ref{crf_general} in a general scenario is non-trivial and approximations
 either do not perform well or are heavily resource consuming. Moreover, this kind of optimization over
@@ -68,7 +68,7 @@ discrete domain is not suitable for neural network application.
 In our case, PNAbind is a deep learning model. So , we would like to implement this conditional random field 
 model as a network layer which can just be plugged into the network and will be optimized by backpropagation 
 along with the whole network, without us requiring any extra optimization. So, following the
-approach described in \citet{gao2019conditional, ristovski2013continuous} we instead use a
+approach described in \citet{gao2019conditional, ristovski2013continuous}, we use a
 Continuous CRF model. 
 \begin{figure}[H]
 \centering
@@ -89,7 +89,7 @@ operation. Now, all variables are in continuous domain and the model looks as fo
 Now, it is time to design $\psi_1$ and $\psi_2$ which is straightforward in this case. We want
 output $H_i$ to preserve its identity as much possible i.e. be as close to $B_i$ as possible, which
 makes squared error w.r.t. a reasonable choice for $\psi_1$. However, we want $H_i$ to be not too
-different from its neighbours also. We would like to different neighbours of $i$ differently
+different from its neighbors also. We would like to different neighbors of $i$ differently
 according to their initial similarity with vertex $i$. Finally, the two potential terms need to be
 weighted by some optimizable constants determined by the network while training. This motivates the following choices of the functions:
 \begin{align*}
@@ -131,7 +131,7 @@ convergence is reached. For our purposes we stop the iterations at a set max ite
 The network optimizes the parameters $\alpha, \beta$ and $\sigma$. Intuitively, if the
 input vertex information is already smooth and no update is necessary then $\beta$ goes towards 0 and 
 otherwise, we have some non zero value of $\beta$ resulting in a balance between preserving the
-vertex's own features and conforming to features of its neighbours. In the following section, we
+vertex's own features and conforming to features of its neighbors. In the following section, we
 show that using this layer as the second last of PNAbind significantly improves the smoothness of
 predicted labels over protein meshes while improving upon or at least preserving desired 
 metrics of classification results. Note: this is important, because a naive way to increase

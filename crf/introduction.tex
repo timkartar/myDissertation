@@ -12,7 +12,7 @@ through it's output layer. However, classification tasks often come with additio
 are not addressable with independence assumption.  For example, image segmentation task involves
 classifying every pixel of an image (which can be thought of as a grid of pixels) to some class.
 However, independence assumption often gives poor/scattered results. In that case, some form of
-conditional label (re)assignment is necessary for each pixel considering its neighbouring pixels. The
+conditional label (re)assignment is necessary for each pixel considering its neighboring pixels. The
 most common way to achieve the same in the field of computer vision is via optimizing a conditional
 random  field (CRF) model over a set of initially  learned labels. For example,
 \hyperref[fig:crf_concept]{Fig. 1.1B} adapted
@@ -49,7 +49,7 @@ Overall, it turns out, optimizing a CRF model over the predicted labels of PNAbi
 Such an operation is based on a continuous variant of a CRF or CCRF. \citet{ristovski2013continuous}
 shows how to calculate the updates for such a model using mean field variational inference, although
 not in a neural network context. \citet{gao2019conditional} introduces this approach for graph convolution based networks, however, the network layer update equation presented in their work results in simply an Identity transformation. We calculated the correct
-form of the network layer which we can be used as the second last layer of PNAbind.
+form of the network layer which can be used as the second last layer of PNAbind.
 
 In next sections, we shall formally describe a metric denoting ``smoothness" of binding site prediction over protein meshes, the CCRF model and the CCRF layer's architecture, followed by results showing how it has significantly improved PNAbind for the binding site classification task.
 \begin{center} 
