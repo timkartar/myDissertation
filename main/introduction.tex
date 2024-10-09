@@ -19,6 +19,32 @@ prediction (PNAbind) developed in the Rohs lab and improve upon it by designing 
 VI over a continuous Conditional Random Field model, which makes the predicted binding sites smoother while improving upon prediction metrics. We also design a smoothness metric addressing the label imbalance problem associated with the task. This work was later published as part of the PNAbind package \citep{Sagendorf2024}.
 In Chapter 2, I describe DeepPBS (Deep predictor of binding specificity), the first of its kind geometric deep learning method developed to predict DNA binding specificity of proteins based on a given protein-DNA complex. DeepPBS acts as a bridge between structure determining (which shows mechanism but not sequence diversity) and specificity determining experiments (which reflects sequences diversity but not mechanism). DeepPBS is applicable on experimentally determined, simulated, predicted or designed complexes, resulting in a broad impact in the domain. This work has been recently published \citep{Mitra2024}.
 
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+Entries & on or before 2000 & post 2000 \\
+\hline
+All entries & 464 & 8320  \\
+Unique uniprot accessions represented & 194 & 3422  \\
+Unique source organisms represented & 62 & 696 \\
+Structures with source organism Human & 158 & 3007  \\
+\hline
+Entries containing PFAM domains: &  &  \\
+\hline
+Homeodomains & 18 & 111  \\
+ZF-C$_2$H$_2$ & 14 & 103  \\
+Basic helix-Loop-helix (bHLH) & 2 & 57  \\
+Basic leucine zipper (bZIP) & 4 & 10   \\
+Forkhead & 1 & 45   \\
+Erythroblast transformation specific (ETS) & 7 & 76   \\
+p53 & 6 & 40  \\
+\hline
+\end{tabular}
+\caption[Quanitification of growth of protein-DNA structures on the PDB (based on pre-2000 and post-2000 release dates).]{\red{Quanitification of growth of protein-DNA structures on the PDB (based on pre-2000 and post-2000 release dates). Based on PDB entries as of October 07, 2024 and PDB-PFAM databse mapping as of September 28, 2024.}}
+\label{table:pdna1}
+\end{table}
+
 In chapter 3, we design and showcase the  \href{https://rnascape.usc.edu/}{RNAscape} algorithm and webserver, a geometric mapping method of RNA 3D structures to 2D, which attempts to preserve the three dimensional topology (unlike common secondary structure based visualization methods). RNAscape significantly improves over existing competitors \citep{Yang2003} in terms of the mapping quality, visualization and customizability. RNAscape has been published \citep{Mitra2024rnascape} and featured on the \href{https://academic.oup.com/nar/issue/52/W1}{cover} of the $50^\text{th}$ anniversary web-server issue of the Nucleic Acids Research.
 
 Chapter 4 describes an updated \href{https://dnaprodb.usc.edu}{DNAproDB} database \citep{Sagendorf2017, Sagendorf2020}. Through this update we introduce both technical advances and an expansion of features included in the analysis. DNAproDB is now automatically updated weekly with newly released structures and thereby will remain up to date as new DNA–protein structures are solved. We also include much larger
