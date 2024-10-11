@@ -29,7 +29,7 @@ However, this does not help much, because the variance of the edge length distri
 is really low for our protein meshes. So, it behaves similarly as $M_1$.
 \par
 So finally, we designed a metric which takes care of the issue of label imbalanced (and the
-resulting skewed smoothness values). Assuming there are $k$ possible classes, we computing a measure
+resulting skewed smoothness values). Assuming there are $k$ possible classes, we compute a measure
 of smoothness for labels corresponding to each of these classes separately and then do a weighted
 combination of them. So, let, $V_i \subset V$ be the set of vertices which has the label $i \in
 \{0,1,..,k-1\}$, and $V_i^{in} \subset V_i$ to be the set of vertices within $V_i$ all of whose
